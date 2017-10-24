@@ -1,0 +1,40 @@
+from django.conf.urls import url
+from django.views.generic import RedirectView
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    url(r'^$', RedirectView.as_view(url='/catalog/', permanent=True)),
+]
+
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+useful_websites=['https://docs.djangoproject.com/en/1.10/ref/django-admin/#runserver',
+                 'https://docs.djangoproject.com/en/1.10/ref/settings/#databases']
+
+<ul class="sidebar-nav">
+
+    ...
+
+   {% if user.is_authenticated %}
+     <li>User: {{ user.get_username }}</li>
+     <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+   {% else %}
+     <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+   {% endif %}
+  </ul>
+  
+add: user.has_perm('foo.add_bar')
+change: user.has_perm('foo.change_bar')
+delete: user.has_perm('foo.delete_bar')
+
+
+def not_in_student_group(user):
+    if user:
+        return user.groups.filter(name='Student').count() == 0
+    return False
+@login_required
+@user_passes_test(not_in_student_group, login_url='/advising/denied/')
+def some_view(request):

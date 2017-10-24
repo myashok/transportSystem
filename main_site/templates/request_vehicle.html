@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if form.errors %}
+    <p style="color: red;">{{ form.errors}}</p>
+{% endif %}
+
+<form action="." method="POST">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="request_vehicle" value="Submit !">
+</form>
+    <a href="{% url 'home' %}" class="btn btn-primary">Home</a>
+{% endblock %}
