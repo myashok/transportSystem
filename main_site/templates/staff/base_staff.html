@@ -1,0 +1,14 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IIITA Transport system</title>
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+</head>
+<body>
+<a href="{% url 'pending_requests' %}">Pending requests</a>
+{% block content %}
+{% endblock %}
+</body>
+</html>
