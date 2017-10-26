@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
     {%  for i in requests %}
-        <p>i.id</p>
-        <p>i.request_type</p>
-        <p>i.description</p>
+        <p>{{ i.id }}</p>
+        <p>{{ i.request_type }}</p>
+        <p>{{ i.description }}</p>
     {% endfor %}
 {% endblock %}

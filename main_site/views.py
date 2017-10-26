@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
 from django.forms import ModelForm, DateInput
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from main_site.models import Request
@@ -9,6 +10,7 @@ logger = logging.getLogger(__name__)
 def has_group(user, group_name):
     group = Group.objects.get(name=group_name)
     return True if group in user.groups.all() else False
+
 
 class RequestForm(ModelForm):
     class Meta:
@@ -19,9 +21,6 @@ class RequestForm(ModelForm):
             'date_of_journey': DateInput(attrs={'type': 'date'}),
             'time_of_journey': DateInput(attrs={'type':'time'}),
         }
-
-def access_denied(request):
-    return render(request,'access_denied.html')
 
 def home(request):
     return render(request, 'user_home.html')
@@ -58,8 +57,10 @@ def transport_request(request):
     if request.method=='POST':
         form=RequestForm(request.POST)
         if form.is_valid():
-            req=Request(form)
-            req.save()
+            instance=form.save(commit=False)
+            instance.user=request.user
+            instance.save()
+            return redirect('my_requests')
         else:
             return render(request,'request_vehicle.html',{'form':form})
     else:
