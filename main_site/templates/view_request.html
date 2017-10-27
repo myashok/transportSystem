@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p>This is the description for request # {{ req.id }}</p>
+    <p>{{ req.description }}</p>
+    <p>{{ req.source }}</p>
+    <p>{{ req.destination }}</p>
+    <p>{{ req.is_return_journey }}</p>
+    <a href="{% url 'edit_request' req.id %}">Edit</a>
+{% endblock %}
