@@ -17,7 +17,7 @@
    <tbody>
   {%  for driver in drivers %}
       <tr>
-        <td>{{ driver.id }}</td>
+          <td><a href="{% url 'view-driver' pk=driver.id %}">{{ driver.id }}</a></td>
         <td>{{ driver.name }}</td>
         <td>{{ driver.date_of_birth.year }}</td>
         <td>{{ driver.phone }}</td>
