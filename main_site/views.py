@@ -1,15 +1,20 @@
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.models import Group
 from django.forms import ModelForm, DateInput
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
-from django.urls import reverse
-from django.views.generic import UpdateView
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout, REDIRECT_FIELD_NAME
+from django.urls import reverse_lazy, reverse
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.generic import UpdateView, ListView, DeleteView, CreateView, DetailView
 
-from main_site.models import Request
+from main_site.models import TransportRequest, Driver
 from django.http import Http404
 import logging
 logger = logging.getLogger(__name__)
+
 def has_group(user, group_name):
     group = Group.objects.get(name=group_name)
     return True if group in user.groups.all() else False
@@ -17,7 +22,7 @@ def has_group(user, group_name):
 
 class RequestForm(ModelForm):
     class Meta:
-        model=Request
+        model=TransportRequest
         fields=['date_of_journey','time_of_journey','request_type','description',
                 'source','destination','is_return_journey']
         widgets = {
@@ -25,8 +30,23 @@ class RequestForm(ModelForm):
             'time_of_journey': DateInput(attrs={'type':'time'}),
         }
 
+
+def check_not_staff(user):
+    return True if not user.groups.filter(name='TransportStaff').exists() else False
+
+def is_not_staff(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
+    actual_decorator = user_passes_test(
+        check_not_staff,
+        login_url=login_url,
+        redirect_field_name=redirect_field_name
+    )
+    if function:
+        return actual_decorator(function)
+    return actual_decorator
+
+
 def home(request):
-    return render(request, 'user_home.html')
+    return render(request, 'home.html')
 
 def login_view(request):
     if request.method=='POST':
@@ -38,85 +58,129 @@ def login_view(request):
             if request.GET.get('next', False):
                 return redirect(request.GET.get('next'))
             else:
-                return redirect('home')
+                if check_not_staff(request.user):
+                    print(request.user.groups.all())
+                    return redirect('staff_home')
+                else:
+                    return redirect('home')
         else:
-            return render(request,'registration/login.html',{'error':'Invalid login credentials'})
+            return render(request, 'login.html', {'error': 'Invalid login credentials'})
     else:
         if request.user.is_authenticated:
-            logger.info(request.user.groups.all())
-            if has_group(request.user,'Admin'):
+            if has_group(request.user,'Transport_Staff'):
                 return redirect('staff_home')
             else:
                 return redirect('home')
         else:
-            return render(request,'registration/login.html')
+            return render(request, 'login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('home')
 
-@login_required(login_url='login')
-def new_request(request):
-    if request.method=='POST':
-        form=RequestForm(request.POST)
-        if form.is_valid():
-            instance=form.save(commit=False)
-            instance.user=request.user
-            instance.save()
-            return redirect('my_requests')
-        else:
-            return render(request, 'new_request.html', {'form':form})
-    else:
-        form=RequestForm()
-        return render(request, 'new_request.html', {'form':form})
-
 
 def my_requests(request):
-    requests=Request.objects.filter(user=request.user)
-    return render(request,'my_requests.html',{'requests':requests})
+    requests=TransportRequest.objects.filter(user=request.user)
+    return render(request, 'transport_request/my_requests.html', {'requests':requests})
 
-
-def view_request(request,pk):
-    try:
-        req = Request.objects.get(pk=pk)
-        if req.user!=request.user:
-            print(request.user.groups.all())
-            if request.user.groups.filter(name='Transport_Admin').exists():
-                return render(request, 'view_request.html', {'req': req})
-            else:
-                return redirect('/access_denied')
-
-        else:
-            return render(request, 'view_request.html', {'req': req})
-
-    except Request.DoesNotExist:
-        raise Http404
-
-
-
-
-def delete_request(request,ID):
-    req=Request.objects.get({'id':ID})
-    req.delete()
-    return redirect('user_home')
 #####staff views#####
-def not_in_staff_group(user):
-    if user:
-        return user.groups.filter(name='Staff').count() ==0
-    return True
-#@login_required(login_url='login')
-@permission_required('request.user.is_staff',login_url='access_denied')
+@login_required(login_url='login')
+@is_not_staff(login_url='access_denied')
 def staff_home(request):
-    return render(request,'staff/staff_home.html')
+    return render(request,'staff/home.html')
+
+
+@login_required(login_url='login')
+@is_not_staff(login_url='access_denied')
+def view_requests(request):
+    reqs=TransportRequest.objects.all().order_by('date_of_journey')
+    return render(request,'staff/view_requests.html',{'requests':reqs})
+
 
 def pending_requests(request):
-    pending=Request.objects.filter(request_status='pending').order_by('date_of_journey')
+    pending=TransportRequest.objects.filter(request_status='pending').order_by('date_of_journey')
     return render('pending.html',{'pending':pending})
 
-class edit_request(UpdateView): #Note that we are using UpdateView and not FormView
-    model = Request
+
+def allot_vehicle(request,pk):
+    req=TransportRequest.objects.get(pk=pk)
+    return render(request,'staff/allot_vehicle.html',{'request':req})
+
+def view_vehicles(request):
+    pass
+
+def view_conductors(request):
+    pass
+
+
+#create driver
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class DriverCreateView(CreateView):
+    model=Driver
+    fields=['name','phone','license_no','license_validity','email','date_of_birth']
+    template_name = 'driver/new_driver.html'
+    success_url = reverse_lazy('list-drivers')
+
+#read driver
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class DriverDetailView(DetailView):
+    model=Driver
+    template_name = 'driver/view_driver.html'
+    def get_context_data(self, **kwargs):
+        context=super(DriverDetailView, self).get_context_data(**kwargs)
+        context['now']=timezone.now()
+        return context
+
+#update driver
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class DriverUpdateView(UpdateView):
+    model=Driver
+    fields=['name','phone','license_no','license_validity','email','date_of_birth']
+    template_name = 'driver/update_driver.html'
+    success_url = reverse_lazy('drivers')
+
+#delete driver
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class DriverDeleteView(DeleteView):
+    model=Driver
+    template_name = 'driver/delete_driver.html'
+    success_url = reverse_lazy('list-drivers')
+
+#list drivers
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class DriverListView(ListView):
+    model = Driver
+    template_name = 'driver/list_drivers.html'
+    context_object_name = 'drivers'
+
+#create request
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class RequestCreateView(CreateView):
+    model=TransportRequest
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
               'source', 'destination', 'is_return_journey']
-    template_name = "new_request.html"
-    success_url = '/requests'
+    template_name = 'transport_request/new_request.html'
+    success_url = reverse_lazy('list-requests')
 
+#read request
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class RequestDetailView(DetailView):
+    model=TransportRequest
+    template_name = 'transport_request/view_request.html'
+    context_object_name = 'request'
+
+#update request
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class RequestUpdateView(UpdateView):
+    model=TransportRequest
+    fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
+              'source', 'destination', 'is_return_journey']
+    template_name = 'transport_request/update_request.html'
+    def get_success_url(self):
+        return reverse('view-request',kwargs={'pk':self.object.pk})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class RequestListView(ListView):
+    model = TransportRequest
+    template_name = 'transport_request/list_requests.html'
+    context_object_name = 'requests'

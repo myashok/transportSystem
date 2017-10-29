@@ -1,0 +1,50 @@
+{%  extends 'base.html' %}
+{% block content %}
+   <table class="table">
+  <thead>
+   <tr>
+       <th>Request #</th>
+       <th>User</th>
+       <th>Date of journey</th>
+       <th>Time ofjourney</th>
+       <th>Type</th>
+       <th>Description</th>
+       <th>Request status</th>
+       <th>Source</th>
+       <th>Destination</th>
+       <th>Return journey</th>
+   </tr>
+   </thead>
+   <tbody>
+  {%  for req in requests %}
+      <tr>
+        <td>{{ req.id }}</td>
+        <td>{{ req.user.username }}</td>
+        <td>{{ req.date_of_journey }}</td>
+        <td>{{ req.time_of_journey }}</td>
+        <td>{{ req.request_type }}</td>
+        <td>{{ req.description }}</td>
+        <td>{{ req.request_status }}</td>
+        <td>{{ req.source}}</td>
+        <td>{{ req.destination}}</td>
+        <td>{{ req.is_return_journey}}</td>
+        {% if req.request_status == "Pending" %}
+          <td>
+            <a href="{% url 'allot_vehicle' pk=req.id %}" class="btn btn-primary">{{ req.Meta }}</a>
+          </td>
+        {% else %}
+            <td>
+            <a href="{% url 'allot_vehicle' pk=req.id %}" class="btn btn-primary">{{ req.request_status }}</a>
+            </td>
+        {% endif %}
+      </tr>
+  {% endfor %}
+  <tr>
+
+  </tr>
+  </tbody>
+   </table>
+     {% if not drivers %}
+          <p align="center">No data to display</p>
+      {% endif %}
+{% endblock %}

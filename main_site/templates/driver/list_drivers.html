@@ -1,0 +1,41 @@
+{%  extends 'base.html' %}
+{% block content %}
+    <a href="{%  url 'new-driver' %}" class="btn btn-primary">Add new</a>
+   <table class="table">
+  <thead>
+   <tr>
+       <th>Driver #</th>
+       <th>Name</th>
+       <th>Age</th>
+       <th>Phone no.</th>
+       <th>Email id</th>
+       <th>License no.</th>
+       <th>License valid till</th>
+       <th>Actions</th>
+   </tr>
+   </thead>
+   <tbody>
+  {%  for driver in drivers %}
+      <tr>
+        <td>{{ driver.id }}</td>
+        <td>{{ driver.name }}</td>
+        <td>{{ driver.date_of_birth.year }}</td>
+        <td>{{ driver.phone }}</td>
+        <td>{{ driver.email }}</td>
+        <td>{{ driver.license_no }}</td>
+        <td>{{ driver.license_validity }}</td>
+        <td>
+            <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>
+        </td>
+      </tr>
+  {% endfor %}
+  <tr>
+
+  </tr>
+  </tbody>
+   </table>
+     {% if not drivers %}
+          <p align="center">No data to display</p>
+      {% endif %}
+{% endblock %}

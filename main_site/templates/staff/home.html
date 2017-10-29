@@ -1,0 +1,10 @@
+{% extends 'staff/base.html' %}
+{%  block content %}
+    <div class="container">
+    <div class="col-md-6 col-md-offset-6">
+        <a href="{% url 'view_requests'  %}" class="btn btn-primary">Requests</a>
+        <a href="{% url 'view_vehicles' %}" class="btn btn-primary">Vehicles</a>
+        <a href="{% url 'view_conductors' %}" class="btn btn-primary">Conductors</a>
+    </div>
+    </div>
+{%  endblock %}
