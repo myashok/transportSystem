@@ -8,9 +8,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 DEFAULT_REQUEST_STATUS=0
 
 class Driver(models.Model):
-    name=models.CharField(max_length=200,null=False,default='Name not given')
+    name=models.CharField(max_length=200,null=False)
     phone=PhoneNumberField(null=False)
-    license_no=models.CharField(max_length=50,null=True)
+    license_no=models.CharField(max_length=50,unique=True,null=True)
     license_validity=models.DateField(default=timezone.now)
     email=models.EmailField(null=True)
     date_of_birth=models.DateField(null=True)
@@ -40,7 +40,7 @@ class TransportRequest(models.Model):
     time_of_journey=models.TimeField(null=False)
     request_type=models.ForeignKey('RequestType')
     description=models.TextField(null=True)
-    request_status=models.ForeignKey('RequestStatus',default=DEFAULT_REQUEST_STATUS)
+    request_status=models.ForeignKey('RequestStatus',null=False)
     source=models.CharField(max_length=200,null=False)
     destination=models.CharField(max_length=200,null=False)
     is_return_journey=models.BooleanField(default=False)

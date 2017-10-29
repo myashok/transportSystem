@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import UpdateView, ListView, DeleteView, CreateView, DetailView
 
-from main_site.models import TransportRequest, Driver
+from main_site.models import TransportRequest, Driver, RequestStatus
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import UpdateView
@@ -22,18 +22,6 @@ logger = logging.getLogger(__name__)
 def has_group(user, group_name):
     group = Group.objects.get(name=group_name)
     return True if group in user.groups.all() else False
-
-
-class RequestForm(ModelForm):
-    class Meta:
-        model=TransportRequest
-        fields=['date_of_journey','time_of_journey','request_type','description',
-                'source','destination','is_return_journey']
-        widgets = {
-            'date_of_journey': DateInput(attrs={'type': 'date'}),
-            'time_of_journey': DateInput(attrs={'type':'time'}),
-        }
-
 
 def check_not_staff(user):
     return True if not user.groups.filter(name='TransportStaff').exists() else False
@@ -48,7 +36,6 @@ def is_not_staff(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_u
     if function:
         return actual_decorator(function)
     return actual_decorator
-
 
 def login_view(request):
     if request.method=='POST':
@@ -123,15 +110,13 @@ class DriverCreateView(CreateView):
     template_name = 'driver/new_driver.html'
     success_url = reverse_lazy('list-drivers')
 
-#read driver
+####################driver##################
+#driver details
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class DriverDetailView(DetailView):
     model=Driver
     template_name = 'driver/view_driver.html'
-    def get_context_data(self, **kwargs):
-        context=super(DriverDetailView, self).get_context_data(**kwargs)
-        context['now']=timezone.now()
-        return context
+    context_object_name = 'driver'
 
 #update driver
 @method_decorator(login_required(login_url='login'),name='dispatch')
@@ -139,7 +124,8 @@ class DriverUpdateView(UpdateView):
     model=Driver
     fields=['name','phone','license_no','license_validity','email','date_of_birth']
     template_name = 'driver/update_driver.html'
-    success_url = reverse_lazy('drivers')
+    def get_success_url(self):
+        return reverse('view-driver',kwargs={'pk':self.object.pk})
 
 #delete driver
 @method_decorator(login_required(login_url='login'),name='dispatch')
@@ -155,6 +141,9 @@ class DriverListView(ListView):
     template_name = 'driver/list_drivers.html'
     context_object_name = 'drivers'
 
+#############################################
+
+#################request####################
 #create request
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class RequestCreateView(CreateView):
@@ -163,10 +152,20 @@ class RequestCreateView(CreateView):
 
 class edit_request(UpdateView): #Note that we are using UpdateView and not FormView
     model = Request
+
+    template_name = 'transport_request/new_request.html'
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
               'source', 'destination', 'is_return_journey']
-    template_name = 'transport_request/new_request.html'
-    success_url = reverse_lazy('list-requests')
+
+    def form_valid(self, form):
+        request=form.save(commit=False)
+        request.user=self.request.user
+        request.request_status=RequestStatus.objects.get(pk=1)
+        request.last_updated_at=timezone.now()
+        return super(RequestCreateView,self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('view-request',kwargs={'pk':self.object.pk})
 
 #read request
 @method_decorator(login_required(login_url='login'),name='dispatch')

@@ -19,7 +19,7 @@
    <tbody>
   {%  for req in requests %}
       <tr>
-        <td>{{ req.id }}</td>
+          <td><a href="{% url 'view-request' pk=req.id %}">{{ req.id }}</a></td>
         <td>{{ req.user.username }}</td>
         <td>{{ req.date_of_journey }}</td>
         <td>{{ req.time_of_journey }}</td>
@@ -35,7 +35,7 @@
           </td>
         {% else %}
             <td>
-            <a href="{% url 'allot_vehicle' pk=req.id %}" class="btn btn-primary">{{ req.request_status }}</a>
+            <a href="{% url 'allot_vehicle' pk=req.id %}" class="btn btn-primary">Allot</a>
             </td>
         {% endif %}
       </tr>
@@ -45,7 +45,7 @@
   </tr>
   </tbody>
    </table>
-     {% if not drivers %}
+     {% if not requests %}
           <p align="center">No data to display</p>
       {% endif %}
 {% endblock %}

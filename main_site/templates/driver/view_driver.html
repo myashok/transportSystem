@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+    <p>{{ driver.id }}</p>
+    <p>{{ driver.name }}</p>
+    <p>{{ driver.phone }}</p>
+    <p>{{ driver.email }}</p>
+    <p>{{ driver.license_no }}</p>
+    <p>{{ driver.license_validity }}</p>
+    <p>{{ driver.date_of_birth }}</p>
 
-</body>
-</html>
+    <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>
+{% endblock %}
