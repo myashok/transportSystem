@@ -5,8 +5,8 @@ from main_site.views import DriverListView, DriverUpdateView, \
 from . import views
 
 urlpatterns=[
-    url(r'^$',TemplateView.as_view(template_name='home.html'),name='home'),
-    url(r'^login',views.login_view,name='login'),
+    url(r'^$',TemplateView.as_view(template_name='home.html'), name='home'),
+    url(r'^login',views.login_view, name='login'),
     url(r'^logout', views.logout_view, name='logout'),
 
     url(r'^staff$',views.staff_home,name='staff_home'),

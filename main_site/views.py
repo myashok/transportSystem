@@ -1,3 +1,5 @@
+from urllib.request import Request
+
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.models import Group
 from django.forms import ModelForm, DateInput
@@ -36,6 +38,7 @@ class RequestForm(ModelForm):
 def check_not_staff(user):
     return True if not user.groups.filter(name='TransportStaff').exists() else False
 
+
 def is_not_staff(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
     actual_decorator = user_passes_test(
         check_not_staff,
@@ -66,7 +69,7 @@ def login_view(request):
             return render(request, 'login.html', {'error': 'Invalid login credentials'})
     else:
         if request.user.is_authenticated:
-            if has_group(request.user,'Transport_Staff'):
+            if has_group(request.user,'TransportStaff'):
                 return redirect('staff_home')
             else:
                 return redirect('home')
@@ -156,10 +159,10 @@ class DriverListView(ListView):
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class RequestCreateView(CreateView):
     model=TransportRequest
-=======
+
+
 class edit_request(UpdateView): #Note that we are using UpdateView and not FormView
     model = Request
->>>>>>> parent of 2c77b91... resolved merge conflicts
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
               'source', 'destination', 'is_return_journey']
     template_name = 'transport_request/new_request.html'

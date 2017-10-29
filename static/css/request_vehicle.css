@@ -1,0 +1,17 @@
+legend {
+    text-align: center;
+}
+.label {
+    text-align: left;
+    font-size: 1.2em;
+    color : white;
+    margin-left: -10px;
+}
+form {
+    margin-top: 10px;
+    border: solid 2px white;
+    border-radius: 5px;
+}
+.form-horizontal {
+    padding: 20px;
+}

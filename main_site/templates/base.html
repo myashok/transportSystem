@@ -5,9 +5,33 @@
     <meta charset="UTF-8">
     <title>IIITA Transport system</title>
     <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    {% block css %}
+    {% endblock %}
 </head>
 <body>
-{% block content %}
-{% endblock %}
+    <nav class="navbar navbar-inverse navbar-toggleable-md navbar-light bg-inverse">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'home' %}">Transport-Cell</a>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"  href="#">Disabled</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
 </body>
+<script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+<script type="text/javascript" src="{% static "js/bootstrap.js" %}"></script>
 </html>
