@@ -1,12 +1,11 @@
 from django.conf.urls import url
-from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
-from main_site.views import DriverListView, check_not_staff, is_not_staff, DriverUpdateView, \
+from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView
 from . import views
 
 urlpatterns=[
-    url(r'^$',views.home,name='home'),
+    url(r'^$',TemplateView.as_view(template_name='home.html'),name='home'),
     url(r'^login',views.login_view,name='login'),
     url(r'^logout', views.logout_view, name='logout'),
 

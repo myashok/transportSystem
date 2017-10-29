@@ -1,9 +1,8 @@
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import Group
 from django.forms import ModelForm, DateInput
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, REDIRECT_FIELD_NAME
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -11,7 +10,10 @@ from django.views import View
 from django.views.generic import UpdateView, ListView, DeleteView, CreateView, DetailView
 
 from main_site.models import TransportRequest, Driver
-from django.http import Http404
+from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
+from django.views.generic import UpdateView
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -44,9 +46,6 @@ def is_not_staff(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_u
         return actual_decorator(function)
     return actual_decorator
 
-
-def home(request):
-    return render(request, 'home.html')
 
 def login_view(request):
     if request.method=='POST':
@@ -157,6 +156,10 @@ class DriverListView(ListView):
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class RequestCreateView(CreateView):
     model=TransportRequest
+=======
+class edit_request(UpdateView): #Note that we are using UpdateView and not FormView
+    model = Request
+>>>>>>> parent of 2c77b91... resolved merge conflicts
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
               'source', 'destination', 'is_return_journey']
     template_name = 'transport_request/new_request.html'
