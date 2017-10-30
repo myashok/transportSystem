@@ -134,7 +134,7 @@ class RequestCreateView(CreateView):
     model=TransportRequest
     template_name = 'transport_request/new_request.html'
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
-              'source', 'destination','preferred_vehicle_type', 'is_return_journey']
+              'source', 'destination','no_of_persons_travelling', 'is_return_journey']
     def form_valid(self, form):
         request=form.save(commit=False)
         request.user=self.request.user
