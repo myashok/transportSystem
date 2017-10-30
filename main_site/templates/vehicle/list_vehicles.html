@@ -1,0 +1,37 @@
+{%  extends 'base.html' %}
+{% block content %}
+    <a href="{%  url 'new-vehicle' %}" class="btn btn-primary">Add new</a>
+   <table class="table">
+  <thead>
+   <tr>
+       <th>Vehicle #</th>
+       <th>Registration no.</th>
+       <th>Type</th>
+       <th>Description</th>
+       <th>Fuel Capacity</th>
+       <th>Actions</th>
+   </tr>
+   </thead>
+   <tbody>
+  {%  for vehicle in vehicles %}
+      <tr>
+          <td><a href="{% url 'view-vehicle' pk=vehicle.id %}">{{ vehicle.id }}</a></td>
+        <td>{{ vehicle.registration_no }}</td>
+        <td>{{ vehicle.type }}</td>
+        <td>{{ vehicle.description }}</td>
+        <td>{{ vehicle.fuel_capacity}}</td>
+        <td>
+            <a href="{% url 'update-vehicle' pk=vehicle.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'delete-vehicle' pk=vehicle.id %}" class="btn btn-danger">Delete</a>
+        </td>
+      </tr>
+  {% endfor %}
+  <tr>
+
+  </tr>
+  </tbody>
+   </table>
+     {% if not vehicles %}
+          <p align="center">No data to display</p>
+      {% endif %}
+{% endblock %}

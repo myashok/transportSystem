@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p>{{ trip.id }}</p>
+    <p>{{ trip.request.id }}</p>
+    <p>{{ trip.status }}</p>
+    <p>{{ trip.vehicle.registration_no }}</p>
+    <p>{{ trip.driver.name }}</p>
+    <p>{{ trip.start_time }}</p>
+    {% if trip.end_time is Null %}
+        <p>Trip is active</p>
+    {% else %}
+        <p>{{ trip.end_time }}</p>
+    {% endif %}
+    <a href="{% url 'update-trip' pk=trip.id %}" class="btn btn-primary">Edit</a>
+{% endblock %}

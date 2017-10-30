@@ -1,20 +1,19 @@
+from django.conf import settings
 from django.conf.urls import url
+from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
-    RequestCreateView
+    LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
+    TripDetailView, TripUpdateView, TripListView, TripEndView, RequestCreateView
 from . import views
 
 urlpatterns=[
-    url(r'^$',TemplateView.as_view(template_name='home.html'), name='home'),
-    url(r'^login',views.login_view, name='login'),
-    url(r'^logout', views.logout_view, name='logout'),
+    url(r'^$',TemplateView.as_view(template_name='home.html'),name='home'),
+    url(r'^login',LoginView.as_view(),name='login'),
+    url(r'^logout', LogoutView.as_view(), name='logout'),
 
-    url(r'^staff$', views.staff_home,name='staff_home'),
-    url(r'^staff/allot_vehicle/(?P<pk>\d+)$', views.allot_vehicle, name='allot_vehicle'),
-    url(r'^staff/view_requests$',views.view_requests, name='view_requests'),
-    url(r'^staff/view_vehicles',views.view_vehicles, name='view_vehicles'),
-    url(r'^staff/view_',views.view_conductors, name='view_conductors'),
+    url(r'^staff$', views.staff_home,name='staff-home'),
 
     url(r'^requests/new', RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
@@ -27,6 +26,21 @@ urlpatterns=[
     url(r'^drivers/(?P<pk>\d+)/delete$', DriverDeleteView.as_view(), name='delete-driver'),
     url(r'^drivers', DriverListView.as_view(), name='list-drivers'),
 
+    url(r'^vehicles/new$', VehicleCreateView.as_view(), name='new-vehicle'),
+    url(r'^vehicles/(?P<pk>\d+)$', VehicleDetailView.as_view(), name='view-vehicle'),
+    url(r'^vehicles/(?P<pk>\d+)/edit$', VehicleUpdateView.as_view(), name='update-vehicle'),
+    url(r'^vehicles/(?P<pk>\d+)/delete$', VehicleDeleteView.as_view(), name='delete-vehicle'),
+    url(r'^vehicles', VehicleListView.as_view(), name='list-vehicles'),
+
+    url(r'^trips/new', views.TripCreateView.as_view(), name='new-trip'),
+    url(r'^trips/(?P<pk>\d+)$', TripDetailView.as_view(), name='view-trip'),
+    url(r'^trips/(?P<pk>\d+)/edit$', TripUpdateView.as_view(), name='update-trip'),
+    url(r'^trips/(?P<pk>\d+)/end$', TripEndView.as_view(), name='end-trip'),
+    url(r'^trips', TripListView.as_view(), name='list-trips'),
+
     url(r'^access_denied$', TemplateView.as_view(template_name='access_denied.html'), name='access_denied'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

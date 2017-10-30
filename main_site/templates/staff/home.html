@@ -20,8 +20,9 @@
 {% endblock %}
 {%  block content %}
     <div class="container col-md-6 col-lg-2 col-sm-6 col-12 ist-group table-of-contents">
-      <a class="item list-group-item list-group-item-action" href="{% url 'view_requests'  %}">Requests</a>
-      <a class="item list-group-item list-group-item-action" href="{% url 'view_vehicles' %}">Vehicles</a>
-      <a class="item list-group-item list-group-item-action" href="{% url 'view_conductors' %}">Conductors</a>
-    </div>
+      <a class="item list-group-item list-group-item-action" href="{% url 'list-requests'  %}">Requests</a>
+      <a class="item list-group-item list-group-item-action" href="{% url 'list-vehicles' %}">Vehicles</a>
+{#      <a class="item list-group-item list-group-item-action" href="{% url 'list-conductors' %}">Conductors</a>#}
+    </d
+        iv>
 {%  endblock %}

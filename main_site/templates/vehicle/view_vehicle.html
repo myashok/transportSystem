@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p>{{ vehicle.id }}</p>
+    <p>{{ vehicle.type }}</p>
+    <p>{{ vehicle.description }}</p>
+    <p>{{ vehicle.fuel_capacity }}</p>
+    <a href="{% url 'update-vehicle' pk=vehicle.id %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'delete-vehicle' pk=vehicle.id %}" class="btn btn-danger">Delete</a>
+{% endblock %}

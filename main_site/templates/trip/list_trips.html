@@ -1,0 +1,45 @@
+{%  extends 'base.html' %}
+{% block content %}
+    <a href="{%  url 'new-trip' %}" class="btn btn-primary">Add new</a>
+   <table class="table">
+  <thead>
+   <tr>
+       <th>Trip #</th>
+       <th>Request #</th>
+       <th>User</th>
+       <th>Status</th>
+       <th>Start time</th>
+       <th>End time</th>
+       <th>Driver name</th>
+       <th>Vehicle allotted</th>
+       <th></th>
+   </tr>
+   </thead>
+   <tbody>
+  {%  for trip in trips %}
+      <tr>
+          <td><a href="{% url 'view-trip' pk=trip.request.id %}">{{ trip.request.id }}</a></td>
+        <td>{{ trip.request.id }}</td>
+        <td>{{ trip.request.user.username }}</td>
+        <td>{{ trip.status }}</td>
+        <td>{{ trip.start_time}}</td>
+        <td>{{ trip.end_time}}</td>
+        <td>{{ trip.driver.name}}</td>
+        <td>{{ trip.vehicle.registration_no}}</td>
+          {% if trip.status|stringformat:"s" == "Active"  %}
+        <td>
+            <a href="{% url 'end-trip' pk=trip.id %}" class="btn btn-success">End Trip</a>
+        </td>
+      {% else %}
+      {% endif %}
+      </tr>
+  {% endfor %}
+  <tr>
+
+  </tr>
+  </tbody>
+   </table>
+     {% if not trips %}
+          <p align="center">No data to display</p>
+      {% endif %}
+{% endblock %}
