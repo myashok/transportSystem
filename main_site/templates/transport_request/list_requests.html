@@ -30,11 +30,9 @@
         <td>{{ req.is_return_journey}}</td>
         {% if req.request_status == "Pending" %}
           <td>
-            <a href="{% url 'allot_vehicle' pk=req.id %}" class="btn btn-primary">{{ req.Meta }}</a>
           </td>
         {% else %}
             <td>
-            <a href="{% url 'allot_vehicle' pk=req.id %}" class="btn btn-primary">Allot</a>
             </td>
         {% endif %}
       </tr>
