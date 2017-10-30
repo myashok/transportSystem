@@ -1,10 +1,27 @@
-{% extends 'staff/base.html' %}
+{% extends 'base.html' %}
+{% block css %}
+    <style>
+    .container{
+       padding: 0px;
+       margin: 0px;
+       margin-left: 10px;
+       margin-top: 10px;
+    }
+    .item {
+        border: 1px solid black;
+        text-align: center;
+        padding: 10px;
+    }
+    .item:nth-child(even) {
+        background-color: lightgrey;
+    }
+    </style>
+
+{% endblock %}
 {%  block content %}
-    <div class="container">
-    <div class="col-md-6 col-md-offset-6">
-        <a href="{% url 'view_requests'  %}" class="btn btn-primary">Requests</a>
-        <a href="{% url 'view_vehicles' %}" class="btn btn-primary">Vehicles</a>
-        <a href="{% url 'view_conductors' %}" class="btn btn-primary">Conductors</a>
-    </div>
+    <div class="container col-md-6 col-lg-2 col-sm-6 col-12 ist-group table-of-contents">
+      <a class="item list-group-item list-group-item-action" href="{% url 'view_requests'  %}">Requests</a>
+      <a class="item list-group-item list-group-item-action" href="{% url 'view_vehicles' %}">Vehicles</a>
+      <a class="item list-group-item list-group-item-action" href="{% url 'view_conductors' %}">Conductors</a>
     </div>
 {%  endblock %}

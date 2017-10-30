@@ -2,7 +2,7 @@ from urllib.request import Request
 
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.models import Group
-from django.forms import ModelForm, DateInput
+from django.forms import ModelForm, DateInput, forms
 from django.contrib.auth import authenticate, login, logout, REDIRECT_FIELD_NAME
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
@@ -19,9 +19,11 @@ from django.views.generic import UpdateView
 import logging
 logger = logging.getLogger(__name__)
 
+
 def has_group(user, group_name):
     group = Group.objects.get(name=group_name)
     return True if group in user.groups.all() else False
+
 
 def check_not_staff(user):
     return True if not user.groups.filter(name='TransportStaff').exists() else False
@@ -36,6 +38,7 @@ def is_not_staff(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_u
     if function:
         return actual_decorator(function)
     return actual_decorator
+
 
 def login_view(request):
     if request.method=='POST':
@@ -72,6 +75,7 @@ def my_requests(request):
     requests=TransportRequest.objects.filter(user=request.user)
     return render(request, 'transport_request/my_requests.html', {'requests':requests})
 
+
 #####staff views#####
 @login_required(login_url='login')
 @is_not_staff(login_url='access_denied')
@@ -83,7 +87,12 @@ def staff_home(request):
 @is_not_staff(login_url='access_denied')
 def view_requests(request):
     reqs=TransportRequest.objects.all().order_by('date_of_journey')
-    return render(request,'staff/view_requests.html',{'requests':reqs})
+
+    for r in reqs:
+        print(r.request_status)
+        print(r.__class__.__name__)
+        break
+    return render(request,'staff/view_requests.html', {'requests':reqs})
 
 
 def pending_requests(request):
@@ -95,8 +104,10 @@ def allot_vehicle(request,pk):
     req=TransportRequest.objects.get(pk=pk)
     return render(request,'staff/allot_vehicle.html',{'request':req})
 
+
 def view_vehicles(request):
     pass
+
 
 def view_conductors(request):
     pass
@@ -110,13 +121,14 @@ class DriverCreateView(CreateView):
     template_name = 'driver/new_driver.html'
     success_url = reverse_lazy('list-drivers')
 
-####################driver##################
+
 #driver details
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class DriverDetailView(DetailView):
     model=Driver
     template_name = 'driver/view_driver.html'
     context_object_name = 'driver'
+
 
 #update driver
 @method_decorator(login_required(login_url='login'),name='dispatch')
@@ -126,6 +138,7 @@ class DriverUpdateView(UpdateView):
     template_name = 'driver/update_driver.html'
     def get_success_url(self):
         return reverse('view-driver',kwargs={'pk':self.object.pk})
+
 
 #delete driver
 @method_decorator(login_required(login_url='login'),name='dispatch')
@@ -148,6 +161,9 @@ class DriverListView(ListView):
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class RequestCreateView(CreateView):
     model=TransportRequest
+    fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
+              'source', 'destination', 'is_return_journey']
+    template_name = 'transport_request/new_request.html'
 
 
 class edit_request(UpdateView): #Note that we are using UpdateView and not FormView
@@ -167,6 +183,7 @@ class edit_request(UpdateView): #Note that we are using UpdateView and not FormV
     def get_success_url(self):
         return reverse('view-request',kwargs={'pk':self.object.pk})
 
+
 #read request
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class RequestDetailView(DetailView):
@@ -174,15 +191,20 @@ class RequestDetailView(DetailView):
     template_name = 'transport_request/view_request.html'
     context_object_name = 'request'
 
+
 #update request
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class RequestUpdateView(UpdateView):
     model=TransportRequest
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
               'source', 'destination', 'is_return_journey']
+
     template_name = 'transport_request/update_request.html'
+
+
     def get_success_url(self):
         return reverse('view-request',kwargs={'pk':self.object.pk})
+
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class RequestListView(ListView):

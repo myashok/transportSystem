@@ -17,21 +17,29 @@ class Driver(models.Model):
     def __str__(self):
         return self.name
 
+
 class Vehicle(models.Model):
     registration_no=models.CharField(max_length=15,null=False)
     description=models.TextField(null=True)
+
     def __str__(self):
+
         return self.registration_no
+
 
 class RequestType(models.Model):
     type=models.CharField(max_length=50,unique=True,null=False)
+
     def __str__(self):
         return self.type
 
+
 class RequestStatus(models.Model):
-    type=models.CharField(max_length=50,unique=True,null=False)
+    type=models.CharField(max_length=50, unique=True, null=False)
+
     def __str__(self):
         return self.type
+
 
 class TransportRequest(models.Model):
     user=models.ForeignKey('auth.User')

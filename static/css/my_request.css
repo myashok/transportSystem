@@ -1,15 +1,16 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto);
-
+{
+    color :red;
+}
 .table{
     width:70%;
     margin:auto;
-    margin-top:100px;
+    margin-top: 10px;
     font-family: Roboto;
 }
 th, td {
     text-align: center;
     text-transform: capitalize;
-    border-color: white;
+    border-color: black;
 }
 th {
     font-weight: bold;
