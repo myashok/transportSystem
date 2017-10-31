@@ -149,6 +149,17 @@ class RequestCreateView(CreateView):
               'source', 'destination', 'is_return_journey']
     template_name = 'transport_request/new_request.html'
 
+    def form_valid(self, form):
+        request = form.save(commit=False)
+        request.user = self.request.user
+        request.request_status = RequestStatus.objects.get(pk=1)
+        request.last_updated_at = timezone.now()
+        return super(RequestCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return redirect("list-requests")
+
+
 
 class edit_request(UpdateView): #Note that we are using UpdateView and not FormView
     model = Request
