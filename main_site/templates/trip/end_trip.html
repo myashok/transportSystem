@@ -1,8 +1,16 @@
 {%  extends 'base.html' %}
 {%  block content %}
-    <form method="post" action="">
+    <form method="post" action="" class="form-group">
+    <div class="form-group">
             {% csrf_token %}
+        <label for="request-id">Request #</label>
+        <input type="text" class="form-control" id="request-id" value="{{ request.id }}" disabled/>
+        <label for="request-user">User</label>
+        <input type="text" class="form-control" id="request-user" value="{{ request.user }}" disabled>
+        <label for="request-user">User</label>
+        <input type="text" class="form-control" id="request-user" value="{{ request.user }}" disabled>
     {{ form.as_p }}
     <input type="submit" value="End Trip and Generate bill">
+    </div>
     </form>
 {%  endblock %}

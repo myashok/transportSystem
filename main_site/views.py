@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.models import Group
-from django.forms import ModelForm, DateInput
-from django.contrib.auth import authenticate, login, logout, REDIRECT_FIELD_NAME
+from django.contrib.auth import  REDIRECT_FIELD_NAME
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import UpdateView, ListView, DeleteView, CreateView, DetailView
 
+from main_site.decorators import is_not_priveleged, check_not_priveleged
 from main_site.models import TransportRequest, Driver, RequestStatus, Vehicle, Trip, TripStatus
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
@@ -18,22 +19,6 @@ from django.views.generic import UpdateView
 import logging
 logger = logging.getLogger(__name__)
 
-def has_group(user, group_name):
-    group = Group.objects.get(name=group_name)
-    return True if group in user.groups.all() else False
-
-def check_not_staff(user):
-    return True if not user.groups.filter(name='TransportStaff').exists() else False
-
-def is_not_staff(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
-    actual_decorator = user_passes_test(
-        check_not_staff,
-        login_url=login_url,
-        redirect_field_name=redirect_field_name
-    )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
 
 class LoginView(View):
     def post(self, request):
@@ -44,20 +29,24 @@ class LoginView(View):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                if has_group(user,'TransportAdmin'):
-                    return redirect('admin')
-                elif has_group(user,'TransportStaff'):
-                    return redirect('staff-home')
-                else:
-                    return redirect('home')
+            if is_not_priveleged(request.user):
+                return redirect('user-home')
             else:
-                return HttpResponse("Inactive user.")
+                return redirect('staff-home')
+
         else:
-            return redirect('login')
+            return render(request,'login.html',{'error':'Invalid credentials'})
 
     def get(self,request):
+        if request.user.is_authenticated:
+            if is_not_priveleged(request.user):
+                return redirect('user-home')
+            else:
+                return redirect('staff-home')
+
         return render(request,'login.html')
 
+@method_decorator(login_required(login_url='login'),name='dispatch')
 class LogoutView(View):
     def get(self, request):
         logout(request)
@@ -68,28 +57,13 @@ def my_requests(request):
     requests=TransportRequest.objects.filter(user=request.user)
     return render(request, 'transport_request/my_requests.html', {'requests':requests})
 
-#####staff views#####
-@login_required(login_url='login')
-def staff_home(request):
-    return render(request,'staff/home.html')
-
-
-@login_required(login_url='login')
-@is_not_staff(login_url='access_denied')
-def view_requests(request):
-    reqs=TransportRequest.objects.all().order_by('date_of_journey')
-    return render(request,'staff/view_requests.html',{'requests':reqs})
-
-
-def allot_vehicle(request,pk):
-    req=TransportRequest.objects.get(pk=pk)
-    return render(request,'staff/allot_vehicle.html',{'request':req})
 
 ####################driver##################
 
 
 #create driver
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class DriverCreateView(CreateView):
     model=Driver
     fields=['name','picture','phone','license_no','license_validity','email','date_of_birth']
@@ -98,12 +72,14 @@ class DriverCreateView(CreateView):
 
 #driver details
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class DriverDetailView(DetailView):
     model=Driver
     template_name = 'driver/view_driver.html'
     context_object_name = 'driver'
 
 #update driver
+@method_decorator(check_not_priveleged,name='dispatch')
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class DriverUpdateView(UpdateView):
     model=Driver
@@ -114,6 +90,7 @@ class DriverUpdateView(UpdateView):
 
 #delete driver
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class DriverDeleteView(DeleteView):
     model=Driver
     template_name = 'driver/delete_driver.html'
@@ -121,6 +98,7 @@ class DriverDeleteView(DeleteView):
 
 #list drivers
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class DriverListView(ListView):
     model = Driver
     template_name = 'driver/list_drivers.html'
@@ -146,6 +124,7 @@ class RequestCreateView(CreateView):
 
 #read request
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class RequestDetailView(DetailView):
     model=TransportRequest
     template_name = 'transport_request/view_request.html'
@@ -153,6 +132,7 @@ class RequestDetailView(DetailView):
 
 #update request
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class RequestUpdateView(UpdateView):
     model=TransportRequest
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
@@ -162,10 +142,15 @@ class RequestUpdateView(UpdateView):
         return reverse('view-request',kwargs={'pk':self.object.pk})
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class RequestListView(ListView):
     model = TransportRequest
     template_name = 'transport_request/list_requests.html'
     context_object_name = 'requests'
+    def get_queryset(self):
+        if is_not_priveleged(self.request.user):
+            return TransportRequest.objects.filter(user=self.request.user)
+        return TransportRequest.objects.all()
 
 #####################################################
 
@@ -173,6 +158,7 @@ class RequestListView(ListView):
 
 #create vehicle
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class VehicleCreateView(CreateView):
     model=Vehicle
     fields=['registration_no','type','description','fuel_capacity']
@@ -181,6 +167,7 @@ class VehicleCreateView(CreateView):
 
 #vehicle details
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class VehicleDetailView(DetailView):
     model=Vehicle
     template_name = 'vehicle/view_vehicle.html'
@@ -188,6 +175,7 @@ class VehicleDetailView(DetailView):
 
 #update vehicle
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class VehicleUpdateView(UpdateView):
     model=Vehicle
     fields=['registration_no','type','description','fuel_capacity']
@@ -197,6 +185,7 @@ class VehicleUpdateView(UpdateView):
 
 #delete vehicle
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class VehicleDeleteView(DeleteView):
     model=Vehicle
     template_name = 'vehicle/delete_vehicle.html'
@@ -204,6 +193,7 @@ class VehicleDeleteView(DeleteView):
 
 #list vehicles
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class VehicleListView(ListView):
     model = Vehicle
     template_name = 'vehicle/list_vehicles.html'
@@ -213,15 +203,17 @@ class VehicleListView(ListView):
 
 #new trip
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class TripCreateView(CreateView):
     model=Trip
-    fields=['request','vehicle','driver','start_time']
+    fields=['request','vehicles','drivers','start_time']
     template_name = 'trip/new_trip.html'
     success_url = reverse_lazy('list-trips')
 
 
 #trip details
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class TripDetailView(DetailView):
     model=Trip
     template_name = 'trip/view_trip.html'
@@ -229,32 +221,47 @@ class TripDetailView(DetailView):
 
 #update trip
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class TripUpdateView(UpdateView):
     model=Trip
-    fields=['request','vehicle','driver','start_time']
     template_name = 'trip/update_trip.html'
+    fields = ['start_distance_reading','end_distance_reading','start_time','end_time',
+              'vehicles','drivers']
     def get_success_url(self):
         return reverse('view-trip',kwargs={'pk':self.object.pk})
 
 #list trips
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class TripListView(ListView):
     model = Trip
     template_name = 'trip/list_trips.html'
     context_object_name = 'trips'
 
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
+class TripStartView(UpdateView):
+    model = Trip
+    template_name = 'trip/start_trip.html'
+    fields = ['start_time','start_distance_reading','vehicles','drivers']
+    context_object_name = 'trip'
+
+@method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class TripEndView(UpdateView):
     model = Trip
     fields = ['end_time','start_distance_reading','end_distance_reading']
     template_name = 'trip/end_trip.html'
 
+
     def get_context_data(self, **kwargs):
         context = super(TripEndView, self).get_context_data(**kwargs)
+        if Trip.objects.get(id=self.kwargs['pk']).status==TripStatus.objects.get(type='Completed'):
+            raise PermissionDenied
         request=Trip.objects.get(pk=self.object.pk).request
         context['request'] = request
-
         return context
+
     def get_object(self, queryset=None):
         obj=super(TripEndView,self).get_object()
         obj.status=TripStatus.objects.get(type='Completed')
