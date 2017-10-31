@@ -38,8 +38,8 @@ urlpatterns=[
     url(r'^trips/(?P<pk>\d+)/end$', TripEndView.as_view(), name='end-trip'),
     url(r'^trips', TripListView.as_view(), name='list-trips'),
 
+    url(r'^access_denied$', TemplateView.as_view(template_name='403.html'), name='access_denied'),
     url(r'^access_denied$', TemplateView.as_view(template_name='access_denied.html'), name='access_denied'),
-
 ]
 
 if settings.DEBUG:
