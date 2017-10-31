@@ -78,6 +78,7 @@ class Vehicle(models.Model):
     status=models.ForeignKey('VehicleStatus',default=1)
 
     def __str__(self):
+
         return self.registration_no
 
     @classmethod
@@ -94,11 +95,13 @@ class RequestType(models.Model):
     def __str__(self):
         return self.type
 
+
 class RequestStatus(models.Model):
-    type=models.CharField(max_length=50,unique=True,null=False)
+    type=models.CharField(max_length=50, unique=True, null=False)
 
     def __str__(self):
         return self.type
+
 
 class TransportRequest(models.Model):
     user=models.ForeignKey('auth.User')

@@ -1,11 +1,34 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block css %}
+     <link rel="stylesheet" href="{% static "css/plugin/timepicker.min.css" %}" >
+     <link href="{% static "css/plugin/zebra_datepicker.min.css" %}" rel="stylesheet">
+     <link rel="stylesheet" href="{% static "css/request_vehicle.css" %}">
+{% endblock %}
 {% block content %}
     {% if form.errors %}
-    <p style="color: red;">{{ form.errors}}</p>
-{% endif %}
-
-<form method="POST">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit !">
-</form>
+        <p style="color: red;">{{ form.errors}}</p>
+    {% endif %}
+    <div class="container col-lg-5 col-md-6 col-sm-7">
+      <div class="row justify-content-center align-items-center">
+        <form method="POST" action="" class="form-horizontal ">{% csrf_token %}
+        <fieldset>
+            <legend>Register</legend>
+            {% for field in form %}
+                <div class="form-group">
+                    <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field">{{ field }}</span>
+                </div>
+            {% endfor %}
+            <input type="submit" class="btn btn-info" name="request_vehicle" value="Submit">
+        </fieldset>
+        </form>
+      </div>
+    </div>
+{%  endblock %}
+{% block js %}
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugin/timepicker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugin/zebra_datepicker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugin/date-time-picker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/form.js" %}"></script>
 {% endblock %}

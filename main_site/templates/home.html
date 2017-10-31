@@ -1,12 +1,24 @@
 {% extends 'base.html' %}
+{% block css %}
+    <style>
+    .container{
+       padding: 0px;
+       margin: 0px;
+       margin-left: 10px;
+       margin-top: 10px;
+    }
+    .item {
+        border: 1px solid black;
+        text-align: center;
+        padding: 10px;
+    }
+     .item:nth-child(even) {
+        background-color: lightgrey;
+    }
+    </style>
+{% endblock %}
 {% block content %}
-    <a href="{% url 'new-request' %}" class="btn btn-primary">
-    Request vehicle
-    </a>
-    {% if user.is_authenticated  %}
-        <p>hello {{ user.username }}</p>
-        <a href="{% url 'logout' %}" class="btn btn-primary">Log Out</a>
-    {% else%}
-        <a href="{% url 'login' %}" class="btn btn-primary">Log In</a>
-    {% endif  %}
+    <div class="container col-md-6 col-lg-2 col-sm-6 col-12 ist-group table-of-contents">
+      <a class="item list-group-item list-group-item-action" href="{% url 'new-request' %}">Request vehicle</a>
+    </div>
 {% endblock %}

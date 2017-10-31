@@ -12,5 +12,4 @@ admin.site.register(RequestStatus)
 admin.site.register(VehicleType)
 admin.site.register(Trip)
 admin.site.register(TripStatus)
-
-
+admin.site.register(RequestStatus)
