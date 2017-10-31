@@ -30,15 +30,7 @@
               <td>{{ i.description }}</td>
               <td>{{ i.is_return_journey}}</td>
               <td>{{ i.request_status }}</td>
-              {% if req.request_status|slugify == "Pending" %}
-                  <td>
-                    <a href="{% url 'home'  %}" class="btn btn-primary">{{ req.Meta }}</a>
-                  </td>
-            {% else %}
-                <td>
-                     <a href="{% url 'home' %}" class="btn btn-primary">Allot</a>
-                </td>
-            {% endif %}
+
                 </tr>
         {% endfor %}
 
