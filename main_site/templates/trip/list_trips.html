@@ -1,6 +1,5 @@
 {%  extends 'base.html' %}
 {% block content %}
-    <a href="{%  url 'new-trip' %}" class="btn btn-primary">Add new</a>
    <table class="table">
   <thead>
    <tr>
@@ -26,12 +25,16 @@
         <td>{% if trip.end_time %} {{ trip.end_time }}{% else %}---{% endif %}</td>
         <td>{% for i in trip.drivers.all %}{{ i.name }}{% endfor %}</td>
         <td>{% for i in trip.vehicles.all %}{{ i.registration_no }}{% endfor %}</td>
-          {% if trip.status|stringformat:"s" == "Active"  %}
         <td>
-            <a href="{% url 'end-trip' pk=trip.id %}" class="btn btn-success">End Trip</a>
+            {% if trip.bill %}
+                <a href="{% url 'view-bill' pk=trip.bill.pk %}">View bill for this trip</a>
+            {% elif trip.status|stringformat:"s" == "Scheduled" %}
+                <a href="{% url 'start-trip' pk=trip.pk %}">Start Trip</a>
+            {% elif trip.status|stringformat:"s" == "Active" %}
+                <a href="{% url 'end-trip' pk=trip.pk %}">end trip</a>
+
+            {% endif %}
         </td>
-      {% else %}
-      {% endif %}
       </tr>
   {% endfor %}
   <tr>

@@ -29,9 +29,17 @@
               <td>{{ i.date_of_journey }} {{ i.time_of_journey }}</td>
               <td>{{ i.description }}</td>
               <td>{{ i.is_return_journey}}</td>
-              <td>{{ i.request_status }}</td>
-
-                </tr>
+              <td>{{ i.status }}</td>
+              <td>
+                {% if not i.trip %}
+                    <a href="{% url 'new-trip' pk=i.pk %}" class="btn btn-success">Approve</a>
+                {% elif not i.trip.bill %}
+                    <a href="{% url 'view-trip' pk=i.trip.pk%}" class="btn btn-primary">View Booking</a>
+                {% else %}
+                    <a href="{% url 'view-bill' pk=i.trip.bill.pk %}" class="btn btn-info">View Bill</a>
+                {% endif %}
+              </td>
+            </tr>
         {% endfor %}
 
   </tbody>

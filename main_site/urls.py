@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
-    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView
+    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView
 from . import views
 
 urlpatterns=[
@@ -32,12 +32,16 @@ urlpatterns=[
     url(r'^vehicles/(?P<pk>\d+)/delete$', VehicleDeleteView.as_view(), name='delete-vehicle'),
     url(r'^vehicles', VehicleListView.as_view(), name='list-vehicles'),
 
-    url(r'^trips/new', views.TripCreateView.as_view(), name='new-trip'),
+    url(r'^requests/(?P<pk>\d+)/trips/new', views.TripCreateView.as_view(), name='new-trip'),
     url(r'^trips/(?P<pk>\d+)$', TripDetailView.as_view(), name='view-trip'),
     url(r'^trips/(?P<pk>\d+)/edit$', TripUpdateView.as_view(), name='update-trip'),
     url(r'^trips/(?P<pk>\d+)/start$', TripStartView.as_view(), name='start-trip'),
     url(r'^trips/(?P<pk>\d+)/end$', TripEndView.as_view(), name='end-trip'),
     url(r'^trips', TripListView.as_view(), name='list-trips'),
+
+
+    url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
+
 
     url(r'^access_denied$', TemplateView.as_view(template_name='access_denied.html'), name='access_denied'),
 
