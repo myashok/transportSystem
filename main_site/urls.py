@@ -1,24 +1,26 @@
 from django.conf import settings
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
-    TripDetailView, TripUpdateView, TripListView, TripEndView, RequestCreateView
+    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, RequestCreateView
 from . import views
+from django.conf.urls import handler404
 
+handler400 = 'my_app.views.bad_request'
 urlpatterns=[
-    url(r'^$',TemplateView.as_view(template_name='home.html'),name='home'),
+    url(r'^$',TemplateView.as_view(template_name='home.html'),name='user-home'),
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
 
-    url(r'^staff$', views.staff_home,name='staff-home'),
+    url(r'^staff$',TemplateView.as_view(template_name='staff/home.html'),name='staff-home'),
 
     url(r'^requests/new', RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
     url(r'^requests/(?P<pk>\d+)/edit$', RequestUpdateView.as_view(), name='update-request'),
-    url(r'^requests', RequestListView.as_view(), name='list-requests'),
+    url(r'^requests$', RequestListView.as_view(), name='list-requests'),
 
     url(r'^drivers/new$', DriverCreateView.as_view(), name='new-driver'),
     url(r'^drivers/(?P<pk>\d+)$', DriverDetailView.as_view(), name='view-driver'),
@@ -35,12 +37,14 @@ urlpatterns=[
     url(r'^trips/new', views.TripCreateView.as_view(), name='new-trip'),
     url(r'^trips/(?P<pk>\d+)$', TripDetailView.as_view(), name='view-trip'),
     url(r'^trips/(?P<pk>\d+)/edit$', TripUpdateView.as_view(), name='update-trip'),
+    url(r'^trips/(?P<pk>\d+)/start$', TripStartView.as_view(), name='start-trip'),
     url(r'^trips/(?P<pk>\d+)/end$', TripEndView.as_view(), name='end-trip'),
     url(r'^trips', TripListView.as_view(), name='list-trips'),
 
     url(r'^access_denied$', TemplateView.as_view(template_name='403.html'), name='access_denied'),
     url(r'^access_denied$', TemplateView.as_view(template_name='access_denied.html'), name='access_denied'),
 ]
+handler404 = 'my_app.views.bad_request'
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

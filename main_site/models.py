@@ -1,6 +1,8 @@
 import os
+from datetime import datetime
 
 from PIL import Image
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
@@ -16,7 +18,7 @@ class Driver(models.Model):
     license_no=models.CharField(max_length=50,unique=True)
     license_validity=models.DateField()
     email=models.EmailField(unique=True)
-    date_of_birth=models.DateField(null=True)
+    date_of_birth=models.DateField()
     picture=models.ImageField(upload_to=get_upload_path,default='default.png')
 
     def get_age(self):
@@ -39,7 +41,7 @@ class Driver(models.Model):
 
 class VehicleType(models.Model):
     type=models.CharField(max_length=50,unique=True)
-    capacity=models.IntegerField(default=4)
+    capacity=models.IntegerField(default=4,validators=[MinValueValidator(1)])
     def __str__(self):
         return self.type
 
@@ -49,10 +51,10 @@ class VehicleStatus(models.Model):
 
 class VehicleMaintenance(models.Model):
     vehicle=models.ForeignKey('Vehicle')
-    start_date=models.DateField(null=False)
+    start_date=models.DateField()
     end_date=models.DateField(null=True)
-    expected_cost=models.FloatField()
-    actual_cost=models.FloatField()
+    expected_cost=models.FloatField(validators=[MinValueValidator(0)])
+    actual_cost=models.FloatField(validators=[MinValueValidator(0)])
 
     class Meta:
         ordering=['start_date']
@@ -68,10 +70,11 @@ class VehicleMaintenance(models.Model):
 
 
 class Vehicle(models.Model):
-    registration_no=models.CharField(max_length=15,null=False)
+    registration_no=models.CharField(max_length=15,null=False,unique=True)
+    #picture=models.ImageField(upload_to=get_upload_path,default='default_bus.png')
     type=models.ForeignKey('VehicleType')
     description=models.TextField(null=True)
-    fuel_capacity=models.FloatField(null=False)
+    fuel_capacity=models.FloatField(null=False,validators=[MinValueValidator(10)])
     status=models.ForeignKey('VehicleStatus',default=1)
 
     def __str__(self):
@@ -88,7 +91,7 @@ class Vehicle(models.Model):
 
 class RequestType(models.Model):
     type=models.CharField(max_length=50,unique=True,null=False)
-    rate=models.FloatField()
+    rate=models.FloatField(validators=[MinValueValidator(0)])
     def __str__(self):
         return self.type
 
@@ -102,10 +105,10 @@ class RequestStatus(models.Model):
 
 class TransportRequest(models.Model):
     user=models.ForeignKey('auth.User')
-    last_updated_at=models.DateTimeField()
+    last_updated_at=models.DateTimeField(default=timezone.now)
     date_of_journey=models.DateField(null=False)
     time_of_journey=models.TimeField(null=False)
-    no_of_persons_travelling=models.IntegerField(default=1)
+    no_of_persons_travelling=models.IntegerField(default=1,validators=[MinValueValidator(1)])
     request_type=models.ForeignKey('RequestType')
     description=models.TextField(null=True)
     source=models.CharField(max_length=200,null=False)
@@ -130,12 +133,11 @@ class TripStatus(models.Model):
         return self.type
 
 class Trip(models.Model):
-    start_distance_reading=models.FloatField(null=True,blank=True)
-    end_distance_reading=models.FloatField(null=True,blank=True)
+    start_distance_reading=models.FloatField(null=True,blank=True,validators=[MinValueValidator(0)])
+    end_distance_reading=models.FloatField(null=True,blank=True,validators=[MinValueValidator(1)])
     request = models.OneToOneField(
         TransportRequest,
         on_delete=models.CASCADE,
-        primary_key=True,
     )
     status=models.ForeignKey('TripStatus',default=1)
     start_time=models.TimeField(null=False)
@@ -154,14 +156,14 @@ class Bill(models.Model):
     trip = models.OneToOneField(
         Trip,
         on_delete=models.CASCADE,
-        primary_key=True,
     )
-    total_distance=models.FloatField()
-    discount_percentage=models.FloatField(default=0)
-    total_fare=models.FloatField()
+    total_distance=models.FloatField(validators=[MinValueValidator(1)])
+    discount_percentage=models.FloatField(default=0,validators=[MinValueValidator(0)])
+    total_fare=models.FloatField(validators=[MinValueValidator(0)])
 
     class Meta:
         ordering=['datetime_of_generation']
 
     def __str__(self):
         return self.id
+
