@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
-    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView
+    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView, RequestCreateView
 from . import views
 from django.conf.urls import handler404
 
