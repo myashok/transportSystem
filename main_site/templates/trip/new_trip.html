@@ -1,5 +1,11 @@
 {%  extends 'base.html' %}
 {%  block content %}
+    <p>You are scheduling a trip for request # {{ req.id }}
+        made by {{ req.user.username }}</p>
+    <p>Source: {{ req.source }}</p>
+    <p>Destination: {{ req.destination }}</p>
+    <p>Date of journey : {{ req.date_of_journey }}</p>
+    <p>Time of journey: {{ req.time_of_journey }}</p>
     <form method="post" action="">
             {% csrf_token %}
     {{ form.as_p }}

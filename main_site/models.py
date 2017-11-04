@@ -133,8 +133,8 @@ class TripStatus(models.Model):
         return self.type
 
 class Trip(models.Model):
-    start_distance_reading=models.FloatField(null=True,blank=True,validators=[MinValueValidator(0)])
-    end_distance_reading=models.FloatField(null=True,blank=True,validators=[MinValueValidator(1)])
+    start_distance_reading=models.FloatField(null=True,blank=False,validators=[MinValueValidator(0)])
+    end_distance_reading=models.FloatField(null=True,blank=False,validators=[MinValueValidator(1)])
     request = models.OneToOneField(
         TransportRequest,
         on_delete=models.CASCADE,
@@ -165,5 +165,5 @@ class Bill(models.Model):
         ordering=['datetime_of_generation']
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
