@@ -1,9 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+        .card {
+            margin: 10px;
+            min-width: 300px;
+            border: 2px solid blue;
+            margin-bottom: 50px;
+        }
+        .card-block {
+            position: relative;
+        }
+        .card-title {
+            text-transform: capitalize;
+            font-weight: 400;
+            font-size: 2em;
+        }
+        .category {
+                font-weight: 600;
+        }
+        .data {
+            display: inline-block;
+            position:absolute;
+            left: 120px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    <p>{{ vehicle.id }}</p>
-    <p>{{ vehicle.type }}</p>
-    <p>{{ vehicle.description }}</p>
-    <p>{{ vehicle.fuel_capacity }}</p>
-    <a href="{% url 'update-vehicle' pk=vehicle.id %}" class="btn btn-primary">Edit</a>
-    <a href="{% url 'delete-vehicle' pk=vehicle.id %}" class="btn btn-danger">Delete</a>
+    <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
+        <div class="card-block">
+            <h4 class="card-title text-bold">{{ vehicle.registration_no }}</h4>
+            <p>
+                <span class="category">Type </span>
+                <span class="data">{{ vehicle.type }}</span>
+            </p>
+            <p>
+                <span class="category">Descrption </span>
+                <span class="data">{{ vehicle.description }}</span>
+            </p>
+            <p>
+                <span class="category">Fuel Capacity </span>
+                <span class="data">{{ vehicle.fuel_capacity }}</span>
+            </p>
+            <a href="{% url 'update-vehicle' pk=vehicle.id  %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'delete-vehicle' pk=vehicle.id  %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
 {% endblock %}
