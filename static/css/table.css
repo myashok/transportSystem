@@ -1,0 +1,15 @@
+.container {
+    width: 100%;
+    padding: 5px;
+    margin:  auto;
+}
+.table {
+    width: 100%;
+    border: 2px solid black;
+}
+table.table-bordered > thead > tr > th{
+  border:2px solid blue;
+}
+table.table-bordered > tbody > tr > td{
+  border:1px solid blue;
+}

@@ -7,9 +7,6 @@ from main_site.views import DriverListView, DriverUpdateView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
     TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView, RequestCreateView
 from . import views
-from django.conf.urls import handler404
-
-handler400 = 'my_app.views.bad_request'
 urlpatterns=[
     url(r'^$',TemplateView.as_view(template_name='home.html'),name='user-home'),
     url(r'^login',LoginView.as_view(),name='login'),
@@ -47,7 +44,5 @@ urlpatterns=[
 
     url(r'^access_denied$', TemplateView.as_view(template_name='access_denied.html'), name='access_denied'),
 ]
-handler404 = 'my_app.views.bad_request'
-
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

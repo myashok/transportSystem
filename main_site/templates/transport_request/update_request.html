@@ -1,14 +1,15 @@
 {%  extends 'base.html' %}
 {% load static %}
 {% block css %}
-     <link rel="stylesheet" href="{% static "css/request_vehicle.css" %}">
+     <link rel="stylesheet" href="{% static "css/plugin/timepicker.min.css" %}" >
+     <link rel="stylesheet" href="{% static "css/form.css" %}">
 {% endblock %}
 {%  block content %}
     <div class="container col-lg-5 col-md-6 col-sm-7">
       <div class="row justify-content-center align-items-center">
         <form method="POST" action="" class="form-horizontal ">{% csrf_token %}
         <fieldset>
-            <legend>Register </legend>
+            <legend>Edit Request </legend>
             {% for field in form %}
                 <div class="form-group">
                     <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field">{{ field }}</span>
@@ -21,5 +22,8 @@
     </div>
 {%  endblock %}
 {% block js %}
+    <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugin/timepicker.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugin/date-time-picker.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/form.js" %}"></script>
 {% endblock %}
