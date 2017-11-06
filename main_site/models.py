@@ -15,14 +15,11 @@ def get_upload_path(instance, filename):
 class Driver(models.Model):
     name=models.CharField(max_length=200)
     phone=PhoneNumberField(unique=True)
+    blood_group=models.CharField(max_length=5,default='A+')
     license_no=models.CharField(max_length=50,unique=True)
     license_validity=models.DateField()
     email=models.EmailField(unique=True)
-    date_of_birth=models.DateField()
     picture=models.ImageField(upload_to=get_upload_path,default='default.png')
-
-    def get_age(self):
-        return timezone.now().year-self.date_of_birth.year
 
     class Meta():
         ordering=['license_validity']
@@ -34,9 +31,16 @@ class Driver(models.Model):
         super(Driver, self).save(*args, **kwargs)
         image = Image.open(self.picture)
         (width, height) = image.size
-        size = (100, 100)
+        size = (200, 200)
         image = image.resize(size, Image.ANTIALIAS)
         image.save(self.picture.path)
+
+    def delete(self, using=None, keep_parents=False):
+        super(Driver, self).delete()
+        if not os.path.exists(self.picture):
+            return
+        image = Image.open(self.picture)
+        os.remove(image)
 
 
 class VehicleType(models.Model):
@@ -166,3 +170,14 @@ class Bill(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class Announcement(models.Model):
+    created_by=models.ForeignKey('auth.User')
+    created_at=models.DateTimeField()
+    text=models.TextField(max_length=500)
+    description=models.TextField(null=True,blank=True)
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        ordering=['created_at']

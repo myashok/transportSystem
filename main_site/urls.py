@@ -5,16 +5,17 @@ from django.views.generic import TemplateView
 from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
-    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView, RequestCreateView
+    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView
 from . import views
+
 urlpatterns=[
-    url(r'^$',TemplateView.as_view(template_name='home.html'),name='user-home'),
+    url(r'^$', TemplateView.as_view(template_name='home.html'), name='user-home'),
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
 
     url(r'^staff$',TemplateView.as_view(template_name='staff/home.html'),name='staff-home'),
 
-    url(r'^requests/new', RequestCreateView.as_view(), name='new-request'),
+    url(r'^requests/new', views.RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
     url(r'^requests/(?P<pk>\d+)/edit$', RequestUpdateView.as_view(), name='update-request'),
     url(r'^requests$', RequestListView.as_view(), name='list-requests'),
@@ -40,9 +41,7 @@ urlpatterns=[
 
 
     url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
-
-
-    url(r'^access_denied$', TemplateView.as_view(template_name='access_denied.html'), name='access_denied'),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

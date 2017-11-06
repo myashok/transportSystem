@@ -5,6 +5,43 @@
 {% endblock %}
 
 {% block content %}
+    <a href="{%  url 'new-driver' %}" class="btn btn-primary">Add new</a>
+   <table class="table">
+  <thead>
+   <tr>
+       <th>Driver #</th>
+       <th>Name</th>
+       <th>Phone no.</th>
+       <th>Email id</th>
+       <th>License no.</th>
+       <th>License valid till</th>
+       <th>Actions</th>
+   </tr>
+   </thead>
+   <tbody>
+  {%  for driver in drivers %}
+      <tr>
+          <td><a href="{% url 'view-driver' pk=driver.id %}">{{ driver.id }}</a></td>
+        <td>{{ driver.name }}</td>
+        <td>{{ driver.phone }}</td>
+        <td>{{ driver.email }}</td>
+        <td>{{ driver.blood_group }}</td>
+        <td>{{ driver.license_no }}</td>
+        <td>{{ driver.license_validity }}</td>
+        <td>
+            <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>
+        </td>
+      </tr>
+  {% endfor %}
+  <tr>
+
+  </tr>
+  </tbody>
+   </table>
+     {% if not drivers %}
+          <p align="center">No data to display</p>
+      {% endif %}
    <div class="container col-lg-12 col-md-12 col-sm-12 col-12">
         <a href="{%  url 'new-driver' %}" class="btn btn-primary">Add new</a>
         <table class="table table-striped table-responsive table-hover table-bordered">
@@ -43,4 +80,3 @@
               {% endif %}
    </div>
 {% endblock %}
-
