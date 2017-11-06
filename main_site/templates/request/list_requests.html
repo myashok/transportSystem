@@ -35,13 +35,17 @@
                                 {% if i.status|stringformat:"s" == "Pending"%}
                                     <a href="{%  url 'new-trip' pk=i.pk %}" class="btn btn-success">Allot</a>
                                 {% else %}
-                                    <a href="{%  url 'view-trip' pk=i.trip.pk %}" class="btn btn-primary">View trip</a>
+                                    <a href="{%  url 'view-trip' pk=i.pk %}" class="btn btn-primary">View trip</a>
                                 {% endif %}
                             </td>
 
                         </tr>
                     {% endfor %}
-
+                      {% if not requests %}
+                            <tr>
+                                <td colspan="8" style="text-align: center">No Data to display</td>
+                            </tr>
+                      {% endif %}
                 </tbody>
            </table>
              {% if not requests %}

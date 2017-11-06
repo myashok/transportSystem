@@ -29,10 +29,13 @@
                     </td>
                   </tr>
                 {% endfor %}
+                {% if not vehicles %}
+                    <tr>
+                        <td colspan="5" style="text-align: center">No Data to display</td>
+                    </tr>
+                {% endif %}
               </tbody>
          </table>
-         {% if not vehicles %}
-              <p align="center">No data to display</p>
-          {% endif %}
+
    </div>
 {% endblock %}
