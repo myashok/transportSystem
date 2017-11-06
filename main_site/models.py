@@ -28,6 +28,9 @@ class Driver(models.Model):
         return self.name
 
     def save(self, *args, ** kwargs):
+        if os.path.exists(self.picture.url):
+            image = Image.open(self.picture)
+            os.remove(image)
         super(Driver, self).save(*args, **kwargs)
         image = Image.open(self.picture)
         (width, height) = image.size
@@ -43,54 +46,47 @@ class Driver(models.Model):
         os.remove(image)
 
 
-class VehicleType(models.Model):
-    type=models.CharField(max_length=50,unique=True)
-    capacity=models.IntegerField(default=4,validators=[MinValueValidator(1)])
-    def __str__(self):
-        return self.type
-
-class VehicleStatus(models.Model):
-    type=models.CharField(max_length=50)
-    description=models.TextField(null=True)
-
 class VehicleMaintenance(models.Model):
     vehicle=models.ForeignKey('Vehicle')
     start_date=models.DateField()
     end_date=models.DateField(null=True)
-    expected_cost=models.FloatField(validators=[MinValueValidator(0)])
-    actual_cost=models.FloatField(validators=[MinValueValidator(0)])
+    expected_cost=models.FloatField(default=0,blank=True)
+    actual_cost=models.FloatField(default=0,blank=True)
 
     class Meta:
         ordering=['start_date']
 
-    @classmethod
-    def make_available(cls,id,end_date,actual_cost):
-        vm=cls.objects.get(pk=id)
-        vm.end_date=end_date
-        vm.actual_cost=actual_cost
-        vm.save()
-        vm.vehicle.status=VehicleStatus.objects.get(type='Available')
-        vm.vehicle.save()
-
-
 class Vehicle(models.Model):
-    registration_no=models.CharField(max_length=15,null=False,unique=True)
-    #picture=models.ImageField(upload_to=get_upload_path,default='default_bus.png')
-    type=models.ForeignKey('VehicleType')
+    registration_no=models.CharField(max_length=15,unique=True)
+    picture=models.ImageField(upload_to=get_upload_path,default='school-bus.png')
     description=models.TextField(null=True)
-    fuel_capacity=models.FloatField(null=False,validators=[MinValueValidator(10)])
-    status=models.ForeignKey('VehicleStatus',default=1)
+    seating_capacity=models.IntegerField(default=4)
+    status=models.CharField(max_length=50)
+
+    def save(self, *args, **kwargs):
+        if self.vehiclemaintenance_set.filter(end_date=None).exists():
+            self.status="Under Maintenance"
+        else:
+            self.status="Available"
+        if os.path.exists(self.picture.url):
+            image = Image.open(self.picture)
+            os.remove(image)
+        image = Image.open(self.picture)
+        (width, height) = image.size
+        size = (200, 200)
+        image = image.resize(size, Image.ANTIALIAS)
+        image.save(self.picture.path)
+        super(Vehicle,self).save(*args,**kwargs)
 
     def __str__(self):
-
         return self.registration_no
 
     @classmethod
     def get_available_vehicles(cls):
-        return cls.objects.filter(status=VehicleStatus.objects.get(type='Available'))
+        return cls.objects.filter(status='Available')
     @classmethod
     def get_vehicles_under_maintenance(cls):
-        return cls.objects.get(status=VehicleStatus.objects.get(type='Under maintenance'))
+        return cls.objects.get(status='Under maintenance')
 
 
 class RequestType(models.Model):
@@ -100,28 +96,26 @@ class RequestType(models.Model):
         return self.type
 
 
-class RequestStatus(models.Model):
-    type=models.CharField(max_length=50, unique=True, null=False)
-
-    def __str__(self):
-        return self.type
-
-
 class TransportRequest(models.Model):
     user=models.ForeignKey('auth.User')
     last_updated_at=models.DateTimeField(default=timezone.now)
     date_of_journey=models.DateField(null=False)
-    time_of_journey=models.TimeField(null=False)
+    time_of_journey=models.TimeField(default=timezone.now)
     no_of_persons_travelling=models.IntegerField(default=1,validators=[MinValueValidator(1)])
     request_type=models.ForeignKey('RequestType')
     description=models.TextField(null=True)
     source=models.CharField(max_length=200,null=False)
     destination=models.CharField(max_length=200,null=False)
     is_return_journey=models.BooleanField(default=False)
-    status=models.ForeignKey('RequestStatus',default=1)
+    status=models.CharField(max_length=50)
 
     def save(self, *args, **kwargs):
         self.last_updated_at=timezone.now()
+        if Trip.objects.filter(request=self).exists():
+            self.status='Accepted'
+        else:
+            self.status='Pending'
+
         super(TransportRequest, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -130,12 +124,6 @@ class TransportRequest(models.Model):
     class Meta:
         ordering=['date_of_journey']
 
-
-class TripStatus(models.Model):
-    type=models.CharField(max_length=50,unique=True)
-    def __str__(self):
-        return self.type
-
 class Trip(models.Model):
     start_distance_reading=models.FloatField(null=True,blank=False,validators=[MinValueValidator(0)])
     end_distance_reading=models.FloatField(null=True,blank=False,validators=[MinValueValidator(1)])
@@ -143,14 +131,20 @@ class Trip(models.Model):
         TransportRequest,
         on_delete=models.CASCADE,
     )
-    status=models.ForeignKey('TripStatus',default=1)
-    start_time=models.TimeField(null=False)
-    end_time=models.TimeField(null=True,blank=True)
+    status=models.CharField(max_length=50)
+    start_time=models.TimeField()
+    end_time=models.TimeField(null=True)
     vehicles=models.ManyToManyField(Vehicle)
     drivers=models.ManyToManyField(Driver)
 
-    def is_valid_trip(self):
-        return self.vehicles.all().count()==self.drivers.all().count()
+    def save(self,*args,**kwargs):
+        if Bill.objects.filter(trip=self):
+            self.status='Completed'
+        elif self.start_distance_reading:
+            self.status='Active'
+        else:
+            self.status='Scheduled'
+        super(Trip,self).save(*args,**kwargs)
 
     def __str__(self):
         return str(self.id)

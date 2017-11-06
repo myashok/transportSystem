@@ -53,8 +53,8 @@
                 <span class="data">{{ driver.license_validity }}</span>
             </p>
             <p>
-                <span class="category">D.O.B.</span>
-                <span class="data">{{ driver.date_of_birth }}</span>
+                <span class="category">Blood group</span>
+                <span class="data">{{ driver.blood_group }}</span>
             </p>
             <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
             <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>

@@ -32,16 +32,12 @@
         <div class="card-block">
             <h4 class="card-title text-bold">{{ vehicle.registration_no }}</h4>
             <p>
-                <span class="category">Type </span>
-                <span class="data">{{ vehicle.type }}</span>
-            </p>
-            <p>
-                <span class="category">Descrption </span>
+                <span class="category">Description </span>
                 <span class="data">{{ vehicle.description }}</span>
             </p>
             <p>
-                <span class="category">Fuel Capacity </span>
-                <span class="data">{{ vehicle.fuel_capacity }}</span>
+                <span class="category">Seats </span>
+                <span class="data">{{ vehicle.seating_capacity }}</span>
             </p>
             <a href="{% url 'update-vehicle' pk=vehicle.id  %}" class="btn btn-primary">Edit</a>
             <a href="{% url 'delete-vehicle' pk=vehicle.id  %}" class="btn btn-danger">Delete</a>
