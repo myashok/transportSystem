@@ -1,13 +1,63 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+        .card {
+            margin: 10px;
+            min-width: 300px;
+            border: 2px solid blue;
+            margin-bottom: 50px;
+        }
+        .card-block {
+            position: relative;
+        }
+        .card-img-top {
+            height: 250px;
+            border: 2px solid blue;
+        }
+        .card-title {
+            text-transform: capitalize;
+            font-weight: 400;
+            font-size: 2em;
+        }
+        .category {
+                font-weight: 600;
+        }
+        .data {
+            display: inline-block;
+            position:absolute;
+            left: 120px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    <p>{{ driver.id }}</p>
-    <p>{{ driver.name }}</p>
-    <p>{{ driver.phone }}</p>
-    <p>{{ driver.email }}</p>
-    <p>{{ driver.license_no }}</p>
-    <p>{{ driver.license_validity }}</p>
-    <p>{{ driver.date_of_birth }}</p>
-    <img src="{{ driver.picture.url }}" />
-    <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
-    <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>
+    <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
+      <img class="card-img-top img-fluid" src="{{ driver.picture.url }}" alt="Card image cap">
+        <div class="card-block">
+            <h4 class="card-title text-bold">{{ driver.name }}</h4>
+            <p>
+                <span class="category">Mob. No. </span>
+                <span class="data">{{ driver.phone }}</span>
+            </p>
+            <p>
+                <span class="category">Email </span>
+                <span class="data">{{ driver.email }}</span>
+            </p>
+            <p>
+                <span class="category">License No </span>
+                <span class="data">{{ driver.license_no }}</span>
+            </p>
+            <p>
+                <span class="category">Licence Valid </span>
+                <span class="data">{{ driver.license_validity }}</span>
+            </p>
+            <p>
+                <span class="category">D.O.B.</span>
+                <span class="data">{{ driver.date_of_birth }}</span>
+            </p>
+            <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
 {% endblock %}

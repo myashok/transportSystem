@@ -2,8 +2,7 @@
 {% load static %}
 {% block css %}
      <link rel="stylesheet" href="{% static "css/plugin/timepicker.min.css" %}" >
-     <link href="{% static "css/plugin/zebra_datepicker.min.css" %}" rel="stylesheet">
-     <link rel="stylesheet" href="{% static "css/request_vehicle.css" %}">
+     <link rel="stylesheet" href="{% static "css/form.css" %}">
 {% endblock %}
 {% block content %}
     {% if form.errors %}
@@ -28,7 +27,6 @@
 {% block js %}
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/plugin/timepicker.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/plugin/zebra_datepicker.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/plugin/date-time-picker.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/form.js" %}"></script>
 {% endblock %}
