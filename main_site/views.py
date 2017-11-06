@@ -12,7 +12,7 @@ from main_site.models import TransportRequest, Driver, RequestStatus, Vehicle, T
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import UpdateView
-# from main_site.utils import  get_bill_as_pdf
+from main_site.utils import  get_bill_as_pdf
 
 class LoginView(View):
     def post(self, request):
