@@ -12,7 +12,7 @@ from main_site.models import TransportRequest, Driver, RequestStatus, Vehicle, T
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import UpdateView
-from main_site.utils import  get_bill_as_pdf
+# from main_site.utils import  get_bill_as_pdf
 
 class LoginView(View):
     def post(self, request):
@@ -292,28 +292,49 @@ class BillDetailView(View):
 @method_decorator(login_required(login_url='login'),name='dispatch')
 @method_decorator(check_not_priveleged,name='dispatch')
 class AnnouncementCreateView(CreateView):
+
     model = Announcement
     fields = ['text','description']
     template_name = 'announcement/new_announcement.html'
-    success_url = reverse_lazy('list-announcements')
+    success_url = reverse_lazy('list-announcement')
+
+    def form_valid(self, form):
+        announcement = form.save(commit=False)
+        announcement.created_by = self.request.user
+        announcement.created_at = datetime.now()
+        announcement.save()
+        return super(AnnouncementCreateView, self).form_valid(form)
+
+
+
+
 
 
 #announcments details
 @method_decorator(login_required(login_url='login'),name='dispatch')
 @method_decorator(check_not_priveleged,name='dispatch')
-class AnnouncementDetailView(DetailView):
-    model=Announcement
+class AnnouncementListView(DetailView):
+    model = Announcement
     template_name = 'announcement/list_announcement.html'
     context_object_name = 'announcements'
 
+    def get_queryset(self):
+        if is_not_priveleged(self.request.user):
+            return Announcement.objects.filter(user=self.request.user)
+        return Announcement.objects.all()
 
+
+@method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class AnnouncementUpdateView(UpdateView):
     model = Announcement
     fields = ['text', 'description']
     template_name = 'announcement/update_announcement.html'
-    success_url = reverse_lazy('list-announcements')
+    success_url = reverse_lazy('list-announcement')
 
 
+@method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class AnnouncementDeleteView(DeleteView):
     model = Announcement
     template_name = "announcement/delete_announcement.html"
