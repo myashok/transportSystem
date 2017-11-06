@@ -1,0 +1,35 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block css %}
+     <link rel="stylesheet" href="{% static "css/table.css" %}">
+{% endblock %}
+{% block content %}
+       <div class="container col-lg-12 col-md-12 col-sm-12 col-12">
+         <a href="#" class="btn btn-primary">Add new</a>
+         <table class="table table-striped table-responsive table-hover table-bordered">
+              <thead>
+                   <tr>
+                       <th>Time of Creation</th>
+                       <th>Text</th>
+                       <th>Description</th>
+                   </tr>
+              </thead>
+              <tbody>
+                {%  for annnouncement in announcements %}
+                  <tr>
+                    <td><a href="#">{{ forloop.counter }}</a></td>
+                    <td>{{ announcement.created_at }}</td>
+                    <td>{{ announcement.text }}</td>
+                    <td>{{ announcement.description }}</td>
+                    <td>
+                        <a href="#" class="btn btn-danger">Delete</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+         </table>
+         {% if not announcements %}
+              <p align="center">No data to display</p>
+          {% endif %}
+   </div>
+{% endblock %}

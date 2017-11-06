@@ -12,7 +12,7 @@ from main_site.models import TransportRequest, Driver, RequestStatus, Vehicle, T
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import UpdateView
-from main_site.utils import  get_bill_as_pdf
+# from main_site.utils import  get_bill_as_pdf
 
 class LoginView(View):
     def post(self, request):
@@ -287,13 +287,7 @@ class BillDetailView(View):
         return get_bill_as_pdf(request,bill)
 
 #############announcements###############
-@method_decorator(login_required(login_url='login'),name='dispatch')
-@method_decorator(check_not_priveleged,name='dispatch')
-class AnnouncementCreateView(CreateView):
-    model = Announcement
-    fields = ['text','description']
-    template_name = 'announcement/new_announcement.html'
-    success_url = reverse_lazy('list-announcements')
+
 
 @method_decorator(login_required(login_url='login'),name='dispatch')
 @method_decorator(check_not_priveleged,name='dispatch')
@@ -302,12 +296,23 @@ class AnnouncementCreateView(CreateView):
     fields = ['text','description']
     template_name = 'announcement/new_announcement.html'
     success_url = reverse_lazy('list-announcements')
+
+
+#announcments details
+@method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
+class AnnouncementDetailView(DetailView):
+    model=Announcement
+    template_name = 'announcement/list_announcement.html'
+    context_object_name = 'announcements'
+
 
 class AnnouncementUpdateView(UpdateView):
     model = Announcement
     fields = ['text', 'description']
     template_name = 'announcement/update_announcement.html'
     success_url = reverse_lazy('list-announcements')
+
 
 class AnnouncementDeleteView(DeleteView):
     model = Announcement
