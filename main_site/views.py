@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import UpdateView, ListView, DeleteView, CreateView, DetailView
+from django.views.generic import UpdateView, ListView, DeleteView, CreateView, DetailView, TemplateView
 from main_site.decorators import is_not_priveleged, check_not_priveleged, check_owner_of_request
 from main_site.models import TransportRequest, Driver, Vehicle, Trip, Bill, Announcement
 from django.contrib.auth import authenticate, login, logout
@@ -15,7 +15,7 @@ from django.views.generic import UpdateView
 #from main_site.utils import get_bill_as_pdf
 
 
-class HomeView(View):
+class HomeView(TemplateView):
     def get(self, request):
         announcements = Announcement.objects.all()
         return render(request, 'home.html', {'announcements': announcements})

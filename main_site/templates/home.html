@@ -1,1 +1,71 @@
 {% extends 'base.html' %}
+{% block css %}
+    <style>
+        .container {
+            margin-top: 5px;
+            margin-right: 5px;
+            padding: 0;
+            max-height: 400px;
+            overflow: auto;
+        }
+		.hide {
+			display: none;
+		}
+		dl {
+			width: 100%;
+			margin: auto;
+		}
+		dt {
+			font-weight: 500;
+			font-size : 1.1em;
+			background-color: rgba(128,128,128,0.5);
+			padding: 5px;
+			text-align: center;
+			margin: auto;
+			border-bottom : 2px solid rgb(150, 148, 149);
+			border-top: 2px solid rgb(120, 128, 129);
+			border-radius: 3px
+		}
+		dd {
+			padding: 5px;
+			margin: auto;
+			text-align: center;
+			background-color: rgba(128,128,128,0.2);
+			border-radius: 3px
+		}
+
+		dt:first-child {
+			border-top: none;
+		}
+		dt:nth-last-child(2) {
+			border-bottom: none;
+		}
+	</style>
+{% endblock %}
+{% block content %}
+    <div class="container col-lg-2 col-md-3 col-sm-6 col-12">
+        <dl>
+            {% for i in announcements %}
+                <dt>{{ i.text }}</dt>
+                <dd>{{ i.description }}</dd>
+            {% endfor %}
+        </dl>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+	$(function() {
+		$('dd').addClass('hide')
+		  .first()
+		  .removeClass('hide');
+		$('dl').on('mouseenter','dt',function() {
+			$(this).next()
+				   .slideDown(200)
+				   .siblings('dd')
+				   .slideUp(200);
+		});
+	})
+</script>
+{% endblock %}
+
+

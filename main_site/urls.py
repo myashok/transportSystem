@@ -6,11 +6,11 @@ from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
     TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView, AnnouncementCreateView, \
-    AnnouncementUpdateView, AnnouncementDeleteView, AnnouncementListView
+    AnnouncementUpdateView, AnnouncementDeleteView, AnnouncementListView, HomeView
 from . import views
 
 urlpatterns=[
-    url(r'^$', TemplateView.as_view(template_name='home.html'), name='user-home'),
+    url(r'^$', HomeView.as_view(), name='user-home'),
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
 
