@@ -5,11 +5,11 @@ from django.views.generic import TemplateView
 from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
-    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView
+    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView
 from . import views
 
 urlpatterns=[
-    url(r'^$',TemplateView.as_view(template_name='home.html'),name='user-home'),
+    url(r'^$', TemplateView.as_view(template_name='home.html'), name='user-home'),
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
 
@@ -40,11 +40,7 @@ urlpatterns=[
     url(r'^trips', TripListView.as_view(), name='list-trips'),
 
 
-    url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
-
-
-    url(r'^access_denied$', TemplateView.as_view(template_name='access_denied.html'), name='access_denied'),
-
+    url(r'^bills/(?P<pk>\d+)$', views.view_bill, name='view-bill'),
 ]
 
 if settings.DEBUG:

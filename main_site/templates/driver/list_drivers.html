@@ -6,9 +6,9 @@
    <tr>
        <th>Driver #</th>
        <th>Name</th>
-       <th>Age</th>
        <th>Phone no.</th>
        <th>Email id</th>
+       <th>Blood Group</th>
        <th>License no.</th>
        <th>License valid till</th>
        <th>Actions</th>
@@ -19,9 +19,9 @@
       <tr>
           <td><a href="{% url 'view-driver' pk=driver.id %}">{{ driver.id }}</a></td>
         <td>{{ driver.name }}</td>
-        <td>{{ driver.date_of_birth.year }}</td>
         <td>{{ driver.phone }}</td>
         <td>{{ driver.email }}</td>
+        <td>{{ driver.blood_group }}</td>
         <td>{{ driver.license_no }}</td>
         <td>{{ driver.license_validity }}</td>
         <td>

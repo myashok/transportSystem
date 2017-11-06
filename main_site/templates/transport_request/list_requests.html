@@ -15,7 +15,6 @@
               <th>Date and Time</th>
               <th>Description</th>
               <th>Return journey</th>
-              <th>Request Status</th>
               <th>Actions</th>
            </tr>
    </thead>
@@ -29,7 +28,6 @@
               <td>{{ i.date_of_journey }} {{ i.time_of_journey }}</td>
               <td>{{ i.description }}</td>
               <td>{{ i.is_return_journey}}</td>
-              <td>{{ i.status }}</td>
               <td>
                 {% if not i.trip %}
                     <a href="{% url 'new-trip' pk=i.pk %}" class="btn btn-success">Approve</a>

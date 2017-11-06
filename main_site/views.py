@@ -1,26 +1,18 @@
 from datetime import datetime
-
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from django.contrib.auth.models import Group
-from django.contrib.auth import  REDIRECT_FIELD_NAME
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import UpdateView, ListView, DeleteView, CreateView, DetailView
-
 from main_site.decorators import is_not_priveleged, check_not_priveleged, check_owner_of_request
 from main_site.models import TransportRequest, Driver, RequestStatus, Vehicle, Trip, TripStatus, Bill
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import UpdateView
-
-import logging
-logger = logging.getLogger(__name__)
-
+from main_site.utils import  get_bill_as_pdf
 
 class LoginView(View):
     def post(self, request):
@@ -29,15 +21,14 @@ class LoginView(View):
         user = authenticate(username=username, password=password)
 
         if user is not None:
-            if user.is_active:
-                login(request, user)
+            login(request, user)
             if is_not_priveleged(request.user):
                 return redirect('user-home')
             else:
                 return redirect('staff-home')
 
         else:
-            return render(request,'login.html',{'error':'Invalid credentials'})
+            return render(request,'login.html',{'error':'Invalid credentials. \nPlease contact admin if facing issues.'})
 
     def get(self,request):
         if request.user.is_authenticated:
@@ -52,12 +43,7 @@ class LoginView(View):
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect('login')
-
-
-def my_requests(request):
-    requests=TransportRequest.objects.filter(user=request.user)
-    return render(request, 'transport_request/my_requests.html', {'requests':requests})
+        return redirect('user-home')
 
 
 ####################driver##################
@@ -68,9 +54,10 @@ def my_requests(request):
 @method_decorator(check_not_priveleged,name='dispatch')
 class DriverCreateView(CreateView):
     model=Driver
-    fields=['name','picture','phone','license_no','license_validity','email','date_of_birth']
+    fields=['name','picture','phone','license_no','license_validity','email','blood_group']
     template_name = 'driver/new_driver.html'
     success_url = reverse_lazy('list-drivers')
+
 
 #driver details
 @method_decorator(login_required(login_url='login'),name='dispatch')
@@ -81,11 +68,11 @@ class DriverDetailView(DetailView):
     context_object_name = 'driver'
 
 #update driver
-@method_decorator(check_not_priveleged,name='dispatch')
 @method_decorator(login_required(login_url='login'),name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class DriverUpdateView(UpdateView):
     model=Driver
-    fields=['name','picture','phone','license_no','license_validity','email','date_of_birth']
+    fields=['name','picture','phone','license_no','license_validity','email','blood_group']
     template_name = 'driver/update_driver.html'
     def get_success_url(self):
         return reverse('view-driver',kwargs={'pk':self.object.pk})
@@ -218,6 +205,8 @@ class TripCreateView(CreateView):
         return context
     def form_valid(self, form):
         trip=form.save(commit=False)
+        trip.request.status = RequestStatus.objects.get(type='Accepted')
+        trip.request.save()
         trip.request=self.get_context_data()['req']
         return super(TripCreateView,self).form_valid(form)
 
@@ -290,9 +279,8 @@ class TripEndView(UpdateView):
 
 ####################bill##################3
 
-@method_decorator(login_required(login_url='login'),name='dispatch')
-@method_decorator(check_not_priveleged,name='dispatch')
-class BillDetailView(DetailView):
-    model=Bill
-    template_name = 'bill/view_bill.html'
-    context_object_name = 'bill'
+@login_required(login_url='login')
+@check_not_priveleged
+def view_bill(request,pk):
+    bill=get_object_or_404(Bill,pk=pk)
+    return get_bill_as_pdf(request,bill)

@@ -6,7 +6,7 @@
     <p>{{ driver.email }}</p>
     <p>{{ driver.license_no }}</p>
     <p>{{ driver.license_validity }}</p>
-    <p>{{ driver.date_of_birth }}</p>
+    <p>{{ driver.blood_group }}</p>
     <img src="{{ driver.picture.url }}" />
     <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
     <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>

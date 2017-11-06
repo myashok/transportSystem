@@ -9,7 +9,7 @@ from transport.settings import BASE_DIR
 
 def get_bill_as_pdf(request,bill):
 
-    BILL_ROOT = os.path.join(BASE_DIR, 'files/Bills')
+    BILL_ROOT = os.path.join(BASE_DIR, 'files/Bill')
     fs = FileSystemStorage(BILL_ROOT)
     filename=str(bill.id)+".pdf"
     if fs.exists(filename):
