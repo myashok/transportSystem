@@ -11,9 +11,8 @@
                    <tr>
                        <th>Vehicle #</th>
                        <th>Registration no.</th>
-                       <th>Type</th>
                        <th>Description</th>
-                       <th>Fuel Capacity</th>
+                       <th>Seating Capacity</th>
                        <th>Actions</th>
                    </tr>
               </thead>
@@ -22,9 +21,8 @@
                   <tr>
                     <td><a href="{% url 'view-vehicle' pk=vehicle.id %}">{{ forloop.counter }}</a></td>
                     <td>{{ vehicle.registration_no }}</td>
-                    <td>{{ vehicle.type }}</td>
                     <td>{{ vehicle.description }}</td>
-                    <td>{{ vehicle.fuel_capacity}}</td>
+                    <td>{{ vehicle.seating_capacity}}</td>
                     <td>
                         <a href="{% url 'update-vehicle' pk=vehicle.id %}" class="btn btn-primary">Edit</a>
                         <a href="{% url 'delete-vehicle' pk=vehicle.id %}" class="btn btn-danger">Delete</a>

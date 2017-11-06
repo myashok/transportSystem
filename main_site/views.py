@@ -8,11 +8,21 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import UpdateView, ListView, DeleteView, CreateView, DetailView
 from main_site.decorators import is_not_priveleged, check_not_priveleged, check_owner_of_request
-from main_site.models import TransportRequest, Driver, RequestStatus, Vehicle, Trip, TripStatus, Bill, Announcement
+from main_site.models import TransportRequest, Driver, Vehicle, Trip, Bill, Announcement
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import UpdateView
 # from main_site.utils import  get_bill_as_pdf
+
+class HomeView(View):
+    def get(self,request):
+        announcements=Announcement.objects.all()
+        return render(request,'home.html',{'announcements':announcements})
+
+@login_required(login_url='login')
+@check_not_priveleged
+def staff_home(request):
+    return render(request,'staff_home.html')
 
 class LoginView(View):
     def post(self, request):
@@ -28,7 +38,7 @@ class LoginView(View):
                 return redirect('staff-home')
 
         else:
-            return render(request,'login.html',{'error':'Invalid credentials. \nPlease contact admin if facing issues.'})
+            return render(request,'login.html',{'error':'Invalid credentials.'})
 
     def get(self,request):
         if request.user.is_authenticated:
@@ -99,14 +109,12 @@ class DriverListView(ListView):
 @method_decorator(login_required(login_url='login'),name='dispatch')
 class RequestCreateView(CreateView):
     model=TransportRequest
-    template_name = 'transport_request/new_request.html'
+    template_name = 'request/new_request.html'
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
               'source', 'destination','no_of_persons_travelling', 'is_return_journey']
     def form_valid(self, form):
         request=form.save(commit=False)
         request.user=self.request.user
-        request.request_status=RequestStatus.objects.get(pk=1)
-        request.last_updated_at=timezone.now()
         return super(RequestCreateView,self).form_valid(form)
     def get_success_url(self):
         return reverse('view-request',kwargs={'pk':self.object.pk})
@@ -116,7 +124,7 @@ class RequestCreateView(CreateView):
 @method_decorator(check_owner_of_request,name='dispatch')
 class RequestDetailView(DetailView):
     model=TransportRequest
-    template_name = 'transport_request/view_request.html'
+    template_name = 'request/view_request.html'
     context_object_name = 'request'
 
 #update request
@@ -126,21 +134,27 @@ class RequestUpdateView(UpdateView):
     model=TransportRequest
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
               'source', 'destination', 'is_return_journey']
-    template_name = 'transport_request/update_request.html'
+    template_name = 'request/update_request.html'
     def get_success_url(self):
         return reverse('view-request',kwargs={'pk':self.object.pk})
 
+#list requests
 @method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(check_not_priveleged,name='dispatch')
 class RequestListView(ListView):
     model = TransportRequest
-    template_name = 'transport_request/list_requests.html'
+    template_name = 'request/list_requests.html'
     context_object_name = 'requests'
-    def get_queryset(self):
-        if is_not_priveleged(self.request.user):
-            return TransportRequest.objects.filter(user=self.request.user)
-        return TransportRequest.objects.all()
 
-#####################################################
+#my requests
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Myrequests(ListView):
+    model = TransportRequest
+    template_name = 'request/my_requests.html'
+    context_object_name = 'requests'
+
+    def get_queryset(self):
+        return TransportRequest.objects.filter(user=self.request.user)
 
 ################vehicle##############3
 
@@ -149,7 +163,7 @@ class RequestListView(ListView):
 @method_decorator(check_not_priveleged,name='dispatch')
 class VehicleCreateView(CreateView):
     model=Vehicle
-    fields=['registration_no','type','description','fuel_capacity']
+    fields=['registration_no','picture','description','seating_capacity']
     template_name = 'vehicle/new_vehicle.html'
     success_url = reverse_lazy('list-vehicles')
 
@@ -166,7 +180,7 @@ class VehicleDetailView(DetailView):
 @method_decorator(check_not_priveleged,name='dispatch')
 class VehicleUpdateView(UpdateView):
     model=Vehicle
-    fields=['registration_no','type','description','fuel_capacity']
+    fields=['registration_no','picture','description','seating_capacity']
     template_name = 'vehicle/update_vehicle.html'
     def get_success_url(self):
         return reverse('view-vehicle',kwargs={'pk':self.object.pk})
@@ -186,7 +200,7 @@ class VehicleListView(ListView):
     model = Vehicle
     template_name = 'vehicle/list_vehicles.html'
     context_object_name = 'vehicles'
-    
+
 ####################trips########################
 
 #new trip
@@ -200,14 +214,14 @@ class TripCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context=super(TripCreateView,self).get_context_data(**kwargs)
         req=get_object_or_404(TransportRequest,pk=self.kwargs['pk'])
+        if Trip.objects.filter(request=self.object).exists():
+            raise PermissionDenied()
         context['req']=req
-        context['start_time']=req.time_of_journey
         return context
     def form_valid(self, form):
         trip=form.save(commit=False)
-        trip.request.status = RequestStatus.objects.get(type='Accepted')
-        trip.request.save()
         trip.request=self.get_context_data()['req']
+        trip.save()
         return super(TripCreateView,self).form_valid(form)
 
 #trip details
@@ -246,9 +260,15 @@ class TripStartView(UpdateView):
     fields = ['start_time','start_distance_reading','vehicles','drivers']
     context_object_name = 'trip'
     success_url = reverse_lazy('list-trips')
+
+    def get_context_data(self, **kwargs):
+        if self.object.status=='Completed' or self.object.status=='Active':
+            raise PermissionDenied()
+        return super(TripStartView,self).get_context_data(**kwargs)
+
     def form_valid(self, form):
         trip=form.save(commit=False)
-        trip.status=TripStatus.objects.get(type='Active')
+        trip.save()
         return super(TripStartView,self).form_valid(form)
 
 @method_decorator(login_required(login_url='login'),name='dispatch')
@@ -260,8 +280,7 @@ class TripEndView(UpdateView):
     success_url = reverse_lazy('list-trips')
     def get_context_data(self, **kwargs):
         context=super(TripEndView,self).get_context_data(**kwargs)
-        trip=get_object_or_404(Trip,pk=self.kwargs['pk'])
-        if trip.status==TripStatus.objects.get(type='Active'):
+        if self.object.status=='Active':
             return context
         else:
             raise PermissionDenied()
@@ -288,7 +307,6 @@ class BillDetailView(View):
 
 #############announcements###############
 
-
 @method_decorator(login_required(login_url='login'),name='dispatch')
 @method_decorator(check_not_priveleged,name='dispatch')
 class AnnouncementCreateView(CreateView):
@@ -296,32 +314,13 @@ class AnnouncementCreateView(CreateView):
     model = Announcement
     fields = ['text','description']
     template_name = 'announcement/new_announcement.html'
-    success_url = reverse_lazy('list-announcement')
-
+    success_url = reverse_lazy('list-announcements')
     def form_valid(self, form):
-        announcement = form.save(commit=False)
-        announcement.created_by = self.request.user
-        announcement.created_at = datetime.now()
+        announcement=form.save(commit=False)
+        announcement.created_by=self.request.user
+        announcement.created_at=datetime.now()
         announcement.save()
         return super(AnnouncementCreateView, self).form_valid(form)
-
-
-
-
-
-
-#announcments details
-@method_decorator(login_required(login_url='login'),name='dispatch')
-@method_decorator(check_not_priveleged,name='dispatch')
-class AnnouncementListView(DetailView):
-    model = Announcement
-    template_name = 'announcement/list_announcement.html'
-    context_object_name = 'announcements'
-
-    def get_queryset(self):
-        if is_not_priveleged(self.request.user):
-            return Announcement.objects.filter(user=self.request.user)
-        return Announcement.objects.all()
 
 
 @method_decorator(login_required(login_url='login'),name='dispatch')
@@ -332,9 +331,6 @@ class AnnouncementUpdateView(UpdateView):
     template_name = 'announcement/update_announcement.html'
     success_url = reverse_lazy('list-announcement')
 
-
-@method_decorator(login_required(login_url='login'),name='dispatch')
-@method_decorator(check_not_priveleged,name='dispatch')
 class AnnouncementDeleteView(DeleteView):
     model = Announcement
     template_name = "announcement/delete_announcement.html"

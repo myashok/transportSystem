@@ -1,0 +1,51 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block css %}
+     <link rel="stylesheet" href="{% static "css/table.css" %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container col-lg-12 col-md-12 col-sm-12 col-12">
+        <table class="table table-striped table-responsive table-hover table-bordered">
+              <thead class="thead">
+                   <tr>
+                      <th>#</th>
+                      <th>User</th>
+                      <th>Source</th>
+                      <th>Destination</th>
+                      <th>Date and Time</th>
+                      <th>Description</th>
+                      <th>Return journey</th>
+                      <th>Request Status</th>
+                      <th>Actions</th>
+                   </tr>
+              </thead>
+              <tbody>
+                    {%  for i in requests %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{request.user.username}}</td>
+                            <td>{{ i.source }}</td>
+                            <td>{{ i.destination }}</td>
+                            <td>{{ i.date_of_journey }} {{ i.time_of_journey }}</td>
+                            <td>{{ i.description }}</td>
+                            <td>{{ i.is_return_journey}}</td>
+                            <td>{{ i.status|stringformat:"s" }}</td>
+                            <td>
+                                {% if i.status|stringformat:"s" == "Pending"%}
+                                    <a href="{%  url 'new-trip' pk=i.pk %}" class="btn btn-success">Allot</a>
+                                {% else %}
+                                    <a href="{%  url 'view-trip' pk=i.trip.pk %}" class="btn btn-primary">View trip</a>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+           </table>
+             {% if not requests %}
+                  <p align="center">No data to display</p>
+              {% endif %}
+    </div>
+{% endblock %}
