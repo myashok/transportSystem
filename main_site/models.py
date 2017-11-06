@@ -170,3 +170,14 @@ class Bill(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class Announcement(models.Model):
+    created_by=models.ForeignKey('auth.User')
+    created_at=models.DateTimeField()
+    text=models.TextField(max_length=500)
+    description=models.TextField(null=True,blank=True)
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        ordering=['created_at']

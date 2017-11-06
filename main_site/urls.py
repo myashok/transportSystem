@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
-    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView
+    TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView
 from . import views
 
 urlpatterns=[
@@ -40,7 +40,7 @@ urlpatterns=[
     url(r'^trips', TripListView.as_view(), name='list-trips'),
 
 
-    url(r'^bills/(?P<pk>\d+)$', views.view_bill, name='view-bill'),
+    url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
 ]
 
 if settings.DEBUG:
