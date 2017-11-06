@@ -65,7 +65,8 @@
 .loginmodal-submit {
   /* border: 1px solid #3079ed; */
   border: 0px;
-  color: #fff;
+  background-color: #373a3c;
+  color: white;
   text-shadow: 0 1px rgba(0,0,0,0.1);
   padding: 17px 0px;
   font-family: roboto;

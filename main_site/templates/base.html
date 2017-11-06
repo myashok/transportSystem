@@ -31,7 +31,14 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">TransportCell</a>
+      <a class="navbar-brand" href="
+            {% ifequal user.groups.all.0.name "TransportUser" %}
+                {% url 'user-home' %}
+            {% endifequal %}
+            {% ifequal user.groups.all.0.name "TransportStaff" %}
+                {% url 'staff-home' %}
+            {% endifequal %}"
+      >TransportCell</a>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         {% ifequal user.groups.all.0.name "TransportUser" %}
             <ul class="navbar-nav mr-auto">
@@ -40,8 +47,9 @@
                   Services
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Request Vehicle</a>
-                  <a class="dropdown-item" href="#">Past Request</a>
+                  <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>
+                  <a class="dropdown-item" href="{%  url 'view-request' %}">View Requests</a>
+                  <a class="dropdown-item" href="#">Past Requests</a>
                   <a class="dropdown-item" href="#">Request Status</a>
                 </div>
               </li>
@@ -56,7 +64,8 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="#">Maintenance</a>
                   <a class="dropdown-item" href="#">Manage Available Vehicles</a>
-                  <a class="dropdown-item" href="#">Add Vehicle</a>
+                  <a class="dropdown-item" href="{% url 'list-vehicles'%}">View Available Vehicles</a>
+                  <a class="dropdown-item" href="{% url 'new-vehicle'%}">Add Vehicle</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -64,8 +73,8 @@
                   Drivers
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Add a new Driver</a>
-                  <a class="dropdown-item" href="#">View Driver</a>
+                  <a class="dropdown-item" href="{%  url 'new-driver' %}">Add Driver</a>
+                  <a class="dropdown-item" href="{%  url 'list-drivers' %}">View Drivers</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -73,8 +82,8 @@
                   Requests
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">View New Requests</a>
-                  <a class="dropdown-item" href="#">View all Requests</a>
+                  <a class="dropdown-item" href="{%  url 'new-request' %}">View New Requests</a>
+                  <a class="dropdown-item" href="{%  url 'list-requests' %}">View Requests</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -84,6 +93,8 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="#">Scheduled Trips</a>
                   <a class="dropdown-item" href="#">Active Trips</a>
+{#                  <a class="dropdown-item" href="{%  url 'new-trip'%}">Add Trips</a>#}
+                  <a class="dropdown-item" href="{%  url 'list-trips'%}">view Trips</a>
                 </div>
               </li>
             </ul>
