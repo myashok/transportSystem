@@ -10,7 +10,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 def get_upload_path(instance, filename):
     return os.path.join(
        instance.__class__.__name__,
-        os.path.join(str(instance.id),filename))
+        os.path.join(str(instance.id), filename))
 
 class Driver(models.Model):
     name=models.CharField(max_length=200)
@@ -170,4 +170,3 @@ class Bill(models.Model):
 
     def __str__(self):
         return str(self.id)
-
