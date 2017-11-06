@@ -44,8 +44,8 @@ urlpatterns=[
 
     url(r'^announcements/new$', AnnouncementCreateView.as_view(), name='new-announcement'),
     url(r'^announcements/(?P<pk>\d+)/edit$', AnnouncementUpdateView.as_view(), name='update-announcement'),
-    url(r'^announcements', AnnouncementListView.as_view(), name='list-announcement'),
-    url(r'^announcements/(?P<pk>\d+)/delete', AnnouncementDeleteView.as_view(), name='delete-announcement'),
+    url(r'^announcements/$', AnnouncementListView.as_view(), name='list-announcements'),
+    url(r'^announcements/(?P<pk>\d+)/delete$', AnnouncementDeleteView.as_view(), name='delete-announcement'),
 ]
 
 if settings.DEBUG:
