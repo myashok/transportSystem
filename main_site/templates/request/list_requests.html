@@ -23,7 +23,7 @@
               <tbody>
                     {%  for i in requests %}
                         <tr>
-                            <td>{{ forloop.counter }}</td>
+                            <td>{{ i.id }}</td>
                             <td>{{request.user.username}}</td>
                             <td>{{ i.source }}</td>
                             <td>{{ i.destination }}</td>
@@ -32,10 +32,12 @@
                             <td>{{ i.is_return_journey}}</td>
                             <td>{{ i.status|stringformat:"s" }}</td>
                             <td>
-                                {% if i.status|stringformat:"s" == "Pending"%}
-                                    <a href="{%  url 'new-trip' pk=i.pk %}" class="btn btn-success">Allot</a>
+                                {% if i.trip.bill %}
+                                    <a href="{%  url 'view-bill' pk=i.trip.bill.pk %}" class="btn btn-primary">View bill</a>
+                                {% elif i.trip%}
+                                    <a href="{%  url 'view-trip' pk=i.trip.pk %}" class="btn btn-success">View Trip</a>
                                 {% else %}
-                                    <a href="{%  url 'view-trip' pk=i.pk %}" class="btn btn-primary">View trip</a>
+                                    <a href="{%  url 'new-trip' pk=i.pk %}" class="btn btn-success">allot</a>
                                 {% endif %}
                             </td>
 
@@ -43,13 +45,10 @@
                     {% endfor %}
                       {% if not requests %}
                             <tr>
-                                <td colspan="8" style="text-align: center">No Data to display</td>
+                                <td colspan="9" style="text-align: center">No Data to display</td>
                             </tr>
                       {% endif %}
                 </tbody>
            </table>
-             {% if not requests %}
-                  <p align="center">No data to display</p>
-              {% endif %}
     </div>
 {% endblock %}

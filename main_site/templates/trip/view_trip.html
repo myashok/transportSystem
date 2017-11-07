@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p>{{ trip.id }}</p>
-    <p>{{ trip.request.id }}</p>
-    <p>{{ trip.start_time }}</p>
-    {% if trip.end_time is Null %}
-        <p>Trip is active</p>
-    {% else %}
-        <p>{{ trip.end_time }}</p>
-    {% endif %}
+    <p>Trip id{{ trip.id }}</p>
+    <p>Start time{{ trip.start_time }}</p>
+    <p>Source {{ trip.request.source }}</p>
+    <p>Destination {{ trip.request.destination }}</p>
+    <p>Vehicles:
+        {%  for i in trip.vehicles.all %}
+        {{ i }}
+        {% endfor %}
+    </p>
+     <p>Drivers:
+        {%  for i in trip.drivers.all %}
+        {{  i }}
+        {% endfor %}
+    </p>
     <a href="{% url 'update-trip' pk=trip.id %}" class="btn btn-primary">Edit</a>
 {% endblock %}

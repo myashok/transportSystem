@@ -1,16 +1,19 @@
 import os
-from datetime import datetime
+import shutil
+import uuid
 
 from PIL import Image
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
 def get_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
     return os.path.join(
-       instance.__class__.__name__,
-        os.path.join(str(instance.id), filename))
+       instance.__class__.__name__, filename)
 
 class Driver(models.Model):
     name=models.CharField(max_length=200)
@@ -28,22 +31,23 @@ class Driver(models.Model):
         return self.name
 
     def save(self, *args, ** kwargs):
-        if os.path.exists(self.picture.url):
-            image = Image.open(self.picture)
-            os.remove(image)
         super(Driver, self).save(*args, **kwargs)
-        image = Image.open(self.picture)
-        (width, height) = image.size
-        size = (200, 200)
-        image = image.resize(size, Image.ANTIALIAS)
-        image.save(self.picture.path)
-
+        try:
+            image = Image.open(self.picture)
+            (width, height) = image.size
+            size = (200, 200)
+            image = image.resize(size, Image.ANTIALIAS)
+            image.save(self.picture.path)
+        except Exception as e:
+            print(e)
     def delete(self, using=None, keep_parents=False):
-        super(Driver, self).delete()
-        if not os.path.exists(self.picture):
-            return
-        image = Image.open(self.picture)
-        os.remove(image)
+        try:
+            path = self.picture.url
+            print(path)
+            os.remove(path)
+        except OSError as e:
+            print(e.strerror)
+        super(Driver,self).delete()
 
 
 class VehicleMaintenance(models.Model):
@@ -111,18 +115,15 @@ class TransportRequest(models.Model):
 
     def save(self, *args, **kwargs):
         self.last_updated_at=timezone.now()
-        if Trip.objects.filter(request=self).exists():
-            self.status='Accepted'
-        else:
+        if not self.status:
             self.status='Pending'
-
         super(TransportRequest, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.id)
 
     class Meta:
-        ordering=['date_of_journey']
+        ordering=['-date_of_journey']
 
 class Trip(models.Model):
     start_distance_reading=models.FloatField(null=True,blank=False,validators=[MinValueValidator(0)])
@@ -138,12 +139,10 @@ class Trip(models.Model):
     drivers=models.ManyToManyField(Driver)
 
     def save(self,*args,**kwargs):
-        if Bill.objects.filter(trip=self):
-            self.status='Completed'
-        elif self.start_distance_reading:
-            self.status='Active'
-        else:
-            self.status='Scheduled'
+        if not self.status:
+            self.status='Trip Scheduled'
+        self.request.status=self.status
+        self.request.save()
         super(Trip,self).save(*args,**kwargs)
 
     def __str__(self):
@@ -159,8 +158,15 @@ class Bill(models.Model):
     discount_percentage=models.FloatField(default=0,validators=[MinValueValidator(0)])
     total_fare=models.FloatField(validators=[MinValueValidator(0)])
 
+    def save(self,*args,**kwargs):
+        self.trip.status="Trip Completed"
+        self.trip.save()
+        self.trip.request.status=self.trip.status
+        self.trip.request.save()
+        super(Bill,self).save(*args,**kwargs)
+
     class Meta:
-        ordering=['datetime_of_generation']
+        ordering=['-datetime_of_generation']
 
     def __str__(self):
         return str(self.id)
@@ -174,4 +180,4 @@ class Announcement(models.Model):
         return self.text
 
     class Meta:
-        ordering=['created_at']
+        ordering=['-created_at']

@@ -14,7 +14,7 @@ urlpatterns=[
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
 
-    url(r'^staff$',TemplateView.as_view(template_name='staff/home.html'),name='staff-home'),
+    url(r'^staff$',views.staff_home,name='staff-home'),
 
     url(r'^requests/new', views.RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
@@ -40,7 +40,7 @@ urlpatterns=[
     url(r'^trips/(?P<pk>\d+)/end$', TripEndView.as_view(), name='end-trip'),
     url(r'^trips', TripListView.as_view(), name='list-trips'),
 
-    # url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
+    url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
 
     url(r'^announcements/new$', AnnouncementCreateView.as_view(), name='new-announcement'),
     url(r'^announcements/(?P<pk>\d+)/edit$', AnnouncementUpdateView.as_view(), name='update-announcement'),
