@@ -14,7 +14,7 @@ urlpatterns=[
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
 
-    url(r'^staff$',TemplateView.as_view(template_name='staff/home.html'),name='staff-home'),
+    url(r'^staff$',TemplateView.as_view(template_name='staff_home.html'),name='staff-home'),
 
     url(r'^requests/new', views.RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
