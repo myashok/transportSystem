@@ -16,7 +16,6 @@ urlpatterns=[
     url(r'^$', HomeView.as_view(), name='user-home'),
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
-
     url(r'^staff$',views.staff_home,name='staff-home'),
 
     url(r'^requests/new', views.RequestCreateView.as_view(), name='new-request'),
