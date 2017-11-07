@@ -6,20 +6,23 @@ from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
     TripDetailView, TripUpdateView, TripListView, TripEndView, TripStartView, BillDetailView, AnnouncementCreateView, \
-    AnnouncementUpdateView, AnnouncementDeleteView, AnnouncementListView, HomeView
+    AnnouncementUpdateView, AnnouncementDeleteView, AnnouncementListView, HomeView, MyRequests
 from . import views
+
+
+
 
 urlpatterns=[
     url(r'^$', HomeView.as_view(), name='user-home'),
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
-
-    url(r'^staff$',TemplateView.as_view(template_name='staff_home.html'),name='staff-home'),
+    url(r'^staff$',views.staff_home,name='staff-home'),
 
     url(r'^requests/new', views.RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
     url(r'^requests/(?P<pk>\d+)/edit$', RequestUpdateView.as_view(), name='update-request'),
     url(r'^requests$', RequestListView.as_view(), name='list-requests'),
+    url(r'^my_requests',MyRequests.as_view(),name='my-requests'),
 
     url(r'^drivers/new$', DriverCreateView.as_view(), name='new-driver'),
     url(r'^drivers/(?P<pk>\d+)$', DriverDetailView.as_view(), name='view-driver'),

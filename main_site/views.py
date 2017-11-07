@@ -12,10 +12,10 @@ from main_site.models import TransportRequest, Driver, Vehicle, Trip, Bill, Anno
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import UpdateView
-#from main_site.utils import get_bill_as_pdf
+from main_site.utils import get_bill_as_pdf
 
 
-class HomeView(TemplateView):
+class HomeView(View):
     def get(self, request):
         announcements = Announcement.objects.all()
         return render(request, 'home.html', {'announcements': announcements})
@@ -164,7 +164,7 @@ class RequestListView(ListView):
 
 # my requests
 @method_decorator(login_required(login_url='login'), name='dispatch')
-class Myrequests(ListView):
+class MyRequests(ListView):
     model = TransportRequest
     template_name = 'request/my_requests.html'
     context_object_name = 'requests'
