@@ -1,12 +1,46 @@
 {% extends 'base.html' %}
-{% block content %}
-    <p>{{ trip.id }}</p>
-    <p>{{ trip.request.id }}</p>
-    <p>{{ trip.start_time }}</p>
-    {% if trip.end_time is Null %}
-        <p>Trip is active</p>
-    {% else %}
-        <p>{{ trip.end_time }}</p>
-    {% endif %}
-    <a href="{% url 'update-trip' pk=trip.id %}" class="btn btn-primary">Edit</a>
+{% block css %}
+<style>
+    .container {
+        padding: 0px;
+        margin: 0 auto;
+    }
+.table {
+    width: 100%;
+    margin: auto;
+    margin-top: 10px;
+}
+.table-bordered > tr{
+  border:2px solid blue;
+}
+.table-bordered th,
+.table-bordered td{
+  border:1px solid blue;
+}
+</style>
 {% endblock %}
+{% block content %}
+    <div class="container col-lg-3 col-md-6 col-sm-10 col-12">
+            <table class="table table-striped table-responsive table-hover table-bordered">
+                <tr>
+                    <th>Id</th>
+                    <td>{{ trip.id}}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{trip.request.id }}</td>
+                </tr>
+                <tr>
+                    <th>Source</th>
+                    <td>{{trip.start_time }}</td>
+                </tr>
+            </table>
+            {% if trip.end_time is Null %}
+                     <p>Trip is active</p>
+                     {% else %}
+                     <p>{{ trip.end_time }}</p>
+                     {% endif %}
+            <a href="{% url 'update-trip' pk=trip.id %}" class="btn btn-primary">Edit</a>
+        </div>
+{% endblock %}
+
