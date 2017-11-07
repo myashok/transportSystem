@@ -1,4 +1,24 @@
 {% extends 'base.html' %}
+{% block css %}
+<style>
+    .container {
+        padding: 0px;
+        margin: 0 auto;
+    }
+.table {
+    width: 100%;
+    margin: auto;
+    margin-top: 10px;
+}
+.table-bordered > tr{
+  border:2px solid blue;
+}
+.table-bordered th,
+.table-bordered td{
+  border:1px solid blue;
+}
+</style>
+{% endblock %}
 {% block content %}
     <p>Trip id{{ trip.id }}</p>
     <p>Start time{{ trip.start_time }}</p>
