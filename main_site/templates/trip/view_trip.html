@@ -20,19 +20,10 @@
 </style>
 {% endblock %}
 {% block content %}
-    <p>Trip id{{ trip.id }}</p>
-    <p>Start time{{ trip.start_time }}</p>
-    <p>Source {{ trip.request.source }}</p>
-    <p>Destination {{ trip.request.destination }}</p>
-    <p>Vehicles:
-        {%  for i in trip.vehicles.all %}
-        {{ i }}
-        {% endfor %}
-    </p>
-     <p>Drivers:
-        {%  for i in trip.drivers.all %}
-        {{  i }}
-        {% endfor %}
-    </p>
-    <a href="{% url 'update-trip' pk=trip.id %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'view-trip' pk=trip.pk %}">Trip     {{ trip.id }}</a>
+    <a href="{% url 'view-request' pk=trip.request.pk %}">Request     {{ trip.request.id }}</a>
+    <p>vehicle  {{ trip.vehicle }}</p>
+    <p>Driver   {{ trip.driver }}</p>
+    <p>Rate     {{ trip.rate }}</p>
+    <a href="{% url 'cancel-trip' pk=trip.id %}" class="btn btn-primary">Cancel</a>
 {% endblock %}

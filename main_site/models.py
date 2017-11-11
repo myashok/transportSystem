@@ -98,6 +98,7 @@ class Request(models.Model):
     user=models.ForeignKey('auth.User',
                            verbose_name='Requested by')
     created_at=models.DateTimeField(default=timezone.now)
+    #last_updated_at=models.DateTimeField(default=timezone.now)
     start_date=models.DateField()
     start_time=models.TimeField()
     end_date=models.DateField()
@@ -125,6 +126,7 @@ class Request(models.Model):
 
 
     def save(self, *args, **kwargs):
+        #self.last_updated_at=timezone.now()
         self.status=Status.objects.get(type='Request Pending')
         super(Request, self).save(*args, **kwargs)
 
@@ -138,26 +140,24 @@ class Request(models.Model):
 
 class Trip(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)
-    request = models.ForeignKey('Request', on_delete=models.CASCADE)
+    request = models.ForeignKey('Request', on_delete=models.CASCADE,editable=False)
     status=models.ForeignKey('Status',editable=False,verbose_name='Status of trip')
     vehicle=models.ForeignKey('Vehicle')
     driver=models.ForeignKey('Driver')
-    start_distance = models.FloatField(validators=[MinValueValidator(0)])
-    end_distance = models.FloatField(validators=[MinValueValidator(1)],
-                                     null=True)
+    start_distance = models.FloatField(default=0.0,
+                                       validators=[MinValueValidator(0)])
+    end_distance = models.FloatField(default=0.0,
+                                     validators=[MinValueValidator(1)]
+                                     )
     rate = models.FloatField(default=0,
                              verbose_name='Rate/km')
     fare = models.FloatField(validators=[MinValueValidator(0)],null=True)
     def save(self,*args,**kwargs):
-        self.request.status=Status.objects.get(type='Request Approved')
-        self.request.save()
-        self.status=Status.objects.get(type='Trip Scheduled')
-        super(Trip,self).save(*args,**kwargs)
         if self.end_distance is not None:
-            self.fare=self.rate*(self.end_distance-self.start_distance)
-            super(Trip,self).save(*args,**kwargs)
-
-
+            self.fare = self.rate * (self.end_distance - self.start_distance)
+        if not self.status:
+            self.status = Status.objects.get(type='Trip Scheduled')
+        super(Trip,self).save(*args,**kwargs)
     def __str__(self):
         return str(self.id)
 
@@ -165,15 +165,18 @@ class Bill(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)
     request=models.OneToOneField(
         Request,on_delete=models.CASCADE)
-    total_distance=models.FloatField(validators=[MinValueValidator(1)])
-    total_fare=models.FloatField(validators=[MinValueValidator(0)])
+    total_distance=models.FloatField(default=0.0,validators=[MinValueValidator(0)])
+    total_fare=models.FloatField(default=0.0,validators=[MinValueValidator(0)])
 
     def save(self,*args,**kwargs):
         super(Bill,self).save(*args,**kwargs)
         trips=self.request.trip_set.all()
+        dist=0
+        fare=0
         for t in trips:
-            t.status=Status.objects.get('Trip Completed')
-            t.save()
+            if t.status==Status.objects.get('Trip Scheduled'):
+                t.status=Status.objects.get('Trip Completed')
+                t.save()
 
 
     class Meta:

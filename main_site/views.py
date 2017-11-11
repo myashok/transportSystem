@@ -251,17 +251,12 @@ class TripDetailView(DetailView):
 # update trip
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_not_priveleged, name='dispatch')
-class TripUpdateView(UpdateView):
-    model = Trip
-    template_name = 'trip/update_trip.html'
-    fields = ['vehicle', 'driver','start_distance','end_distance', 'rate']
-
-    def get_context_data(self, **kwargs):
-        return super(TripUpdateView, self).get_context_data(**kwargs)
-
-    def get_success_url(self):
-        return reverse('view-trip', kwargs={'pk': self.object.pk})
-
+class TripCancelView(View):
+    def get(self,request,*args,**kwargs):
+        trip=get_object_or_404(Trip,pk=kwargs['pk'])
+        trip.status=Status.objects.get(type='Trip Cancelled')
+        trip.save()
+        return redirect('view-trip',pk=trip.pk)
 
 # list trips
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -270,7 +265,8 @@ class TripListView(ListView):
     model = Trip
     template_name = 'trip/list_trips.html'
     context_object_name = 'trips'
-
+    def get_queryset(self):
+        return Trip.objects.filter(request_id=self.kwargs['pk'])
 
 # # trip start view
 # @method_decorator(login_required(login_url='login'), name='dispatch')
