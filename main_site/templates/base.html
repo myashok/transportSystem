@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>IIITA Transport system</title>
     <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    <link rel="stylesheet" href="{% static "css/footer.css" %}">
     {% block css %}
     {% endblock %}
     <style>
@@ -48,7 +49,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>
-                  <a class="dropdown-item" href="{%  url 'view-request' %}">View Requests</a>
+                  <a class="dropdown-item" href="#">View Requests</a>
                   <a class="dropdown-item" href="#">Past Requests</a>
                   <a class="dropdown-item" href="#">Request Status</a>
                 </div>
@@ -94,7 +95,7 @@
                   <a class="dropdown-item" href="#">Scheduled Trips</a>
                   <a class="dropdown-item" href="#">Active Trips</a>
 {#                  <a class="dropdown-item" href="{%  url 'new-trip'%}">Add Trips</a>#}
-                  <a class="dropdown-item" href="{%  url 'list-trips'%}">view Trips</a>
+{#                  <a class="dropdown-item" href="{%  url 'list-trips'%}">view Trips</a>#}
                 </div>
               </li>
             </ul>
@@ -119,6 +120,49 @@
     </nav>
     {% block content %}
     {% endblock %}
+    <footer class="site-footer" >
+
+        <div class="bottom">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6 col-xs-12 text-lg-left text-center">
+                <p class="copyright-text">
+                  © TransportCell @ IIITA
+                  <a href="https://iiita.ac.in/">TransportCell</a>
+                </p>
+              </div>
+              <div class="col-lg-6 col-xs-12 text-lg-right text-center">
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                    <a href="index.html">Home</a>
+                  </li>
+
+                  <li class="list-inline-item">
+                    <a href="#about">About Us</a>
+                  </li>
+
+                  <li class="list-inline-item">
+                    <a href="#features">Features</a>
+                  </li>
+
+                  <li class="list-inline-item">
+                    <a href="#portfolio" font color="white">Portfolio</a>
+                  </li>
+
+                  <li class="list-inline-item">
+                    <a href="#team">Team</a>
+                  </li>
+
+                  <li class="list-inline-item">
+                    <a href="#contact">Contact</a>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </div>
+    </footer>
     <script type="text/javascript" src="{% static "js/tether.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/bootstrap.js" %}"></script>

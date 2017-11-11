@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block css %}
+    <link rel="stylesheet" href="{% static "css/plugin/carousel.css" %}">
     <style>
-        .container {
+        .alert {
+            margin: 0px;
+            font-weight: 500;
+            text-align: center;
+            background-color: #373a3c;
+            color: white;
+            font-size: 1.2em;
+        }
+        .announcement {
             margin-top: 5px;
-            margin-right: 5px;
+            margin-right: 4%;
             padding: 0;
             max-height: 400px;
             overflow: auto;
+            border: 2px solid #373a3c;
         }
 		.hide {
 			display: none;
@@ -43,7 +54,20 @@
 	</style>
 {% endblock %}
 {% block content %}
-    <div class="container col-lg-2 col-md-3 col-sm-6 col-12">
+
+{#    carousel in home page#}
+    <div class="carousel col-lg-8 col-md-8 col-sm-8 col-12" id="slideshow">
+        <div id="my-slider" class="slider">
+            <a class="left arrow"></a><a class="right arrow"></a>
+            <div class="slide active"> <img src="{% static "images/slide (1).jpg" %}"> </div>
+            <div class="slide"> <img src="{% static "images/slide (2).jpg" %}"> </div>
+            <div class="slide"> <img src="{% static "images/slide (3).jpg" %}"> </div>
+        </div>
+    </div>
+    <div></div>
+{#    announcement in home#}
+    <div class="container announcement col-lg-3 col-md-3 col-sm-4 col-12">
+        <p class="alert alert-info">Announcements</p>
         <dl>
             {% for i in announcements %}
                 <dt>{{ i.text }}</dt>
@@ -52,20 +76,46 @@
         </dl>
     </div>
 {% endblock %}
+
+
 {% block js %}
+     <script type="text/javascript" src="{% static "js/plugin/jquery.slippity.min.js" %}"></script>
+{#script for announcement bar#}
     <script>
-	$(function() {
-		$('dd').addClass('hide')
-		  .first()
-		  .removeClass('hide');
-		$('dl').on('mouseenter','dt',function() {
-			$(this).next()
-				   .slideDown(200)
-				   .siblings('dd')
-				   .slideUp(200);
-		});
-	})
-</script>
+        $(function() {
+            $('dd').addClass('hide')
+              .first()
+              .removeClass('hide');
+            $('dl').on('mouseenter','dt',function() {
+                $(this).next()
+                       .slideDown(200)
+                       .siblings('dd')
+                       .slideUp(200);
+            });
+        })
+    </script>
+{#    script for carousel#}
+    <script>
+        $(document).ready(function(){
+            $("#my-slider").slippity({
+            arrowClass: ".arrow", // the selector for arrows navigation.
+            slideClass: ".slide", // the selector for slide items.
+            dynamicHeight: true, // dynamiclly set the height of your images
+            animationTime: 500, // the delay time between slides.
+            start: function(){}, // callback
+            end: function(){}}); // callback
+        });
+
+{#        $("#slideshow > div > div:gt(0)").hide();#}
+{#        setInterval(function() {#}
+{#          $('#slideshow > div > div:first')#}
+{#            .fadeOut(1000)#}
+{#            .next()#}
+{#            .fadeIn(1000)#}
+{#            .end()#}
+{#            .appendTo('#slideshow > div');#}
+{#        }, 3000);#}
+    </script>
 {% endblock %}
 
 

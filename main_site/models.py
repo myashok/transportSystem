@@ -1,14 +1,12 @@
 import os
-import shutil
 import uuid
-
-from PIL import Image
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
+#todo Try removing the respective image from directory after deleting a driver
+#todo Add last_updated_at field to every model, editalble=False and change on every save
 def get_upload_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
@@ -16,13 +14,31 @@ def get_upload_path(instance, filename):
        instance.__class__.__name__, filename)
 
 class Driver(models.Model):
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
     name=models.CharField(max_length=200)
-    phone=PhoneNumberField(unique=True)
-    blood_group=models.CharField(max_length=5,default='A+')
-    license_no=models.CharField(max_length=50,unique=True)
-    license_validity=models.DateField()
-    email=models.EmailField(unique=True)
-    picture=models.ImageField(upload_to=get_upload_path,default='default.png')
+    phone=PhoneNumberField(unique=True,
+                           verbose_name='Phone Number',
+                           help_text='Format: +91-9912345678')
+    emergency_contact = PhoneNumberField(null=True,
+                                         blank=True,
+                                         verbose_name='Emergency Contact',
+                                         help_text='Format: +91-9912345678')
+    address=models.TextField(null=True,
+                             blank=True)
+    blood_group=models.CharField(max_length=5,
+                                 verbose_name='Blood Group',
+                                 choices=[('O-','O-'),('O+','O+'),('A-','A-'),('A+','A+'),
+                                          ('B-','B-'),('B+','B+'),('AB-','AB-'),('AB+','AB+')])
+    license_no=models.CharField(max_length=50,
+                                null=True,blank=True,
+                                verbose_name='License number')
+    license_validity=models.DateField(verbose_name='Valid till',null=True,blank=True)
+    email=models.EmailField(null=True,
+                            blank=True,
+                            verbose_name='Email Address')
+    picture=models.ImageField(upload_to=get_upload_path,
+                              default='default.png',
+                              help_text='If not provided, default will be used')
 
     class Meta():
         ordering=['license_validity']
@@ -30,154 +46,164 @@ class Driver(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, ** kwargs):
-        super(Driver, self).save(*args, **kwargs)
-        try:
-            image = Image.open(self.picture)
-            (width, height) = image.size
-            size = (200, 200)
-            image = image.resize(size, Image.ANTIALIAS)
-            image.save(self.picture.path)
-        except Exception as e:
-            print(e)
-    def delete(self, using=None, keep_parents=False):
-        try:
-            path = self.picture.url
-            print(path)
-            os.remove(path)
-        except OSError as e:
-            print(e.strerror)
-        super(Driver,self).delete()
-
-
-class VehicleMaintenance(models.Model):
-    vehicle=models.ForeignKey('Vehicle')
-    start_date=models.DateField()
+class Maintenance(models.Model):
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
+    vehicle=models.ForeignKey('Vehicle',
+                              verbose_name='Vehicle to repair')
+    start_date=models.DateField(default=timezone.now)
     end_date=models.DateField(null=True)
-    expected_cost=models.FloatField(default=0,blank=True)
-    actual_cost=models.FloatField(default=0,blank=True)
-
+    start_time=models.TimeField()
+    end_time=models.TimeField(null=True)
+    repairing_cost=models.FloatField(null=True,blank=True)
     class Meta:
-        ordering=['start_date']
+        ordering=['-start_date']
 
 class Vehicle(models.Model):
-    registration_no=models.CharField(max_length=15,unique=True)
-    picture=models.ImageField(upload_to=get_upload_path,default='school-bus.png')
-    description=models.TextField(null=True)
-    seating_capacity=models.IntegerField(default=4)
-    status=models.CharField(max_length=50)
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
+    registration_no=models.CharField(max_length=15,
+                                     unique=True,
+                                     help_text='e.g - UP 15 D 1234')
+    nickname=models.CharField(max_length=50,
+                              blank=True,
+                              help_text='e.g.- B3')
 
-    def save(self, *args, **kwargs):
-        if self.vehiclemaintenance_set.filter(end_date=None).exists():
-            self.status="Under Maintenance"
-        else:
-            self.status="Available"
-        if os.path.exists(self.picture.url):
-            image = Image.open(self.picture)
-            os.remove(image)
-        image = Image.open(self.picture)
-        (width, height) = image.size
-        size = (200, 200)
-        image = image.resize(size, Image.ANTIALIAS)
-        image.save(self.picture.path)
-        super(Vehicle,self).save(*args,**kwargs)
+    description=models.TextField(null=True)
+    seating_capacity=models.IntegerField(default=4,validators=[MinValueValidator(1)])
+    is_owned=models.BooleanField(default=True,
+                                 verbose_name='Owned by institute?',
+                                 help_text='Whether owned by IIITA or hired')
+    picture = models.ImageField(upload_to=get_upload_path,
+                                default='school-bus.png',
+                                help_text='If not provided, default will be taken')
+    # def save(self, *args, **kwargs):
+    #     image = Image.open(self.picture)
+    #     size = (200, 200)
+    #     image = image.resize(size, Image.ANTIALIAS)
+    #     image.save(self.picture.path)
+    #     super(Vehicle,self).save(*args,**kwargs)
 
     def __str__(self):
-        return self.registration_no
+        if self.nickname is not None:
+            return self.nickname
+        else:
+            return self.registration_no
 
-    @classmethod
-    def get_available_vehicles(cls):
-        return cls.objects.filter(status='Available')
-    @classmethod
-    def get_vehicles_under_maintenance(cls):
-        return cls.objects.get(status='Under maintenance')
-
-
-class RequestType(models.Model):
-    type=models.CharField(max_length=50,unique=True,null=False)
-    rate=models.FloatField(validators=[MinValueValidator(0)])
+class Status(models.Model):
+    type=models.CharField(max_length=50,unique=True)
+    description=models.TextField(null=True,blank=True)
     def __str__(self):
         return self.type
 
-
-class TransportRequest(models.Model):
-    user=models.ForeignKey('auth.User')
-    last_updated_at=models.DateTimeField(default=timezone.now)
-    date_of_journey=models.DateField(null=False)
-    time_of_journey=models.TimeField(default=timezone.now)
+class Request(models.Model):
+    user=models.ForeignKey('auth.User',
+                           verbose_name='Requested by')
+    created_at=models.DateTimeField(default=timezone.now)
+    #last_updated_at=models.DateTimeField(default=timezone.now)
+    start_date=models.DateField()
+    start_time=models.TimeField()
+    end_date=models.DateField()
+    expected_end_time=models.TimeField(null=True,
+                                       blank=True,
+                                       help_text='To ensure fair services to '
+                                                 'everyone, please provide expected end time')
     no_of_persons_travelling=models.IntegerField(default=1,validators=[MinValueValidator(1)])
-    request_type=models.ForeignKey('RequestType')
-    description=models.TextField(null=True)
-    source=models.CharField(max_length=200,null=False)
-    destination=models.CharField(max_length=200,null=False)
-    is_return_journey=models.BooleanField(default=False)
-    status=models.CharField(max_length=50)
+    request_type=models.CharField(max_length=50,
+                          default='Personal',
+                          choices=[('Official','Official'),('Personal','Personal')],
+                          verbose_name='Type of request(Official/Personal)')
+    description=models.TextField(null=True,
+                                 blank=True,
+                                 verbose_name='Brief Summary,with preferences(if any)')
+    remarks=models.TextField(null=True,
+                             blank=True,
+                             verbose_name='Remarks from transport cell')
+    source=models.CharField(max_length=200)
+    destination=models.CharField(max_length=200)
+    is_round_trip=models.BooleanField(default=False,
+                                          verbose_name='Round Trip?')
+    status=models.ForeignKey('Status',editable=False,
+                             verbose_name='Status of Request')
+
 
     def save(self, *args, **kwargs):
-        self.last_updated_at=timezone.now()
-        if not self.status:
-            self.status='Pending'
-        super(TransportRequest, self).save(*args, **kwargs)
+        #self.last_updated_at=timezone.now()
+        self.status=Status.objects.get(type='Request Pending')
+        super(Request, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.id)
 
     class Meta:
-        ordering=['-date_of_journey']
+        ordering=['-start_date']
+
+
 
 class Trip(models.Model):
-    start_distance_reading=models.FloatField(null=True,blank=False,validators=[MinValueValidator(0)])
-    end_distance_reading=models.FloatField(null=True,blank=False,validators=[MinValueValidator(1)])
-    request = models.OneToOneField(
-        TransportRequest,
-        on_delete=models.CASCADE,
-    )
-    status=models.CharField(max_length=50)
-    start_time=models.TimeField()
-    end_time=models.TimeField(null=True)
-    vehicles=models.ManyToManyField(Vehicle)
-    drivers=models.ManyToManyField(Driver)
-
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
+    request = models.ForeignKey('Request', on_delete=models.CASCADE,editable=False)
+    status=models.ForeignKey('Status',editable=False,verbose_name='Status of trip')
+    vehicle=models.ForeignKey('Vehicle')
+    driver=models.ForeignKey('Driver')
+    start_distance = models.FloatField(default=0.0,
+                                       validators=[MinValueValidator(0)])
+    end_distance = models.FloatField(default=0.0,
+                                     validators=[MinValueValidator(1)]
+                                     )
+    rate = models.FloatField(default=0,
+                             verbose_name='Rate/km')
+    fare = models.FloatField(validators=[MinValueValidator(0)],null=True)
     def save(self,*args,**kwargs):
+        if self.end_distance is not None:
+            self.fare = self.rate * (self.end_distance - self.start_distance)
         if not self.status:
-            self.status='Trip Scheduled'
-        self.request.status=self.status
-        self.request.save()
+            self.status = Status.objects.get(type='Trip Scheduled')
         super(Trip,self).save(*args,**kwargs)
-
     def __str__(self):
         return str(self.id)
 
 class Bill(models.Model):
-    datetime_of_generation=models.DateTimeField(default=timezone.now)
-    trip = models.OneToOneField(
-        Trip,
-        on_delete=models.CASCADE,
-    )
-    total_distance=models.FloatField(validators=[MinValueValidator(1)])
-    discount_percentage=models.FloatField(default=0,validators=[MinValueValidator(0)])
-    total_fare=models.FloatField(validators=[MinValueValidator(0)])
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
+    request=models.OneToOneField(
+        Request,on_delete=models.CASCADE)
+    total_distance=models.FloatField(default=0.0,validators=[MinValueValidator(0)])
+    total_fare=models.FloatField(default=0.0,validators=[MinValueValidator(0)])
 
     def save(self,*args,**kwargs):
-        self.trip.status="Trip Completed"
-        self.trip.save()
-        self.trip.request.status=self.trip.status
-        self.trip.request.save()
         super(Bill,self).save(*args,**kwargs)
+        trips=self.request.trip_set.all()
+        dist=0
+        fare=0
+        for t in trips:
+            if t.status==Status.objects.get('Trip Scheduled'):
+                t.status=Status.objects.get('Trip Completed')
+                t.save()
+
 
     class Meta:
-        ordering=['-datetime_of_generation']
+        ordering=['-created_at']
 
     def __str__(self):
         return str(self.id)
 
 class Announcement(models.Model):
     created_by=models.ForeignKey('auth.User')
-    created_at=models.DateTimeField()
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
     text=models.TextField(max_length=500)
-    description=models.TextField(null=True,blank=True)
+    description=models.TextField(null=True,
+                                 blank=True,
+                                 verbose_name='Brief description')
     def __str__(self):
         return self.text
 
     class Meta:
         ordering=['-created_at']
+    def save(self, *args,**kwargs):
+        super(Announcement, self).save(*args,**kwargs)
+
+class Schedule(models.Model):
+    file=models.FileField(upload_to=get_upload_path)
+    def save(self, *args,**kwargs):
+        message='Transport schedule has been updated.Please visit'\
+                +self.file.url+'to see changes'
+        #mail_to_admins(message=message)
+        super(self,Schedule).save(*args,**kwargs)

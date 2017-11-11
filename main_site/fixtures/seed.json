@@ -1,0 +1,50 @@
+[
+  {
+    "model": "main_site.Status",
+    "fields": {
+     "type":"Request Pending",
+      "description": "Yet to be approved"
+    }
+  },
+  {
+    "model": "main_site.Status",
+    "fields": {
+     "type":"Request Approved",
+      "description": "Approved by transport cell and trip created"
+    }
+  },
+  {
+    "model": "main_site.Status",
+    "fields": {
+     "type":"Request Declined",
+      "description":"Declined by transport cell"
+    }
+  },
+   {
+    "model": "main_site.Status",
+    "fields": {
+     "type":"Request Cancelled",
+      "description":"Request cancelled by user"
+    }
+  },
+   {
+    "model": "main_site.Status",
+    "fields": {
+     "type":"Trip Scheduled",
+      "description":"Trip scheduled, bill not generated"
+    }
+  },
+   {
+    "model": "main_site.Status",
+    "fields": {
+     "type":"Trip Completed",
+      "description": "Trip completed and bill generated"
+    }
+  },
+   {
+    "model": "main_site.Status",
+    "fields": {
+     "type":"Trip Cancelled"
+    }
+  }
+]

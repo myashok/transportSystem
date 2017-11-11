@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+    <p>Your requests</p>
     {%  for i in requests %}
         <p>{{ i.id }}</p>
         <p>{{ i.request_type }}</p>

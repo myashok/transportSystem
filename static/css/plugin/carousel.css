@@ -1,0 +1,99 @@
+a {
+text-decoration: none;
+}
+h1, h2, h3, h4, h5, h6 {
+font-weight: 100;
+letter-spacing: 0.5px;
+}
+.carousel {
+    background: #FFF;
+    max-height: 600px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-left: 4%;
+    margin-right: .33%;
+    overflow: hidden;
+    padding: 0 50px 0;
+    text-align: center;
+    float: left;
+}
+.buttons {
+    margin: 25px 0 0;
+}
+.buttons a {
+    background: #555;
+    border-radius: 4px;
+    color: #FFF;
+    display: inline-block;
+    font-size: 0.5em;
+    letter-spacing: 1px;
+    margin: 0 10px;
+    opacity: 0.6;
+    padding: 15px 20px;
+    text-transform: uppercase;
+}
+.buttons a:hover {
+    opacity: 1;
+}
+#my-slider {
+    background: #000;
+    margin: 0px -50px;
+}
+/* SLIDER CSS */
+
+.slider {
+    overflow: visible !important; /* Have to add this due to jQuery adding overflow:hidden */
+    position: relative;
+}
+.slider img {
+    display: block;
+    width: 100%;
+}
+.slider .slide {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.slider .slide.active {
+display: block;
+opacity: 1;
+}
+.slider .arrow {
+    background: url(../../images/slider-arrows.png) no-repeat;
+    cursor: pointer;
+    display: block;
+    margin-top: -50px;
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 100px;
+    z-index: 100;
+}
+.slider .arrow.left {
+left: 20px;
+}
+.slider .arrow.right {
+    right: 20px;
+    background-position: -50px 0;
+}
+.slider .dots {
+    position: absolute;
+    bottom: -35px;
+    text-align: center;
+    width: 100%;
+}
+.slider .dots a {
+    background: #000;
+    border-radius: 4em;
+    display: inline-block;
+    margin: 0 10px;
+    opacity: 0.6;
+    text-indent: -9999px;
+    width: 15px;
+    height: 15px;
+}
+.slider .dots a.active, .slider .dots a:hover {
+    opacity: 1;
+}
