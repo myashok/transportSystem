@@ -330,7 +330,8 @@ class TripListView(ListView):
 class BillDetailView(View):
     def get(self, request, pk):
         bill = get_object_or_404(Bill, pk=pk)
-        return get_bill_as_pdf(request, bill)
+        return HttpResponse('hello world');
+        #return get_bill_as_pdf(request, bill)
 
 #############announcements###############
 
