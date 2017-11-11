@@ -1,7 +1,7 @@
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from main_site.models import TransportRequest
+from main_site.models import Request
 
 
 def is_not_priveleged(user):
@@ -32,7 +32,7 @@ def check_owner_of_request(function):
         if not is_not_priveleged(user):
             return function(request, *args, **kwargs)
         else:
-            req = get_object_or_404(TransportRequest, pk=kwargs['pk'])
+            req = get_object_or_404(Request, pk=kwargs['pk'])
             if req.user!=request.user:
                 raise PermissionDenied()
 

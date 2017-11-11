@@ -38,3 +38,19 @@ def not_in_student_group(user):
 @login_required
 @user_passes_test(not_in_student_group, login_url='/advising/denied/')
 def some_view(request):
+
+
+
+
+
+
+
+shiv-->
+1. Change driver/view_driver.html to display all attributes and design it properly
+2. driver/list_drivers show most important fields and remove age from there
+3. request/view_request.html--Name of some fields have changed, see models.py
+   and change names in templates
+4.
+
+nikhil-->
+1. send mail on form_valid() in requestcreateview

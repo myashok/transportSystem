@@ -30,7 +30,7 @@
                             <td>{{ i.date_of_journey }} {{ i.time_of_journey }}</td>
                             <td>{{ i.description }}</td>
                             <td>{{ i.is_return_journey}}</td>
-                            <td>{{ i.status|stringformat:"s" }}</td>
+                            <td>{{ i.status }}</td>
                             <td>
                                 {% if i.trip.bill %}
                                     <a href="{%  url 'view-bill' pk=i.trip.bill.pk %}" class="btn btn-primary">View bill</a>

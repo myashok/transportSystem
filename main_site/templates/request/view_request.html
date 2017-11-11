@@ -36,10 +36,14 @@
                 </tr>
                 <tr>
                     <th>Start time</th>
-                    <td>{{ request.time_of_journey }}</td>
+                    <td>{{ request.start_time }}</td>
                 </tr>
                 <tr>
                     <th>Source</th>
+                    <td>{{ request.source }}</td>
+                </tr>
+                <tr>
+                    <th>Expected end time</th>
                     <td>{{ request.source }}</td>
                 </tr>
                 <tr>
@@ -47,7 +51,7 @@
                     <td>{{ request.destination }}</td>
                 </tr>
                 <tr>
-                    <th>Return Journey</th>
+                    <th>Round trip?</th>
                     <td>{{ request.is_return_journey }}</td>
                 </tr>
                 <tr>
