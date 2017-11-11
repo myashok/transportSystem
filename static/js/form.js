@@ -29,4 +29,5 @@ $('#id_end_time').timepicki({
 		disable_keyboard_mobile: true
 });
 $('#id_date_of_journey').dateTimePicker();
+$('#id_license_validity').dateTimePicker();
 $("#id_is_return_journey").css({"float": "left", "clear": "both", "margin-top": "-25px",});

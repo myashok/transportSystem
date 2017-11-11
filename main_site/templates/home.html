@@ -13,7 +13,7 @@
         }
         .announcement {
             margin-top: 5px;
-            margin-right: 5px;
+            margin-right: 4%;
             padding: 0;
             max-height: 400px;
             overflow: auto;
@@ -56,16 +56,17 @@
 {% block content %}
 
 {#    carousel in home page#}
-    <div class="carousel col-lg-8 col-md-8 col-sm-6 col-12" id="slideshow">
+    <div class="carousel col-lg-8 col-md-8 col-sm-8 col-12" id="slideshow">
         <div id="my-slider" class="slider">
             <a class="left arrow"></a><a class="right arrow"></a>
-            <div class="slide active"> <img src="{% static "images/slide1 (1).jpg" %}"> </div>
-            <div class="slide"> <img src="{% static "images/slide1 (2).jpg" %}"> </div>
-            <div class="slide"> <img src="{% static "images/slide1 (3).jpg" %}"> </div>
+            <div class="slide active"> <img src="{% static "images/slide (1).jpg" %}"> </div>
+            <div class="slide"> <img src="{% static "images/slide (2).jpg" %}"> </div>
+            <div class="slide"> <img src="{% static "images/slide (3).jpg" %}"> </div>
         </div>
     </div>
+    <div></div>
 {#    announcement in home#}
-    <div class="container announcement col-lg-3 col-md-3 col-sm-5 col-12">
+    <div class="container announcement col-lg-3 col-md-3 col-sm-4 col-12">
         <p class="alert alert-info">Announcements</p>
         <dl>
             {% for i in announcements %}
