@@ -49,9 +49,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>
-                  <a class="dropdown-item" href="#">View Requests</a>
-                  <a class="dropdown-item" href="#">Past Requests</a>
-                  <a class="dropdown-item" href="#">Request Status</a>
+                  <a class="dropdown-item" href="{% url 'my-requests' %}">View Requests</a>
                 </div>
               </li>
             </ul>
@@ -83,7 +81,7 @@
                   Requests
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="{%  url 'new-request' %}">View New Requests</a>
+                  <a class="dropdown-item" href="{%  url 'new-request' %}">New Requests</a>
                   <a class="dropdown-item" href="{%  url 'list-requests' %}">View Requests</a>
                 </div>
               </li>
@@ -107,6 +105,7 @@
               Account
             </a>
             <div class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+
                 {% if request.user.is_authenticated  %}
                     <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
                 {% else%}
@@ -127,7 +126,7 @@
             <div class="row">
               <div class="col-lg-6 col-xs-12 text-lg-left text-center">
                 <p class="copyright-text">
-                  © TransportCell @ IIITA
+                  <span style="color:white; font-weight: 300">© TransportCell @ IIITA</span>
                   <a href="https://iiita.ac.in/">TransportCell</a>
                 </p>
               </div>

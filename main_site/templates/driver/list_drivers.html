@@ -6,12 +6,12 @@
 {% block content %}
       <div class="container">
         <a href="{%  url 'new-driver' %}" class="btn btn-primary">Add new</a>
-        <table class="table table-striped table-responsive table-hover table-bordered">
+        <table class="table table-striped  table-hover table-bordered">
            <thead>
                <tr>
                    <th>Driver #</th>
                    <th>Name</th>
-                   <th>Age</th>
+                   <th>Blood Group</th>
                    <th>Phone no.</th>
                    <th>Email id</th>
                    <th>License no.</th>
@@ -24,7 +24,7 @@
                   <tr>
                     <td><a href="{% url 'view-driver' pk=driver.id %}">{{ driver.id }}</a></td>
                     <td>{{ driver.name }}</td>
-                    <td>{{ driver.date_of_birth.year }}</td>
+                    <td>{{ driver.blood_group }}</td>
                     <td>{{ driver.phone }}</td>
                     <td>{{ driver.email }}</td>
                     <td>{{ driver.license_no }}</td>
