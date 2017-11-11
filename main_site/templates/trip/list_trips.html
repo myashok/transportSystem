@@ -5,40 +5,39 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container ">
-       <a href="#" class="btn btn-primary">Add new</a>
-       <table class="table table-striped  table-hover table-bordered">
-          <thead>
-               <tr>
-                   <th>Trip #</th>
-                   <th>Request #</th>
-                   <th>User</th>
-                   <th>Status</th>
-                   <th>Start time</th>
-                   <th>End time</th>
-                   <th>Drivers allotted</th>
-                   <th>Vehicles allotted</th>
-                   <th>Actions</th>
-               </tr>
-          </thead>
-           <tbody>
-              {%  for trip in trips %}
-                  <tr>
-                      <td><a href="{% url 'view-trip' pk=trip.request.id %}">{{ trip.request.id }}</a></td>
-                    <td>{{ trip.request.id }}</td>
-                    <td>{{ trip.request.user.username }}</td>
-                    <td>{{ trip.status }}</td>
-                    <td>{{ trip.start_time}}</td>
-                    <td>{% if trip.end_time %} {{ trip.end_time }}{% else %}---{% endif %}</td>
-                    <td>{% for i in trip.drivers.all %}{{ i.name }}{% endfor %}</td>
-                    <td>{% for i in trip.vehicles.all %}{{ i.registration_no }}{% endfor %}</td>
-                    <td>
-                        {% if trip.bill %}
-                            <a href="#">View bill for this trip</a>
-                        {% elif trip.status|stringformat:"s" == "Scheduled" %}
-                            <a href="{% url 'start-trip' pk=trip.pk %}">Start Trip</a>
-                        {% elif trip.status|stringformat:"s" == "Active" %}
-                            <a href="{% url 'end-trip' pk=trip.pk %}">end trip</a>
+   <table class="table">
+      <thead>
+           <tr>
+               <th>Trip #</th>
+               <th>Request #</th>
+               <th>User</th>
+               <th>Status</th>
+               <th>Start time</th>
+               <th>End time</th>
+               <th>Drivers allotted</th>
+               <th>Vehicles allotted</th>
+               <th>Actions</th>
+           </tr>
+       </thead>
+       <tbody>
+          {%  for trip in trips %}
+              <tr>
+                  <td><a href="{% url 'view-trip' pk=trip.id %}">{{ trip.id }}</a></td>
+                  <td><a href="{% url 'view-request' pk=trip.request.id %}">{{ trip.request.id }}</a></td>
+                <td>{{ trip.request.user.username }}</td>
+                <td>{{ trip.status }}</td>
+                <td>{{ trip.start_time}}</td>
+                <td>{% if trip.end_time %} {{ trip.end_time }}{% else %}---{% endif %}</td>
+                <td>{% for i in trip.drivers.all %}{{ i.name }}{% endfor %}</td>
+                <td>{% for i in trip.vehicles.all %}{{ i.registration_no }}{% endfor %}</td>
+                <td>
+                    {% if trip.bill %}
+                        <a href="{% url 'view-bill' pk=trip.bill.pk %}">View bill for this trip</a>
+                    {% elif trip.start_distance_reading %}
+                        <a href="{% url 'end-trip' pk=trip.pk %}">end trip</a>
+                    {% elif trip.status|stringformat:"s" == "Trip Scheduled" %}
+                        <a href="{% url 'start-trip' pk=trip.pk %}">Start Trip</a>
+
 
                         {% endif %}
                     </td>

@@ -1,13 +1,15 @@
 import os
 
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from weasyprint import HTML
+#from weasyprint import HTML
 
 from transport.settings import BASE_DIR
 
-def get_bill_as_pdf(request,bill):
+
+def get_bill_as_pdf(request, bill):
 
     BILL_ROOT = os.path.join(BASE_DIR, 'files/Bill')
     fs = FileSystemStorage(BILL_ROOT)
@@ -29,3 +31,7 @@ def get_bill_as_pdf(request,bill):
         return response
 
     return Http404
+
+def send_email(title,body,recepients):
+    email = EmailMessage(title, body, to=recepients)
+    email.send()

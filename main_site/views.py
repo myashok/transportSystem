@@ -1,6 +1,10 @@
+import os
 from datetime import datetime
+
+from PIL import Image
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -12,11 +16,11 @@ from main_site.models import TransportRequest, Driver, Vehicle, Trip, Bill, Anno
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.views.generic import UpdateView
-from main_site.utils import get_bill_as_pdf
+from main_site.utils import send_email, get_bill_as_pdf
 
 
-class HomeView(View):
-    def get(self, request):
+class HomeView(TemplateView):
+    def get(self, request, **kwargs):
         announcements = Announcement.objects.all()
         return render(request, 'home.html', {'announcements': announcements})
 
@@ -25,7 +29,6 @@ class HomeView(View):
 @check_not_priveleged
 def staff_home(request):
     return render(request, 'staff_home.html')
-
 
 class LoginView(View):
     def post(self, request):
@@ -57,11 +60,10 @@ class LoginView(View):
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect('user-home')
+        return redirect('login')
 
 
 ####################driver##################
-
 
 # create driver
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -102,7 +104,6 @@ class DriverDeleteView(DeleteView):
     template_name = 'driver/delete_driver.html'
     success_url = reverse_lazy('list-drivers')
 
-
 # list drivers
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_not_priveleged, name='dispatch')
@@ -125,7 +126,12 @@ class RequestCreateView(CreateView):
     def form_valid(self, form):
         request = form.save(commit=False)
         request.user = self.request.user
+        try:
+            send_email('Transport request received','Hi, we have received your request',['nik211012@gmail.com'])
+        except OSError as e:
+            print(e.strerror)
         return super(RequestCreateView, self).form_valid(form)
+
 
     def get_success_url(self):
         return reverse('view-request', kwargs={'pk': self.object.pk})
@@ -148,6 +154,11 @@ class RequestUpdateView(UpdateView):
     fields = ['date_of_journey', 'time_of_journey', 'request_type', 'description',
               'source', 'destination', 'is_return_journey']
     template_name = 'request/update_request.html'
+
+    def get_context_data(self, **kwargs):
+        if self.object.status == 'Trip Completed' or self.object.status == 'Trip Active':
+            raise PermissionDenied()
+        return super(RequestUpdateView, self).get_context_data(**kwargs)
 
     def get_success_url(self):
         return reverse('view-request', kwargs={'pk': self.object.pk})
@@ -245,6 +256,8 @@ class TripCreateView(CreateView):
 
     def form_valid(self, form):
         trip = form.save(commit=False)
+        if len(form.cleaned_data.get('vehicles')) is not len(form.cleaned_data.get('drivers')):
+            raise ValidationError('No. of drivers and vehicles must match')
         trip.request = self.get_context_data()['req']
         trip.save()
         return super(TripCreateView, self).form_valid(form)
@@ -265,8 +278,12 @@ class TripDetailView(DetailView):
 class TripUpdateView(UpdateView):
     model = Trip
     template_name = 'trip/update_trip.html'
-    fields = ['start_distance_reading', 'end_distance_reading', 'start_time', 'end_time',
-              'vehicles', 'drivers']
+    fields = ['start_time', 'vehicles', 'drivers']
+
+    def get_context_data(self, **kwargs):
+        if self.object.status == 'Trip Completed' or self.object.status == 'Trip Active':
+            raise PermissionDenied("You can't edit an active or completed trip")
+        return super(TripUpdateView, self).get_context_data(**kwargs)
 
     def get_success_url(self):
         return reverse('view-trip', kwargs={'pk': self.object.pk})
@@ -292,12 +309,13 @@ class TripStartView(UpdateView):
     success_url = reverse_lazy('list-trips')
 
     def get_context_data(self, **kwargs):
-        if self.object.status == 'Completed' or self.object.status == 'Active':
+        if self.object.status == 'Trip Completed' or self.object.status == 'Trip Active':
             raise PermissionDenied()
         return super(TripStartView, self).get_context_data(**kwargs)
 
     def form_valid(self, form):
         trip = form.save(commit=False)
+        trip.status='Trip Active'
         trip.save()
         return super(TripStartView, self).form_valid(form)
 
@@ -308,11 +326,10 @@ class TripEndView(UpdateView):
     model = Trip
     fields = ['start_time', 'end_time', 'start_distance_reading', 'end_distance_reading']
     template_name = 'trip/end_trip.html'
-    success_url = reverse_lazy('list-trips')
 
     def get_context_data(self, **kwargs):
         context = super(TripEndView, self).get_context_data(**kwargs)
-        if self.object.status == 'Active':
+        if self.object.status == 'Trip Active':
             return context
         else:
             raise PermissionDenied()
@@ -321,9 +338,16 @@ class TripEndView(UpdateView):
         total_distance = self.object.end_distance_reading - self.object.start_distance_reading
         rate = self.object.request.request_type.rate
         fare = rate * total_distance
-        bill = Bill(datetime_of_generation=datetime.now(), trip=self.object, total_distance=total_distance, \
+        if Bill.objects.filter(trip=self.object).exists():
+            bill=Bill.objects.get(trip=self.object)
+            bill.datetime_of_generation=datetime.now()
+            bill.total_fare=fare
+            bill.total_distance=total_distance
+            bill.save()
+        else:
+            bill = Bill(datetime_of_generation=datetime.now(), trip=self.object, total_distance=total_distance, \
                     total_fare=fare)
-        bill.save()
+            bill.save()
         return super(TripEndView, self).form_valid(form)
 
     def get_success_url(self):
@@ -337,7 +361,8 @@ class TripEndView(UpdateView):
 class BillDetailView(View):
     def get(self, request, pk):
         bill = get_object_or_404(Bill, pk=pk)
-        return get_bill_as_pdf(request, bill)
+        return HttpResponse('hello world');
+        #return get_bill_as_pdf(request, bill)
 
 
 #############announcements###############
