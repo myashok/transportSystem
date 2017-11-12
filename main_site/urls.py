@@ -18,7 +18,7 @@ urlpatterns=[
     url(r'^login',LoginView.as_view(),name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
 
-    url(r'^staff$',StaffHomeView.as_view(),name='staff-home'),
+    url(r'^staff$', StaffHomeView.as_view(),name='staff-home'),
 
     url(r'^requests/new', RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
@@ -42,6 +42,7 @@ urlpatterns=[
     url(r'^trips/(?P<pk>\d+)$', TripDetailView.as_view(), name='view-trip'),
     url(r'^trips/(?P<pk>\d+)/cancel$', TripCancelView.as_view(), name='cancel-trip'),
     url(r'^requests/(?P<pk>\d+)/trips', TripListView.as_view(), name='list-trips'),
+
 
     url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
 
