@@ -22,7 +22,7 @@
            <tbody>
               {%  for driver in drivers %}
                   <tr>
-                    <td><a href="{% url 'view-driver' pk=driver.id %}">{{ driver.id }}</a></td>
+                    <td><a href="{% url 'view-driver' pk=driver.id %}">{{ forloop.counter }}</a></td>
                     <td>{{ driver.name }}</td>
                     <td>{{ driver.blood_group }}</td>
                     <td>{{ driver.phone }}</td>

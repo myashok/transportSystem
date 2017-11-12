@@ -1,34 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-    <style>
-        .card {
-            margin: 10px;
-            min-width: 300px;
-            border: 2px solid blue;
-            margin-bottom: 50px;
-        }
-        .card-block {
-            position: relative;
-        }
-        .card-img-top {
-            height: 250px;
-            border: 2px solid blue;
-        }
-        .card-title {
-            text-transform: capitalize;
-            font-weight: 400;
-            font-size: 2em;
-        }
-        .category {
-                font-weight: 600;
-        }
-        .data {
-            display: inline-block;
-            position:absolute;
-            left: 120px;
-        }
-    </style>
+     <link rel="stylesheet" href="{% static "css/card.css" %}">
+
 {% endblock %}
 
 {% block content %}
