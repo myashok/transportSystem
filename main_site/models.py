@@ -157,7 +157,7 @@ class Trip(models.Model):
             self.fare = self.rate * (self.end_distance - self.start_distance)
         if not self.status:
             self.status = Status.objects.get(type='Trip Scheduled')
-        super(Trip,self).save(*args,**kwargs)
+        super(Trip, self).save(*args,**kwargs)
     def __str__(self):
         return str(self.id)
 

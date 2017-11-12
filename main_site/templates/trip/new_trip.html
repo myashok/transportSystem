@@ -12,7 +12,12 @@
             {% for field in form %}
 
                 <div class="form-group ">
-                    <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field">{{ field }}</span>
+                    <span class="label col-lg-2 control-label" >
+                        {{ field.label_tag}}
+
+                    </span>
+
+                    <span class="field">{{ field }}</span>
                   {%if field.errors %}
                       <span class="text-danger">{{ field.errors|striptags }} </span>
                   {%endif%}
@@ -27,4 +32,10 @@
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/plugin/timepicki.js" %}"></script>
     <script type="text/javascript" src="{% static "js/form.js" %}"></script>
+    <script>
+        $("[for='id_driver']").after(" <a href=\"{%url 'new-driver'%}\" target=\"_blank\" class=\"related-widget-wrapper-link add-related\" title=\"Add another driver\">"+
+                "<img src=\"/static/admin/img/icon-addlink.svg\" alt=\"Add\"/></a>");
+        $("[for='id_vehicle']").after(" <a href=\"{%url 'new-vehicle'%}\" target=\"_blank\" class=\"related-widget-wrapper-link add-related\" title=\"Add another vehicle\">"+
+            "<img src=\"/static/admin/img/icon-addlink.svg\" alt=\"Add\"/></a>");
+    </script>
 {% endblock %}
