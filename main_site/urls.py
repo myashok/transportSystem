@@ -1,10 +1,11 @@
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
+from django.conf.urls import url
 from main_site.views import \
     UserHomeView, StaffHomeView, LoginView, LogoutView
 from views.view_announcements import AnnouncementCreateView, AnnouncementUpdateView, AnnouncementListView, \
-    AnnouncementDeleteView
+    AnnouncementDeleteView, AnnouncementDetailView
 from views.view_bills import BillDetailView
 from views.view_drivers import DriverCreateView, DriverDetailView, DriverUpdateView, DriverDeleteView, DriverListView
 from views.view_requests import RequestDetailView, RequestUpdateView, RequestListView, MyRequestsView, RequestCreateView
@@ -45,9 +46,11 @@ urlpatterns=[
     url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
 
     url(r'^announcements/new$', AnnouncementCreateView.as_view(), name='new-announcement'),
+    url(r'^announcements/(?P<pk>\d+)$', AnnouncementDetailView.as_view(), name='view-announcement'),
     url(r'^announcements/(?P<pk>\d+)/edit$', AnnouncementUpdateView.as_view(), name='update-announcement'),
-    url(r'^announcements/$', AnnouncementListView.as_view(), name='list-announcements'),
     url(r'^announcements/(?P<pk>\d+)/delete$', AnnouncementDeleteView.as_view(), name='delete-announcement'),
+    url(r'^announcements/$', AnnouncementListView.as_view(), name='list-announcements'),
+
 ]
 
 if settings.DEBUG:

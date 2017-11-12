@@ -93,8 +93,16 @@
                   <a class="dropdown-item" href="#">Scheduled Trips</a>
                   <a class="dropdown-item" href="#">Active Trips</a>
 {#                  <a class="dropdown-item" href="{%  url 'new-trip'%}">Add Trips</a>#}
-{#                  <a class="dropdown-item" href="{%  url 'list-trips'%}">view Trips</a>#}
+{#                  <a class="dropdown-item" href="{%  url 'list-trips'%}">View Trips</a>#}
                 </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Announcements
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="{% url 'list-announcements' %}">View Announcements</a>
+                  <a class="dropdown-item" href="{% url 'new-announcement' %}">Add Announcements</a>
               </li>
             </ul>
 
@@ -162,6 +170,7 @@
           </div>
         </div>
     </footer>
+
     <script type="text/javascript" src="{% static "js/tether.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/bootstrap.js" %}"></script>

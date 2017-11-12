@@ -7,7 +7,6 @@ from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from main_site.decorators import check_not_priveleged, check_owner_of_request
 from main_site.models import Request
 
-
 #create request
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class RequestCreateView(CreateView):

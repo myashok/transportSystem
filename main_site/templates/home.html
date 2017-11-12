@@ -19,6 +19,9 @@
             overflow: auto;
             border: 2px solid #373a3c;
         }
+        .slider img {
+            max-height: 500px;
+        }
 		.hide {
 			display: none;
 		}
@@ -105,16 +108,6 @@
             start: function(){}, // callback
             end: function(){}}); // callback
         });
-
-{#        $("#slideshow > div > div:gt(0)").hide();#}
-{#        setInterval(function() {#}
-{#          $('#slideshow > div > div:first')#}
-{#            .fadeOut(1000)#}
-{#            .next()#}
-{#            .fadeIn(1000)#}
-{#            .end()#}
-{#            .appendTo('#slideshow > div');#}
-{#        }, 3000);#}
     </script>
 {% endblock %}
 

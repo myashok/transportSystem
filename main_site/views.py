@@ -106,4 +106,3 @@ class LogoutView(View):
 #         return reverse('view-bill', kwargs={'pk': self.object.bill.pk})
 #
 
-
