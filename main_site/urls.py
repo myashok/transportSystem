@@ -2,8 +2,8 @@ from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.conf.urls import url
-from main_site.views import \
-    UserHomeView, StaffHomeView, LoginView, LogoutView
+
+from main_site.views import UserHomeView, LoginView, LogoutView, StaffHomeView
 from views.view_announcements import AnnouncementCreateView, AnnouncementUpdateView, AnnouncementListView, \
     AnnouncementDeleteView, AnnouncementDetailView
 from views.view_bills import BillDetailView, BillCreateView
