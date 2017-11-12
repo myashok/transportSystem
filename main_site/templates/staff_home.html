@@ -1,5 +1,61 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block css %}
+    <link rel="stylesheet" href="{% static "css/plugin/carousel.css" %}">
+    <link rel="stylesheet" href="{% static "css/home.css" %}">
 {% endblock %}
-{%  block content %}
-{%  endblock %}
+{% block content %}
+
+{#    carousel in home page#}
+    <div class="carousel col-lg-8 col-md-8 col-sm-8 col-12" id="slideshow">
+        <div id="my-slider" class="slider">
+            <a class="left arrow"></a><a class="right arrow"></a>
+            <div class="slide active"> <img src="{% static "images/slide (1).jpg" %}"> </div>
+            <div class="slide"> <img src="{% static "images/slide (2).jpg" %}"> </div>
+            <div class="slide"> <img src="{% static "images/slide (3).jpg" %}"> </div>
+        </div>
+    </div>
+    {#    announcement in home#}
+    <div class="container announcement col-lg-3 col-md-3 col-sm-4 col-12">
+        <p class="alert alert-info">Announcements</p>
+        <dl>
+            {% for i in announcements %}
+                <dt>{{ i.text }}</dt>
+                <dd>{{ i.description }}</dd>
+            {% endfor %}
+        </dl>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+     <script type="text/javascript" src="{% static "js/plugin/jquery.slippity.min.js" %}"></script>
+    {#script for announcement bar#}
+    <script>
+        $(function() {
+            $('dd').addClass('hide')
+              .first()
+              .removeClass('hide');
+            $('dl').on('mouseenter','dt',function() {
+                $(this).next()
+                       .slideDown(200)
+                       .siblings('dd')
+                       .slideUp(200);
+            });
+        })
+    </script>
+    {#    script for carousel#}
+    <script>
+        $(document).ready(function(){
+            $("#my-slider").slippity({
+            arrowClass: ".arrow", // the selector for arrows navigation.
+            slideClass: ".slide", // the selector for slide items.
+            dynamicHeight: true, // dynamiclly set the height of your images
+            animationTime: 500, // the delay time between slides.
+            start: function(){}, // callback
+            end: function(){}}); // callback
+        });
+    </script>
+{% endblock %}
+
+
