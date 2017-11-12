@@ -10,7 +10,6 @@
         <fieldset>
             <legend>Register</legend>
             {% for field in form %}
-
                 <div class="form-group ">
                     <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field">{{ field }}</span>
                   {%if field.errors %}

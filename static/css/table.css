@@ -28,10 +28,12 @@ tbody:hover > tr td {
 .btn {
     color: white;
     background: #515E67;
+    border-color: #515E67;
     margin-bottom: 10px;
 }
 .btn:hover {
     background: #34383B;
+    border-color: #34383B;
     box-shadow: 1px 1px 2px #888888;
 }
 tbody:hover > tr:hover td {

@@ -7,7 +7,7 @@
      <div class="container col-lg-4 col-md-5 col-sm-8 col-12">
         <form method="POST" action="" class="form-horizontal ">{% csrf_token %}
             <fieldset>
-                <legend>Add Announcement </legend>
+                <legend>Edit Announcement </legend>
                 {% for field in form %}
                     <div class="form-group">
                         <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field col-lg-2">{{ field }}</span>

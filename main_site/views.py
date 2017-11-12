@@ -217,6 +217,9 @@ class VehicleListView(ListView):
     template_name = 'vehicle/list_vehicles.html'
     context_object_name = 'vehicles'
 
+
+
+
 ####################trips########################
 # new trip
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -364,10 +367,18 @@ class AnnouncementDeleteView(DeleteView):
     template_name = 'announcement/delete_announcement.html'
     success_url = reverse_lazy('list-announcements')
 
-# list drivers
+# list announcement
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_not_priveleged, name='dispatch')
 class AnnouncementListView(ListView):
     model = Announcement
     template_name = 'announcement/list_announcement.html'
     context_object_name = 'announcements'
+
+# announcment details
+@method_decorator(login_required(login_url='login'), name='dispatch')
+@method_decorator(check_not_priveleged, name='dispatch')
+class AnnouncementDetailView(DetailView):
+    model = Announcement
+    template_name = 'announcement/view_announcement.html'
+    context_object_name = 'announcement'

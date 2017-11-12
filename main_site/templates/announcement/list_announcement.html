@@ -19,7 +19,7 @@
               <tbody>
                 {%  for i in announcements %}
                   <tr>
-                    <td><a href="#">{{ forloop.counter }}</a></td>
+                    <td><a href="{% url 'view-announcement' pk=i.id %}">{{ forloop.counter }}</a></td>
                     <td>{{ i.created_at }}</td>
                     <td>{{ i.text }}</td>
                     <td>{{ i.description }}</td>

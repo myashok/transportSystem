@@ -6,7 +6,8 @@ from main_site.views import DriverListView, DriverUpdateView, \
     DriverDeleteView, DriverCreateView, RequestListView, RequestUpdateView, RequestDetailView, DriverDetailView, \
     LoginView, LogoutView, VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, VehicleListView, \
     TripDetailView, TripCancelView, TripListView, BillDetailView, AnnouncementCreateView, \
-    AnnouncementUpdateView, AnnouncementDeleteView, AnnouncementListView, UserHomeView, StaffHomeView
+    AnnouncementUpdateView, AnnouncementDeleteView, AnnouncementListView, UserHomeView, StaffHomeView, \
+    AnnouncementDetailView
 from . import views
 
 urlpatterns=[
@@ -41,9 +42,11 @@ urlpatterns=[
     url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
 
     url(r'^announcements/new$', AnnouncementCreateView.as_view(), name='new-announcement'),
+    url(r'^announcements/(?P<pk>\d+)$', AnnouncementDetailView.as_view(), name='view-announcement'),
     url(r'^announcements/(?P<pk>\d+)/edit$', AnnouncementUpdateView.as_view(), name='update-announcement'),
-    url(r'^announcements/$', AnnouncementListView.as_view(), name='list-announcements'),
     url(r'^announcements/(?P<pk>\d+)/delete$', AnnouncementDeleteView.as_view(), name='delete-announcement'),
+    url(r'^announcements/$', AnnouncementListView.as_view(), name='list-announcements'),
+
 ]
 
 if settings.DEBUG:
