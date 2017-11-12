@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
-from main_site.decorators import is_not_priveleged, check_not_priveleged
+from main_site.decorators import is_not_priveleged, check_priveleged
 from main_site.models import Announcement
 from django.contrib.auth import authenticate, login, logout
 
@@ -13,7 +13,7 @@ class UserHomeView(TemplateView):
         return render(request, 'home.html', {'announcements': announcements})
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class StaffHomeView(View):
     def get(self, request):
         return render(request, 'staff_home.html')

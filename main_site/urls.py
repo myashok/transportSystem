@@ -8,7 +8,7 @@ from views.view_announcements import AnnouncementCreateView, AnnouncementUpdateV
     AnnouncementDeleteView, AnnouncementDetailView
 from views.view_bills import BillDetailView
 from views.view_drivers import DriverCreateView, DriverDetailView, DriverUpdateView, DriverDeleteView, DriverListView
-from views.view_requests import RequestDetailView, RequestUpdateView, RequestListView, MyRequestsView, RequestCreateView
+from views.view_requests import RequestDetailView, RequestListView, MyRequestsView, RequestCreateView, RequestCancelView
 from views.view_trips import TripCreateView, TripDetailView, TripCancelView, TripListView
 from views.view_vehicles import VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, \
     VehicleListView
@@ -22,7 +22,8 @@ urlpatterns=[
 
     url(r'^requests/new', RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
-    url(r'^requests/(?P<pk>\d+)/edit$', RequestUpdateView.as_view(), name='update-request'),
+    #url(r'^requests/(?P<pk>\d+)/edit$', RequestUpdateView.as_view(), name='update-request'),
+    url(r'^requests/(?P<pk>\d+)/cancel$', RequestCancelView.as_view(), name='cancel-request'),
     url(r'^requests$', RequestListView.as_view(), name='list-requests'),
     url(r'^myrequests$',MyRequestsView.as_view(),name='my-requests'),
 

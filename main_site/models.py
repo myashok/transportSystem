@@ -127,7 +127,8 @@ class Request(models.Model):
 
     def save(self, *args, **kwargs):
         #self.last_updated_at=timezone.now()
-        self.status=Status.objects.get(type='Request Pending')
+        if self.status is None:
+            self.status=Status.objects.get(type='Request Pending')
         super(Request, self).save(*args, **kwargs)
 
     def __str__(self):
