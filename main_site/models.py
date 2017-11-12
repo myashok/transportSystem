@@ -193,7 +193,7 @@ class Announcement(models.Model):
                                  blank=True,
                                  verbose_name='Brief description')
     def __str__(self):
-        return self.text
+        return str(self.id)
 
     class Meta:
         ordering=['-created_at']
