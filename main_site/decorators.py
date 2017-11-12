@@ -29,12 +29,9 @@ def check_not_priveleged(function):
 def check_owner_of_request(function):
     def wrap(request, *args, **kwargs):
         user=request.user
-        if not is_not_priveleged(user):
-            return function(request, *args, **kwargs)
-        else:
-            req = get_object_or_404(Request, pk=kwargs['pk'])
-            if req.user!=request.user:
-                raise PermissionDenied()
+        req = get_object_or_404(Request, pk=kwargs['pk'])
+        if req.user!=request.user:
+            raise PermissionDenied()
 
             return function(request, *args, **kwargs)
     wrap.__doc__ = function.__doc__
