@@ -169,17 +169,6 @@ class Bill(models.Model):
     total_distance=models.FloatField(default=0.0,validators=[MinValueValidator(0)])
     total_fare=models.FloatField(default=0.0,validators=[MinValueValidator(0)])
 
-    def save(self,*args,**kwargs):
-        super(Bill,self).save(*args,**kwargs)
-        trips=self.request.trip_set.all()
-        dist=0
-        fare=0
-        for t in trips:
-            if t.status==Status.objects.get('Trip Scheduled'):
-                t.status=Status.objects.get('Trip Completed')
-                t.save()
-
-
     class Meta:
         ordering=['-created_at']
 

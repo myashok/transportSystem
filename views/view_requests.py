@@ -91,7 +91,7 @@ class RequestCancelView(View):
         trips=req.trip_set.all()
         if trips.exists():
             for t in trips:
-                print('cancelling')
+
                 t.status=Status.objects.get(type='Trip Cancelled')
                 t.save()
         return redirect('view-request',pk=pk)
