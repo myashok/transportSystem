@@ -2,59 +2,7 @@
 {% load static %}
 {% block css %}
     <link rel="stylesheet" href="{% static "css/plugin/carousel.css" %}">
-    <style>
-        .alert {
-            margin: 0px;
-            font-weight: 500;
-            text-align: center;
-            background-color: #373a3c;
-            color: white;
-            font-size: 1.2em;
-        }
-        .announcement {
-            margin-top: 5px;
-            margin-right: 4%;
-            padding: 0;
-            max-height: 400px;
-            overflow: auto;
-            border: 2px solid #373a3c;
-        }
-        .slider img {
-            max-height: 500px;
-        }
-		.hide {
-			display: none;
-		}
-		dl {
-			width: 100%;
-			margin: auto;
-		}
-		dt {
-			font-weight: 500;
-			font-size : 1.1em;
-			background-color: rgba(128,128,128,0.5);
-			padding: 5px;
-			text-align: center;
-			margin: auto;
-			border-bottom : 2px solid rgb(150, 148, 149);
-			border-top: 2px solid rgb(120, 128, 129);
-			border-radius: 3px
-		}
-		dd {
-			padding: 5px;
-			margin: auto;
-			text-align: center;
-			background-color: rgba(128,128,128,0.2);
-			border-radius: 3px
-		}
-
-		dt:first-child {
-			border-top: none;
-		}
-		dt:nth-last-child(2) {
-			border-bottom: none;
-		}
-	</style>
+    <link rel="stylesheet" href="{% static "css/plugin/carousel.css" %}">
 {% endblock %}
 {% block content %}
 
@@ -67,8 +15,7 @@
             <div class="slide"> <img src="{% static "images/slide (3).jpg" %}"> </div>
         </div>
     </div>
-    <div></div>
-{#    announcement in home#}
+    {#    announcement in home#}
     <div class="container announcement col-lg-3 col-md-3 col-sm-4 col-12">
         <p class="alert alert-info">Announcements</p>
         <dl>
@@ -83,7 +30,7 @@
 
 {% block js %}
      <script type="text/javascript" src="{% static "js/plugin/jquery.slippity.min.js" %}"></script>
-{#script for announcement bar#}
+    {#script for announcement bar#}
     <script>
         $(function() {
             $('dd').addClass('hide')
@@ -97,7 +44,7 @@
             });
         })
     </script>
-{#    script for carousel#}
+    {#    script for carousel#}
     <script>
         $(document).ready(function(){
             $("#my-slider").slippity({

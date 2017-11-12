@@ -39,6 +39,7 @@ urlpatterns=[
     url(r'^trips/(?P<pk>\d+)/cancel$', TripCancelView.as_view(), name='cancel-trip'),
     url(r'^requests/(?P<pk>\d+)/trips', TripListView.as_view(), name='list-trips'),
 
+
     url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
 
     url(r'^announcements/new$', AnnouncementCreateView.as_view(), name='new-announcement'),

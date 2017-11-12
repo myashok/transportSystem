@@ -7,39 +7,36 @@
 {% block content %}
     <div class="container">
         <a href="{%  url 'new-request' %}" class="btn btn-primary">Add new</a>
-        <table class="table table-flue table-striped  table-hover table-bordered">
+        <table class="table table-flue table-responsive table-striped table-hover table-bordered">
               <thead class="thead">
                    <tr>
-                      <th>#</th>
+                      <th>Request #</th>
                       <th>User</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Expected End Time</th>
+                      <th># of Person Travelling</th>
                       <th>Source</th>
                       <th>Destination</th>
-                      <th>Date and Time</th>
-                      <th>Description</th>
-                      <th>Return journey</th>
-                      <th>Request Status</th>
                       <th>Actions</th>
                    </tr>
               </thead>
               <tbody>
-                    {%  for i in requests %}
+                    {%  for request in requests %}
                         <tr>
-                            <td>{{ i.id }}</td>
+                           <td><a href="{% url 'view-request' pk=request.id %}">{{ forloop.counter }}</a></td>
                             <td>{{request.user.username}}</td>
-                            <td>{{ i.source }}</td>
-                            <td>{{ i.destination }}</td>
-                            <td>{{ i.date_of_journey }} {{ i.time_of_journey }}</td>
-                            <td>{{ i.description }}</td>
-                            <td>{{ i.is_return_journey}}</td>
-                            <td>{{ i.status }}</td>
+                            <td>{{ request.start_date }}</td>
+                            <td>{{ request.end_date }}</td>
+                            <td>{{ request.expected_end_time }}</td>
+                            <td>{{ request.no_of_persons_travelling }}</td>
+                            <td>{{ request.source}}</td>
+                            <td>{{ request.destination }}</td>
                             <td>
-                                {% if i.trip.bill %}
-                                    <a href="{%  url 'view-bill' pk=i.trip.bill.pk %}" class="btn btn-primary">View bill</a>
-                                {% elif i.trip%}
-                                    <a href="{%  url 'view-trip' pk=i.trip.pk %}" class="btn btn-success">View Trip</a>
-                                {% else %}
-                                    <a href="{%  url 'new-trip' pk=i.pk %}" class="btn btn-success">allot</a>
-                                {% endif %}
+                                    <a href="#" class="btn btn-primary">View bill</a>
+                                    <a href="#" class="btn btn-success">View Trip</a>
+                                    <a href="#" class="btn btn-success">Create Trip</a>
+
                             </td>
 
                         </tr>
