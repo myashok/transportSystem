@@ -11,8 +11,9 @@
     margin-right: 4%;
     padding: 0;
     max-height: 400px;
-    overflow: auto;
+    background-color: rgba(128,128,128,0.2);
     border: 2px solid #373a3c;
+    box-shadow: 2px 2px 3px #888;
 }
 .slider img {
     max-height: 500px;
@@ -33,14 +34,19 @@ dt {
     margin: auto;
     border-bottom : 2px solid rgb(150, 148, 149);
     border-top: 2px solid rgb(120, 128, 129);
-    border-radius: 3px
+    border-radius: 3px;
+    max-width: 500px;
+    overflow: auto;
+
 }
 dd {
     padding: 5px;
     margin: auto;
     text-align: center;
     background-color: rgba(128,128,128,0.2);
-    border-radius: 3px
+    border-radius: 3px;
+    max-width: 500px;
+    overflow: auto;
 }
 
 dt:first-child {

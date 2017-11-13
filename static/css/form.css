@@ -24,6 +24,19 @@ form {
     background-color: #F7F7F7;
     box-shadow: 3px 3px 5px #888888;
 }
+form:hover {
+    box-shadow: 7px 7px 7px #888888;
+}
 .form-horizontal {
     padding: 20px;
+}
+input {
+    text-align: center;
+}
+input:focus, input:hover, select:focus, select:hover {
+    box-shadow: 3px 3px 3px #888;
+    font-size: 1.1em;
+}
+textarea:focus, textarea:hover {
+    box-shadow: 3px 3px 3px #888;
 }

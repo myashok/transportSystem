@@ -21,4 +21,16 @@ if($("#id_start_date").length) {
 if($("#id_license_validity").length) {
 	$("#id_license_validity").dateTimePicker();
 }
+if($("#id_phone").length) {
+    $("#id_phone").attr('placeholder', "eg: +91-XXXXXXXXXX");
+}
+if($("#id_emergency_contact").length) {
+    $("#id_emergency_contact").attr('placeholder', "eg: +91-XXXXXXXXXX");
+}
+if($("#id_registration_no").length) {
+    $("#id_registration_no").attr('placeholder', "eg: UP 15 D 1234");
+}
+if($("#id_nickname").length) {
+    $("#id_nickname").attr('placeholder', "eg: B3");
+}
 $(":checkbox").css({"float": "left", "clear": "both", "margin-top": "-25px",});
