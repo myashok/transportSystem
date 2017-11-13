@@ -127,7 +127,7 @@ class Request(models.Model):
 
     def save(self, *args, **kwargs):
         #self.last_updated_at=timezone.now()
-        if self.status is None:
+        if self.pk is None:
             self.status=Status.objects.get(type='Request Pending')
         super(Request, self).save(*args, **kwargs)
 
@@ -145,18 +145,15 @@ class Trip(models.Model):
     status=models.ForeignKey('Status',editable=False,verbose_name='Status of trip')
     vehicle=models.ForeignKey('Vehicle')
     driver=models.ForeignKey('Driver')
-    start_distance = models.FloatField(default=0.0,
+    start_distance = models.FloatField(null=True,
                                        validators=[MinValueValidator(0)])
-    end_distance = models.FloatField(default=0.0,
-                                     validators=[MinValueValidator(1)]
-                                     )
+    end_distance = models.FloatField(null=True,
+                                     validators=[MinValueValidator(1)])
     rate = models.FloatField(default=0,
                              verbose_name='Rate/km')
     fare = models.FloatField(validators=[MinValueValidator(0)],null=True)
     def save(self,*args,**kwargs):
-        if self.end_distance is not None:
-            self.fare = self.rate * (self.end_distance - self.start_distance)
-        if not self.status:
+        if self.pk is None:
             self.status = Status.objects.get(type='Trip Scheduled')
         super(Trip, self).save(*args,**kwargs)
     def __str__(self):

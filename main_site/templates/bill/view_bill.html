@@ -1,13 +1,12 @@
-{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+     <link rel="stylesheet" href="{% static "css/table.css" %}">
+{% endblock %}
 
 {% block content %}
-    <table class="table table-striped  table-hover table-bordered">
-    <p>Datetime of generation: {{ bill.datetime_of_generation }}</p>
-    <p>Trip # : {{ bill.trip_id }}</p>
-    <p>Total distance : {{ bill.total_distance }}</p>
-    <p>Type: {{ bill.trip.request.request_type }}</p>
-    <p>Rate: {{ bill.trip.request.request_type.rate }}</p>
+    <p>Created at: {{ bill.created_at }}</p>
+    <p>Type: {{ bill.request.request_type }}</p>
+    <p>Total distance: {{ bill.total_distance }}</p>
     <p>Fare: {{ bill.total_fare }}</p>
-    </table>
 {% endblock %}
 

@@ -1,24 +1,25 @@
 import os
 from datetime import datetime
 
+from weasyprint import HTML
+
 from transport.settings import BASE_DIR
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-# from weasyprint import HTML
 
 def get_bill_as_pdf(request,bill):
 
     BILL_ROOT = os.path.join(BASE_DIR, 'files/Bill')
     fs = FileSystemStorage(BILL_ROOT)
     filename=str(bill.id)+".pdf"
-    if fs.exists(filename):
-        with fs.open(filename) as pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = 'inline; filename='+"bill_"+filename
-            return response
+    # if fs.exists(filename):
+    #     with fs.open(filename) as pdf:
+    #         response = HttpResponse(pdf, content_type='application/pdf')
+    #         response['Content-Disposition'] = 'inline; filename='+"bill_"+filename
+    #         return response
 
     html_string = render_to_string('pdf_templates/bill_template.html', {'bill':bill})
 

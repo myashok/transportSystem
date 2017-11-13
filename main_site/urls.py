@@ -3,14 +3,14 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.conf.urls import url
 
-from main_site.views import UserHomeView, LoginView, LogoutView, StaffHomeView
-from views.view_announcements import AnnouncementCreateView, AnnouncementUpdateView, AnnouncementListView, \
+from main_site.views.views import UserHomeView, LoginView, LogoutView, StaffHomeView
+from main_site.views.view_announcements import AnnouncementCreateView, AnnouncementUpdateView, AnnouncementListView, \
     AnnouncementDeleteView, AnnouncementDetailView
-from views.view_bills import BillDetailView, BillCreateView
-from views.view_drivers import DriverCreateView, DriverDetailView, DriverUpdateView, DriverDeleteView, DriverListView
-from views.view_requests import RequestDetailView, RequestListView, MyRequestsView, RequestCreateView, RequestCancelView
-from views.view_trips import TripCreateView, TripDetailView, TripCancelView, TripListView
-from views.view_vehicles import VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, \
+from main_site.views.view_bills import BillDetailView, BillCreateView
+from main_site.views.view_drivers import DriverCreateView, DriverDetailView, DriverUpdateView, DriverDeleteView, DriverListView
+from main_site.views.view_requests import RequestDetailView, RequestListView, MyRequestsView, RequestCreateView, RequestCancelView
+from main_site.views.view_trips import TripCreateView, TripDetailView, TripCancelView, TripListView
+from main_site.views.view_vehicles import VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, \
     VehicleListView
 
 urlpatterns=[
@@ -25,8 +25,8 @@ urlpatterns=[
     #url(r'^requests/(?P<pk>\d+)/edit$', RequestUpdateView.as_view(), name='update-request'),
     url(r'^requests/(?P<pk>\d+)/cancel$', RequestCancelView.as_view(), name='cancel-request'),
     url(r'^requests/(?P<pk>\d+)/billing$', BillCreateView.as_view(), name='create-bill'),
-    url(r'^requests$', RequestListView.as_view(), name='list-requests'),
-    url(r'^myrequests$',MyRequestsView.as_view(),name='my-requests'),
+    url(r'^requests[/]$', RequestListView.as_view(), name='list-requests'),
+    url(r'^myrequests[/]$',MyRequestsView.as_view(),name='my-requests'),
 
     url(r'^drivers/new$', DriverCreateView.as_view(), name='new-driver'),
     url(r'^drivers/(?P<pk>\d+)$', DriverDetailView.as_view(), name='view-driver'),
