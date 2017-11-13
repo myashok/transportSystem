@@ -17,7 +17,7 @@ class UserHomeView(TemplateView):
 class StaffHomeView(View):
     def get(self, request):
         announcements = Announcement.objects.all()
-        return render(request, 'staff_home.html', {'announcements': announcements})
+        return render(request, 'staff_home.html',  {'announcements': announcements})
 
 
 class LoginView(View):

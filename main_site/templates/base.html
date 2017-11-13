@@ -54,7 +54,7 @@
               </li>
             </ul>
         {% endifequal %}
-        {% ifequal user.groups.all.0.name "TransportStaff" %}
+        {% if user.groups.all.0.name  == "TransportStaff" or  user.groups.all.0.name  == "TransportAdmin"%}
             <ul class="navbar-nav mr-auto">
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -107,7 +107,7 @@
               </li>
             </ul>
 
-        {% endifequal %}
+        {% endif %}
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -129,7 +129,6 @@
     {% block content %}
     {% endblock %}
     <footer class="site-footer" >
-
         <div class="bottom">
           <div class="container">
             <div class="row">

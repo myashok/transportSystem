@@ -7,6 +7,7 @@ letter-spacing: 0.5px;
 }
 .carousel {
     background: #FFF;
+    box-shadow: 2px 2px 5px #888;
     max-height: 600px;
     box-sizing: border-box;
     margin-top: 5px;

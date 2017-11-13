@@ -6,6 +6,7 @@
 
 {% block content %}
     <div class="container">
+        <a href="{%  url 'new-request' %}" class="btn btn-primary">Add new</a>
         <table class="table table-flue table-responsive table-striped table-hover table-bordered">
               <thead class="thead">
                    <tr>
@@ -17,6 +18,7 @@
                       <th>Source</th>
                       <th>Destination</th>
                       <th>Request Type</th>
+                      <th>Request Status</th>
                       <th>Actions</th>
                    </tr>
               </thead>
@@ -31,6 +33,7 @@
                             <td>{{ request.source}}</td>
                             <td>{{ request.destination }}</td>
                             <td>{{request.request_type}}</td>
+                            <td>{{request.status}}</td>
                             <td>
                                 <a href="#" class="btn btn-primary">View Trips</a>
                                 <a href="#" class="btn btn-success">Cancel Request</a>
