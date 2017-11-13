@@ -29,13 +29,31 @@
     </div>
 {%  endblock %}
 {% block js %}
+    <script>
+        $("[for='id_driver']").after("<a href=\"#\"  class=\"related-widget-wrapper-link add-related\" title=\"Add another driver\">"+
+                "<img src=\"/static/admin/img/icon-addlink.svg\" alt=\"Add\"/></a>");
+        $("[for='id_vehicle']").after(" <a href=\"#\" class=\"related-widget-wrapper-link add-related\" title=\"Add another vehicle\">"+
+            "<img src=\"/static/admin/img/icon-addlink.svg\" alt=\"Add\"/></a>");
+        $("[title$='vehicle']").attr("onClick","new_win(\"{% url 'new-vehicle' %}\")");
+        $("[title$='driver']").attr("onClick","new_win(\"{% url 'new-driver' %}\")");
+        function new_win(url) {
+            var top  = (window.screen.height / 2);
+            var left = (window.screen.width / 2);
+            var win  = window.open(url,
+                        'shiv',
+                        "status=no,height=" + 800 + ",width=" + 500 + ",resizable=yes,left="
+                        + left + ",top=" + top + ",screenX=" + left + ",screenY="
+                        + top + ",toolbar=no,menubar=no,scrollbars=no,location=no,directories=no");
+            var timer = setInterval(function() {
+                if(win.closed) {
+                    clearInterval(timer);
+                    location.reload();
+                }
+            }, 1);
+        }
+    </script>
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/plugin/timepicki.js" %}"></script>
     <script type="text/javascript" src="{% static "js/form.js" %}"></script>
-    <script>
-        $("[for='id_driver']").after(" <a href=\"{%url 'new-driver'%}\" target=\"_blank\" class=\"related-widget-wrapper-link add-related\" title=\"Add another driver\">"+
-                "<img src=\"/static/admin/img/icon-addlink.svg\" alt=\"Add\"/></a>");
-        $("[for='id_vehicle']").after(" <a href=\"{%url 'new-vehicle'%}\" target=\"_blank\" class=\"related-widget-wrapper-link add-related\" title=\"Add another vehicle\">"+
-            "<img src=\"/static/admin/img/icon-addlink.svg\" alt=\"Add\"/></a>");
-    </script>
+
 {% endblock %}

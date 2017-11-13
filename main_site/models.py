@@ -32,7 +32,7 @@ class Driver(models.Model):
     license_no=models.CharField(max_length=50,
                                 null=True,blank=True,
                                 verbose_name='License number')
-    license_validity=models.DateField(verbose_name='Valid till',null=True,blank=True)
+    license_validity=models.DateField(verbose_name='Valid till', null=True, blank=True)
     email=models.EmailField(null=True,
                             blank=True,
                             verbose_name='Email Address')
@@ -127,8 +127,8 @@ class Request(models.Model):
 
     def save(self, *args, **kwargs):
         #self.last_updated_at=timezone.now()
-        if self.status is None:
-            self.status=Status.objects.get(type='Request Pending')
+        if self.pk is None:
+            self.status = Status.objects.get(type='Request Pending')
         super(Request, self).save(*args, **kwargs)
 
     def __str__(self):
