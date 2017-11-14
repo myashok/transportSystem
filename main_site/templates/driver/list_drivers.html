@@ -9,7 +9,8 @@
         <table class="table table-striped  table-hover table-bordered">
            <thead>
                <tr>
-                   <th>Driver #</th>
+                   <th>#</th>
+                   <th>picture</th>
                    <th>Name</th>
                    <th>Blood Group</th>
                    <th>Phone no.</th>
@@ -22,7 +23,8 @@
            <tbody>
               {%  for driver in drivers %}
                   <tr>
-                    <td><a href="{% url 'view-driver' pk=driver.id %}">{{ forloop.counter }}</a></td>
+                    <td><a href="{% url 'view-driver' pk=driver.id %}">{{ driver.id }}</a></td>
+                    <td><img src="{{ driver.picture.url }}"  width="50" height="40" alt="picture"></td>
                     <td>{{ driver.name }}</td>
                     <td>{{ driver.blood_group }}</td>
                     <td>{{ driver.phone }}</td>

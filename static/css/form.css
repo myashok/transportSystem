@@ -30,13 +30,10 @@ form:hover {
 .form-horizontal {
     padding: 20px;
 }
-input {
-    text-align: center;
-}
-input:focus, input:hover, select:focus, select:hover {
+
+input:focus, select:focus  {
     box-shadow: 3px 3px 3px #888;
-    font-size: 1.1em;
 }
-textarea:focus, textarea:hover {
+textarea:focus {
     box-shadow: 3px 3px 3px #888;
 }
