@@ -2,12 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
-from main_site.decorators import  check_not_priveleged
+from main_site.decorators import  check_priveleged
 from main_site.models import Driver
 
 #create driver
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class DriverCreateView(CreateView):
     model = Driver
     fields = ['name','phone','emergency_contact','address','blood_group',
@@ -17,7 +17,7 @@ class DriverCreateView(CreateView):
 
 #driver details
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class DriverDetailView(DetailView):
     model = Driver
     template_name = 'driver/view_driver.html'
@@ -25,7 +25,7 @@ class DriverDetailView(DetailView):
 
 #update driver
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class DriverUpdateView(UpdateView):
     model = Driver
     fields = ['name', 'phone', 'emergency_contact', 'address', 'blood_group',
@@ -36,7 +36,7 @@ class DriverUpdateView(UpdateView):
 
 #delete driver
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class DriverDeleteView(DeleteView):
     model = Driver
     template_name = 'driver/delete_driver.html'
@@ -44,7 +44,7 @@ class DriverDeleteView(DeleteView):
 
 #list drivers
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class DriverListView(ListView):
     model = Driver
     template_name = 'driver/list_drivers.html'

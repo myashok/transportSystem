@@ -31,10 +31,9 @@
                       <td>{{ trip.vehicle}}</td>
                       <td>{{ trip.driver}}</td>
                       <td>{{ trip.start_distance}}</td>
-                      <td>{% if trip.end_distance %} {{ trip.end_time }}{% else %}---{% endif %}
-                      </td>
+                      <td>{{ trip.end_distance }}</td>
                       <td>{{ trip.rate}}</td>
-                      <td>{{ trip.rate}}</td>
+                      <td>{{ trip.fare}}</td>
                   </tr>
                   {% endfor %}
                   {% if not trips %}

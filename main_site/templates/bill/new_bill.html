@@ -7,18 +7,11 @@
 {%  block content %}
      <div class="container col-lg-4 col-md-5 col-sm-8 col-12">
         <form method="POST" action="" enctype="multipart/form-data" class="form-horizontal ">{% csrf_token %}
-            <fieldset>
-                <legend>Add Driver </legend>
-                {% for field in form %}
-                    <div class="form-group">
-                       <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field col-lg-2">{{ field }}</span>
-                      {%if field.errors %}
-                          <span class="text-danger">{{ field.errors|striptags }} </span>
-                      {%endif%}
-                    </div>
-                {% endfor %}
-                <input type="submit" class="btn btn-info" value="Create">
-            </fieldset>
+          {% for form in forms %}
+              {{ form.as_table }}
+          {% endfor %}
+            {{ forms.management_form }}
+        <input type="submit" class="btn btn-primary" value="Generate Bill">
         </form>
     </div>
 {%  endblock %}

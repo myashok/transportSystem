@@ -4,7 +4,6 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 from main_site.decorators import is_not_priveleged, check_priveleged
-from main_site.decorators import is_not_priveleged
 from main_site.models import Announcement
 from django.contrib.auth import authenticate, login, logout
 
@@ -55,7 +54,7 @@ class LogoutView(View):
 
 # # trip start view
 # @method_decorator(login_required(login_url='login'), name='dispatch')
-# @method_decorator(check_not_priveleged, name='dispatch')
+# @method_decorator(check_priveleged, name='dispatch')
 # class TripStartView(UpdateView):
 #     model = Trip
 #     template_name = 'trip/start_trip.html'
@@ -76,7 +75,7 @@ class LogoutView(View):
 #
 #
 # @method_decorator(login_required(login_url='login'), name='dispatch')
-# @method_decorator(check_not_priveleged, name='dispatch')
+# @method_decorator(check_priveleged, name='dispatch')
 # class TripEndView(UpdateView):
 #     model = Trip
 #     fields = ['start_time', 'end_time', 'start_distance_reading', 'end_distance_reading']

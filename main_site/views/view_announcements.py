@@ -5,12 +5,12 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView, DetailView
 
-from main_site.decorators import check_not_priveleged
+from main_site.decorators import check_priveleged
 from main_site.models import Announcement
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class AnnouncementCreateView(CreateView):
     model = Announcement
     fields = ['text', 'description']
@@ -25,7 +25,7 @@ class AnnouncementCreateView(CreateView):
         return super(AnnouncementCreateView, self).form_valid(form)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class AnnouncementUpdateView(UpdateView):
     model = Announcement
     fields = ['text', 'description']
@@ -40,14 +40,14 @@ class AnnouncementDeleteView(DeleteView):
 
 # list drivers
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class AnnouncementListView(ListView):
     model = Announcement
     template_name = 'announcement/list_announcement.html'
     context_object_name = 'announcements'
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_not_priveleged, name='dispatch')
+@method_decorator(check_priveleged, name='dispatch')
 class AnnouncementDetailView(DetailView):
     model = Announcement
     template_name = 'announcement/view_announcement.html'
