@@ -36,9 +36,9 @@
             {% ifequal user.groups.all.0.name "TransportUser" %}
                 {% url 'user-home' %}
             {% endifequal %}
-            {% ifequal user.groups.all.0.name "TransportStaff" %}
+            {% if user.groups.all.0.name == "TransportStaff" or user.groups.all.0.name == "TransportAdmin"%}
                 {% url 'staff-home' %}
-            {% endifequal %}"
+            {% endif %}"
       >TransportCell</a>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         {% ifequal user.groups.all.0.name "TransportUser" %}

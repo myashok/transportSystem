@@ -1,13 +1,28 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <table class="table table-striped  table-hover table-bordered">
-    <p>Datetime of generation: {{ bill.datetime_of_generation }}</p>
-    <p>Trip # : {{ bill.trip_id }}</p>
-    <p>Total distance : {{ bill.total_distance }}</p>
-    <p>Type: {{ bill.trip.request.request_type }}</p>
-    <p>Rate: {{ bill.trip.request.request_type.rate }}</p>
-    <p>Fare: {{ bill.total_fare }}</p>
-    </table>
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/card.css" %}">
+    <style>
+        table.table-bordered > tbody > tr > td{
+            border:2px solid white;
+            text-align: left;
+            max-width: 150px;
+            overflow: auto;
+        }
+    </style>
 {% endblock %}
+{% block content %}
+      <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
+        <div class="card-block">
+           <table class="table  table-hover table-bordered">
+            <tr><td>Datetime of generation </td> <td>{{ bill.datetime_of_generation }} </td></tr>
+            <tr><td>Trip #  </td> <td>{{ bill.trip_id }} </td></tr>
+            <tr><td>Total distance </td> <td>{{ bill.total_distance }} </td></tr>
+            <tr><td>Type </td> <td>{{ bill.trip.request.request_type }} </td></tr>
+            <tr><td>Rate </td> <td>{{ bill.trip.request.request_type.rate }} </td></tr>
+            <tr><td>Fare </td> <td>{{ bill.total_fare }}</td></tr>
+           </table>
+        </div>
+    </div>
+{% endblock %}
+
 
