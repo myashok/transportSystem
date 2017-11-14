@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from weasyprint import HTML
+# from weasyprint import HTML
 
 from transport.settings import BASE_DIR
 from django.contrib.auth.models import User

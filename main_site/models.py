@@ -150,7 +150,7 @@ class Trip(models.Model):
     end_distance = models.FloatField(null=True,
                                      validators=[MinValueValidator(1)])
     rate = models.FloatField(default=0,
-                             verbose_name='Rate/km')
+                             verbose_name='Rate/km', validators=[MinValueValidator(0)])
     fare = models.FloatField(validators=[MinValueValidator(0)],null=True)
     def save(self,*args,**kwargs):
         if self.pk is None:

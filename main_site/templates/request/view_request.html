@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-     <link rel="stylesheet" href="{% static "css/card.css" %}">
+    <link rel="stylesheet" href="{% static "css/card.css" %}">
     <style>
         table.table-bordered > tbody > tr > td{
             border:2px solid white;
-            text-align: center;
+            text-align: left;
             max-width: 150px;
             overflow: auto;
         }
@@ -47,9 +47,6 @@
                     <th>End date</th>
                     <td>{{ request.end_date}}</td>
                 </tr>
-
-
-
                 <tr>
                     <th>Round trip ?</th>
                     <td>{{ request.is_round_trip}}</td>

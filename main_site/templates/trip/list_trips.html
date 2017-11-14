@@ -6,7 +6,7 @@
 
 {% block content %}
   <div class="container ">
-       <a href="#" class="btn btn-primary">Add new</a>
+       <a href="{% url 'new-trip' pk=request.session.req.id%}" class="btn btn-primary">Add new</a>
        <table class="table table-striped  table-hover table-bordered">
           <thead>
                <tr>

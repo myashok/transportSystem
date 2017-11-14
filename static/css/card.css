@@ -36,6 +36,7 @@
 }
 .data {
     position: relative;
+    word-wrap: break-word;
     left: 10px;
     clear: both;
 
