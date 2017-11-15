@@ -16,7 +16,7 @@ from main_site.utils import get_bill_as_pdf
 @method_decorator(check_priveleged, name='dispatch')
 class BillDetailView(View):
     def get(self, request, pk):
-        bill = get_object_or_404(Bill, pk=pk)
+        bill = get_object_or_404(Bill, request_id=pk)
         #return render(request,'bill/view.html',{'bill':bill})
         return get_bill_as_pdf(request, bill)
 
@@ -40,6 +40,7 @@ class BillCreateView(View):
             fare=0
             for form in tripformset:
                 trip=form.save(commit=False)
+                trip.status=Status.objects.get(type='Trip Completed')
                 temp_dist=(trip.end_distance-trip.start_distance)
                 trip.fare=trip.rate*temp_dist
                 dist+=temp_dist
@@ -52,4 +53,4 @@ class BillCreateView(View):
             bill.total_distance=dist
             bill.total_fare=fare
             bill.save()
-            return redirect(reverse('view-bill', kwargs={'pk': bill.pk}))
+            return redirect(reverse('view-bill', kwargs={'pk': bill.request_id}))

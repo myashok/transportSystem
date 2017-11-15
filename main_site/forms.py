@@ -3,7 +3,7 @@ from datetime import datetime
 from django.core.exceptions import PermissionDenied
 from django.forms import models
 
-from main_site.models import Trip, Driver, Maintenance, Request
+from main_site.models import Trip, Driver, Maintenance, Request, Vehicle
 
 
 class DriverForm(models.ModelForm):
@@ -50,3 +50,10 @@ class RequestForm(models.ModelForm):
         elif start_date==end_date and start_time>expected_end_time:
             self.add_error('expected_end_time','End time cannot be smaller than start time on same day')
 
+class TripCreateForm(models.ModelForm):
+    class Meta:
+        model=Trip
+        fields=['driver','vehicle','rate']
+    def __init__(self,*args,**kwargs):
+        super(TripCreateForm,self).__init__(*args,**kwargs)
+        #self.fields['vehicle']=Vehicle.get_available_vehicles()

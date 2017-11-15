@@ -2,6 +2,7 @@ import os
 import uuid
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -38,7 +39,7 @@ class Driver(models.Model):
                             blank=True,
                             verbose_name='Email Address')
     picture=models.ImageField(upload_to=get_upload_path,
-                              default='default.png',
+                              default='driver-default.png',
                               help_text='If not provided, default will be used')
 
     class Meta():
@@ -46,6 +47,9 @@ class Driver(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
 
 class Maintenance(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)
@@ -82,14 +86,16 @@ class Vehicle(models.Model):
                                  verbose_name='Owned by institute?',
                                  help_text='Whether owned by IIITA or hired')
     picture = models.ImageField(upload_to=get_upload_path,
-                                default='school-bus.png',
+                                default='schoolbus-default.png',
                                 help_text='If not provided, default will be taken')
-    # def save(self, *args, **kwargs):
-    #     image = Image.open(self.picture)
-    #     size = (200, 200)
-    #     image = image.resize(size, Image.ANTIALIAS)
-    #     image.save(self.picture.path)
-    #     super(Vehicle,self).save(*args,**kwargs)
+
+    @classmethod
+    def get_available_vehicles(cls):
+        excluded_vehicles = []
+        m = Maintenance.objects.filter(status=Status.objects.get('Maintenance Started'))
+        for i in m:
+            excluded_vehicles.append(i.vehicle)
+        return Vehicle.objects.filter(~Q(excluded_vehicles))
 
     def __str__(self):
         if self.nickname is not None:

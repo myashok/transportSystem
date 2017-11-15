@@ -1,29 +1,36 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import CreateView, ListView, DetailView
 from main_site.decorators import check_priveleged
-from main_site.models import Trip, Request, Status
+from main_site.forms import TripCreateForm
+from main_site.models import Trip, Request, Status, Bill
+
 
 # new trip
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_priveleged, name='dispatch')
 class TripCreateView(CreateView):
     model = Trip
-    fields = ['vehicle', 'driver', 'rate']
+    form_class = TripCreateForm
     template_name = 'trip/new.html'
 
     def get_context_data(self, **kwargs):
         context = super(TripCreateView, self).get_context_data(**kwargs)
         req = get_object_or_404(Request, pk=self.kwargs['pk'])
+        if Bill.objects.filter(request=req).exists():
+            raise PermissionDenied()
         context['req'] = req
         return context
 
     def form_valid(self, form):
         trip = form.save(commit=False)
         trip.request = self.get_context_data()['req']
+        trip.request.status=Status.objects.get(type='Request Approved')
+        trip.request.save()
         trip.save()
         return super(TripCreateView, self).form_valid(form)
     def get_success_url(self):

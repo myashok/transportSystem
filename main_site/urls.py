@@ -26,7 +26,6 @@ urlpatterns=[
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
     #url(r'^requests/(?P<pk>\d+)/edit$', RequestUpdateView.as_view(), name='update-request'),
     url(r'^requests/(?P<pk>\d+)/cancel$', RequestCancelView.as_view(), name='cancel-request'),
-    url(r'^requests/(?P<pk>\d+)/billing$', BillCreateView.as_view(), name='create-bill'),
     url(r'^requests[/]$', RequestListView.as_view(), name='list-requests'),
     url(r'^myrequests[/]$',MyRequestsView.as_view(),name='my-requests'),
 
@@ -47,8 +46,8 @@ urlpatterns=[
     url(r'^trips/(?P<pk>\d+)/cancel$', TripCancelView.as_view(), name='cancel-trip'),
     url(r'^requests/(?P<pk>\d+)/trips', TripListView.as_view(), name='list-trips'),
 
-
-    url(r'^bills/(?P<pk>\d+)$', BillDetailView.as_view(), name='view-bill'),
+    url(r'^requests/(?P<pk>\d+)/billing$', BillCreateView.as_view(), name='create-bill'),
+    url(r'^requests/(?P<pk>\d+)/bill$', BillDetailView.as_view(), name='view-bill'),
 
     url(r'^announcements/new$', AnnouncementCreateView.as_view(), name='new-announcement'),
     url(r'^announcements/(?P<pk>\d+)$', AnnouncementDetailView.as_view(), name='view-announcement'),
