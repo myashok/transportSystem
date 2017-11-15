@@ -35,13 +35,21 @@
                             <td>{{ request.status }}</td>
                             <td>
                                 {% if not request.bill %}
-                                <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary disabled">Bill</a>
+                                <a href="{% url 'new-bill' pk=request.id %}" class="btn btn-success">Billing</a>
                                 {% else %}
                                 <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">Bill</a>
                                 {% endif %}
                                 <a href="{% url 'list-trips' pk=request.id %}" class="btn btn-success">Trips</a>
-                                <a href="{% url 'new-trip' pk=request.id %}" class="btn btn-success">Create Trip</a>
-                                <a href="#" class="btn btn-success">Decline</a>
+                                {% if request.bill %}
+                                <a href="{% url 'new-trip' pk=request.id %}" class="btn btn-primary disabled">Create Trip</a>
+                                {% else %}
+                                <a href="{% url 'new-trip' pk=request.id %}" class="btn btn-primary">Create Trip</a>
+                                {% endif %}
+                                {%  if request.bill %}
+                                <a href="#" class="btn btn-danger disabled">Decline</a>
+                                {% else %}
+                                <a href="#" class="btn btn-danger">Decline</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

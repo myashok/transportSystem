@@ -31,8 +31,11 @@
                             <td>{{ maintenance.repairing_cost}}</td>
                             <td>{{ maintenance.status}}</td>
                             <td>
-                                <a href="{% url 'end-maintenance' pk=maintenance.id %}" class="btn btn-success">End maintenance</a>
-
+                                {%  if not maintenance.repairing_cost %}
+                                    <a href="{% url 'end-maintenance' pk=maintenance.id %}" class="btn btn-success">End</a>
+                                {% else %}
+                                    <a href="{% url 'end-maintenance' pk=maintenance.id %}" class="btn btn-primary">Update</a>
+                                {% endif %}
                             </td>
 
                         </tr>

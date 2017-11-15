@@ -11,13 +11,12 @@
           <thead>
                <tr>
                    <th>Trip ID</th>
-                   <th>Request ID</th>
                    <th>Status</th>
                    <th>Vehicle</th>
                    <th>Driver</th>
+                   <th>Rate</th>
                    <th>Start distance</th>
                    <th>End distance</th>
-                   <th>Rate</th>
                    <th>Fare</th>
                    <th>Actions</th>
                </tr>
@@ -26,14 +25,20 @@
               {%  for trip in trips %}
                   <tr>
                       <td><a href="{% url 'cancel-trip' pk=trip.id %}">{{ trip.id }}</a></td>
-                      <td><a href="{% url 'view-request' pk=trip.request.id %}">{{ trip.request.id }}</a></td>
                       <td>{{ trip.status }}</td>
                       <td>{{ trip.vehicle}}</td>
                       <td>{{ trip.driver}}</td>
-                      <td>{{ trip.start_distance}}</td>
-                      <td>{{ trip.end_distance }}</td>
                       <td>{{ trip.rate}}</td>
-                      <td>{{ trip.fare}}</td>
+                      <td>{{ trip.start_distance|default_if_none:"---"}}</td>
+                      <td>{{ trip.end_distance|default_if_none:"---" }}</td>
+                      <td>{{ trip.fare|default_if_none:"---"}}</td>
+                      <td>
+                          {% if trip.request.bill %}
+                              <a href="{%  url 'cancel-trip' pk=trip.pk %}" class="btn btn-danger">Cancel</a>
+                          {% else %}
+                              <a href="{%  url 'cancel-trip' pk=trip.pk %}" class="btn btn-danger disabled">Cancel</a>
+                          {% endif %}
+                      </td>
                   </tr>
                   {% endfor %}
                   {% if not trips %}
@@ -46,22 +51,4 @@
   </div>
 
 {% endblock %}
-<html>
-<body>
-<table>
-    {%  for trip in trips %}
-    <tr>
-    <td>{{ trip.request.id }}</td>
-    <td>{{ trip.status }}</td>
-    <td>{{ trip.vehicle }}</td>
-    <td>{{ trip.driver }}</td>
-    <td>{{ trip.start_distance }}</td>
-    <td>{{ trip.end_distance }}</td>
-    <td>{{ trip.rate }}</td>
-    <td>{{ trip.fare }}</td>
-    </tr>
-    {% endfor %}
-</table>
 
-</body>
-</html>

@@ -112,7 +112,7 @@ class Status(models.Model):
 class Request(models.Model):
     user=models.ForeignKey('auth.User',
                            verbose_name='Requested by')
-    created_at=models.DateTimeField(default=timezone.now)
+    created_at=models.DateTimeField(default=timezone.now,editable=False)
     #last_updated_at=models.DateTimeField(default=timezone.now)
     start_date=models.DateField()
     start_time=models.TimeField()
