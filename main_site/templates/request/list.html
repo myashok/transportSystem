@@ -6,6 +6,7 @@
 {% block content %}
     <div class="container">
         <table class="table table-flue table-striped table-hover table-bordered">
+        <table class="table table-flue  table-striped table-hover table-bordered">
               <thead class="thead">
                    <tr>
                       <th>#</th>
@@ -33,12 +34,15 @@
                             <td>{{ request.destination }}</td>
                             <td>{{ request.status }}</td>
                             <td>
-                                <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">View bill</a>
-                                <a href="{% url 'list-trips' pk=request.id %}" class="btn btn-success">View Trips</a>
+                                {% if not request.bill %}
+                                <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary disabled">Bill</a>
+                                {% else %}
+                                <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">Bill</a>
+                                {% endif %}
+                                <a href="{% url 'list-trips' pk=request.id %}" class="btn btn-success">Trips</a>
                                 <a href="{% url 'new-trip' pk=request.id %}" class="btn btn-success">Create Trip</a>
-
+                                <a href="#" class="btn btn-success">Decline</a>
                             </td>
-
                         </tr>
                     {% endfor %}
                       {% if not requests %}
@@ -49,4 +53,7 @@
                 </tbody>
            </table>
     </div>
+{% endblock %}
+{% block js %}
+
 {% endblock %}

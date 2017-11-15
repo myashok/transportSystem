@@ -3,7 +3,10 @@
     bottom: 0px;
     width:100%;
     height:40px;   /* Height of the footer */
-    background:#373a3c;
+
+}
+footer {
+    background: #373a3d !important;
 }
 .copyright-text > a {
     color: white;
@@ -27,6 +30,13 @@
     margin-left: 100px;
 }
 .fl_right{
-
     float:right;
+}
+/*change color of navigation bar*/
+.bg-inverse, .dropdown-menu {
+    background-color:#373a3c !important;
+}
+.dropdown-menu > a
+{
+  padding: 8px;
 }

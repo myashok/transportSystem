@@ -39,3 +39,6 @@ if($("#id_nickname").length) {
     $("#id_nickname").next().css("font-size", "85%");
 }
 $(":checkbox").css({"float": "left", "clear": "both", "margin-top": "-25px",});
+if($('input,textarea,select').filter('[required]:visible').length) {
+   $('input,textarea,select').filter('[required]:visible').before("<span style='color: red; font-size: 130%; margin-left: -30px;'>*</span>");
+}
