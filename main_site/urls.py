@@ -3,6 +3,8 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.conf.urls import url
 
+from main_site.views.view_maintenences import MaintenanceCreateView, MaintenanceDetailView, MaintenanceEndView, \
+    MaintenanceListView
 from main_site.views.views import UserHomeView, LoginView, LogoutView, StaffHomeView
 from main_site.views.view_announcements import AnnouncementCreateView, AnnouncementUpdateView, AnnouncementListView, \
     AnnouncementDeleteView, AnnouncementDetailView
@@ -53,6 +55,11 @@ urlpatterns=[
     url(r'^announcements/(?P<pk>\d+)/edit$', AnnouncementUpdateView.as_view(), name='update-announcement'),
     url(r'^announcements/(?P<pk>\d+)/delete$', AnnouncementDeleteView.as_view(), name='delete-announcement'),
     url(r'^announcements/$', AnnouncementListView.as_view(), name='list-announcements'),
+
+    url(r'^maintenances/new$', MaintenanceCreateView.as_view(), name='new-maintenance'),
+    url(r'^maintenances[/]$', MaintenanceListView.as_view(), name='list-maintenances'),
+    url(r'^maintenances/(?P<pk>\d+)$', MaintenanceDetailView.as_view(), name='view-maintenance'),
+    url(r'^maintenances/(?P<pk>\d+)/end$', MaintenanceEndView.as_view(), name='end-maintenance'),
 
 ]
 

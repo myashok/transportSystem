@@ -57,7 +57,7 @@ class LogoutView(View):
 # @method_decorator(check_priveleged, name='dispatch')
 # class TripStartView(UpdateView):
 #     model = Trip
-#     template_name = 'trip/start_trip.html'
+#     template_name = 'trip/start.html'
 #     fields = ['start_time', 'start_distance_reading', 'vehicles', 'drivers']
 #     context_object_name = 'trip'
 #     success_url = reverse_lazy('list-trips')
@@ -79,7 +79,7 @@ class LogoutView(View):
 # class TripEndView(UpdateView):
 #     model = Trip
 #     fields = ['start_time', 'end_time', 'start_distance_reading', 'end_distance_reading']
-#     template_name = 'trip/end_trip.html'
+#     template_name = 'trip/end.html'
 #
 #     def get_context_data(self, **kwargs):
 #         context = super(TripEndView, self).get_context_data(**kwargs)

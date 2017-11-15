@@ -13,7 +13,7 @@ class VehicleCreateView(CreateView):
     model = Vehicle
     fields = ['registration_no','nickname', 'description', 'seating_capacity'
               ,'is_owned','picture']
-    template_name = 'vehicle/new_vehicle.html'
+    template_name = 'vehicle/new.html'
     success_url = reverse_lazy('list-vehicles')
 
 # vehicle details
@@ -21,7 +21,7 @@ class VehicleCreateView(CreateView):
 @method_decorator(check_priveleged, name='dispatch')
 class VehicleDetailView(DetailView):
     model = Vehicle
-    template_name = 'vehicle/view_vehicle.html'
+    template_name = 'vehicle/view.html'
     context_object_name = 'vehicle'
 
 
@@ -32,7 +32,7 @@ class VehicleUpdateView(UpdateView):
     model = Vehicle
     fields = ['registration_no', 'nickname', 'description', 'seating_capacity'
             ,'is_owned', 'picture']
-    template_name = 'vehicle/update_vehicle.html'
+    template_name = 'vehicle/update.html'
 
     def get_success_url(self):
         return reverse('view-vehicle', kwargs={'pk': self.object.pk})
@@ -42,7 +42,7 @@ class VehicleUpdateView(UpdateView):
 @method_decorator(check_priveleged, name='dispatch')
 class VehicleDeleteView(DeleteView):
     model = Vehicle
-    template_name = 'vehicle/delete_vehicle.html'
+    template_name = 'vehicle/delete.html'
     success_url = reverse_lazy('list-vehicles')
 
 # list vehicles
@@ -50,5 +50,5 @@ class VehicleDeleteView(DeleteView):
 @method_decorator(check_priveleged, name='dispatch')
 class VehicleListView(ListView):
     model = Vehicle
-    template_name = 'vehicle/list_vehicles.html'
+    template_name = 'vehicle/list.html'
     context_object_name = 'vehicles'

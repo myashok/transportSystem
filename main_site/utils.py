@@ -21,7 +21,7 @@ def get_bill_as_pdf(request,bill):
     #         response['Content-Disposition'] = 'inline; filename='+"bill_"+filename
     #         return response
 
-    html_string = render_to_string('pdf_templates/bill_template.html', {'bill':bill})
+    html_string = render_to_string('custom_templates/bill_template.html', {'bill':bill})
 
     html = HTML(string=html_string)
     html.write_pdf(target=BILL_ROOT+"/"+filename)

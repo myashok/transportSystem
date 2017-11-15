@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from main_site.decorators import check_priveleged, check_owner_of_request, is_not_priveleged
+from main_site.forms import RequestForm
 from main_site.models import Request, Status
 
 
@@ -15,10 +16,8 @@ from main_site.models import Request, Status
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class RequestCreateView(CreateView):
     model = Request
-    template_name = 'request/new_request.html'
-    fields = ['start_date', 'start_time','end_date','expected_end_time' ,
-              'no_of_persons_travelling','request_type', 'description',
-              'source', 'destination',  'is_round_trip']
+    template_name = 'request/new.html'
+    form_class = RequestForm
 
     def form_valid(self, form):
         request = form.save(commit=False)
@@ -37,7 +36,7 @@ class RequestCreateView(CreateView):
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class RequestDetailView(DetailView):
     model = Request
-    template_name = 'request/view_request.html'
+    template_name = 'request/view.html'
     context_object_name = 'request'
     def get_object(self, queryset=None):
         obj=super(RequestDetailView,self).get_object()
@@ -54,7 +53,7 @@ class RequestDetailView(DetailView):
 #     fields = ['start_date', 'start_time', 'end_date', 'expected_end_time',
 #               'no_of_persons_travelling', 'request_type', 'description',
 #               'source', 'destination', 'is_round_trip']
-#     template_name = 'request/update_request.html'
+#     template_name = 'request/update.html'
 #
 #     def get_object(self, *args, **kwargs):
 #         obj = super(RequestUpdateView, self).get_object(*args, **kwargs)
@@ -69,7 +68,7 @@ class RequestDetailView(DetailView):
 @method_decorator(check_priveleged, name='dispatch')
 class RequestListView(ListView):
     model = Request
-    template_name = 'request/list_requests.html'
+    template_name = 'request/list.html'
     context_object_name = 'requests'
 
 #my requests

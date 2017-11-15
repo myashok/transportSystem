@@ -14,7 +14,7 @@ from main_site.models import Announcement
 class AnnouncementCreateView(CreateView):
     model = Announcement
     fields = ['text', 'description']
-    template_name = 'announcement/new_announcement.html'
+    template_name = 'announcement/new.html'
     success_url = reverse_lazy('list-announcements')
 
     def form_valid(self, form):
@@ -29,13 +29,13 @@ class AnnouncementCreateView(CreateView):
 class AnnouncementUpdateView(UpdateView):
     model = Announcement
     fields = ['text', 'description']
-    template_name = 'announcement/update_announcement.html'
+    template_name = 'announcement/update.html'
     success_url = reverse_lazy('list-announcements')
 
 
 class AnnouncementDeleteView(DeleteView):
     model = Announcement
-    template_name = 'announcement/delete_announcement.html'
+    template_name = 'announcement/delete.html'
     success_url = reverse_lazy('list-announcements')
 
 # list drivers
@@ -43,12 +43,12 @@ class AnnouncementDeleteView(DeleteView):
 @method_decorator(check_priveleged, name='dispatch')
 class AnnouncementListView(ListView):
     model = Announcement
-    template_name = 'announcement/list_announcement.html'
+    template_name = 'announcement/list.html'
     context_object_name = 'announcements'
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_priveleged, name='dispatch')
 class AnnouncementDetailView(DetailView):
     model = Announcement
-    template_name = 'announcement/view_announcement.html'
+    template_name = 'announcement/view.html'
     context_object_name = 'announcement'

@@ -13,7 +13,7 @@ from main_site.models import Trip, Request, Status
 class TripCreateView(CreateView):
     model = Trip
     fields = ['vehicle', 'driver', 'rate']
-    template_name = 'trip/new_trip.html'
+    template_name = 'trip/new.html'
 
     def get_context_data(self, **kwargs):
         context = super(TripCreateView, self).get_context_data(**kwargs)
@@ -34,7 +34,7 @@ class TripCreateView(CreateView):
 @method_decorator(check_priveleged, name='dispatch')
 class TripDetailView(DetailView):
     model = Trip
-    template_name = 'trip/view_trip.html'
+    template_name = 'trip/view.html'
     context_object_name = 'trip'
 
 
@@ -53,7 +53,7 @@ class TripCancelView(View):
 @method_decorator(check_priveleged, name='dispatch')
 class TripListView(ListView):
     model = Trip
-    template_name = 'trip/list_trips.html'
+    template_name = 'trip/list.html'
     context_object_name = 'trips'
     def get_queryset(self):
         req=get_object_or_404(Request,pk=self.kwargs['pk'])

@@ -17,7 +17,7 @@ from main_site.utils import get_bill_as_pdf
 class BillDetailView(View):
     def get(self, request, pk):
         bill = get_object_or_404(Bill, pk=pk)
-        #return render(request,'bill/view_bill.html',{'bill':bill})
+        #return render(request,'bill/view.html',{'bill':bill})
         return get_bill_as_pdf(request, bill)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -30,7 +30,7 @@ class BillCreateView(View):
         if req.status==Status.objects.get(type='Request Cancelled'):
            raise PermissionDenied()
         tripformset=Tripset(queryset=req.trip_set.all())
-        return render(request, 'bill/new_bill.html', {'forms':tripformset})
+        return render(request, 'bill/new.html', {'forms':tripformset})
     def post(self,request,pk):
         req=get_object_or_404(Request,pk=pk)
         Tripset = modelformset_factory(Trip, fields=['start_distance', 'end_distance', 'rate'], extra=0)

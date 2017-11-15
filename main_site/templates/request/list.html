@@ -34,7 +34,7 @@
                             <td>{{ request.status }}</td>
                             <td>
                                 <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">View bill</a>
-                                <a href="{% url 'view-trip' pk=request.id %}" class="btn btn-success">View Trips</a>
+                                <a href="{% url 'list-trips' pk=request.id %}" class="btn btn-success">View Trips</a>
                                 <a href="{% url 'new-trip' pk=request.id %}" class="btn btn-success">Create Trip</a>
 
                             </td>

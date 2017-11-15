@@ -3,6 +3,7 @@
   {
     "model": "main_site.Status",
     "fields": {
+      "id":1,
      "type":"Request Pending",
       "description": "Yet to be approved"
     }
@@ -10,6 +11,7 @@
   {
     "model": "main_site.Status",
     "fields": {
+      "id":2,
      "type":"Request Approved",
       "description": "Approved by transport cell and trip created"
     }
@@ -17,6 +19,7 @@
   {
     "model": "main_site.Status",
     "fields": {
+      "id":3,
      "type":"Request Declined",
       "description":"Declined by transport cell"
     }
@@ -24,11 +27,13 @@
    {
     "model": "main_site.Status",
     "fields": {
+      "id":4,
      "type":"Request Cancelled",
       "description":"Request cancelled by user"
     }
   },
    {
+     "id":5,
     "model": "main_site.Status",
     "fields": {
      "type":"Trip Scheduled",
@@ -38,6 +43,7 @@
    {
     "model": "main_site.Status",
     "fields": {
+      "id":5,
      "type":"Trip Completed",
       "description": "Trip completed and bill generated"
     }
@@ -45,7 +51,22 @@
    {
     "model": "main_site.Status",
     "fields": {
+      "id":6,
      "type":"Trip Cancelled"
+    }
+  },
+   {
+    "model": "main_site.Status",
+    "fields": {
+      "id":7,
+     "type":"Maintenance Started"
+    }
+  },
+  {
+    "model": "main_site.Status",
+    "fields": {
+      "id":8,
+     "type":"Maintenance Completed"
     }
   }
 ]

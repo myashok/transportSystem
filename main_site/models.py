@@ -25,10 +25,11 @@ class Driver(models.Model):
                                          help_text='Format: +91-9912345678')
     address=models.TextField(null=True,
                              blank=True)
-    blood_group=models.CharField(max_length=5,
+    blood_group=models.CharField(max_length=2,
                                  verbose_name='Blood Group',
                                  choices=[('O-','O-'),('O+','O+'),('A-','A-'),('A+','A+'),
-                                          ('B-','B-'),('B+','B+'),('AB-','AB-'),('AB+','AB+')])
+                                          ('B-','B-'),('B+','B+'),('AB-','AB-'),('AB+','AB+'),
+                                          ('NA','NA')])
     license_no=models.CharField(max_length=50,
                                 null=True,blank=True,
                                 verbose_name='License number')
@@ -54,9 +55,17 @@ class Maintenance(models.Model):
     end_date=models.DateField(null=True)
     start_time=models.TimeField()
     end_time=models.TimeField(null=True)
-    repairing_cost=models.FloatField(null=True,blank=True)
+    repairing_cost=models.FloatField(null=True,blank=True,validators=[MinValueValidator(0)])
+    status=models.ForeignKey('Status',editable=False)
     class Meta:
         ordering=['-start_date']
+    def save(self,*args,**kwargs):
+        if self.pk is None:
+            self.status=Status.objects.get(type='Maintenance Started')
+        super(Maintenance, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.vehicle.__str__()+' | '+str(self.start_date)
 
 class Vehicle(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)
@@ -84,7 +93,7 @@ class Vehicle(models.Model):
 
     def __str__(self):
         if self.nickname is not None:
-            return self.nickname
+            return self.nickname+' | '+self.registration_no
         else:
             return self.registration_no
 
