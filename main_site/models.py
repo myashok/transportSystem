@@ -60,7 +60,7 @@ class Maintenance(models.Model):
     start_time=models.TimeField()
     end_time=models.TimeField(null=True)
     repairing_cost=models.FloatField(null=True,blank=True,validators=[MinValueValidator(0)])
-    status=models.ForeignKey('Status',editable=False)
+    status=models.ForeignKey('Status', null=True, editable=False)
     class Meta:
         ordering=['-start_date']
     def save(self,*args,**kwargs):
