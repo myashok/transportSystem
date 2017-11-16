@@ -39,7 +39,7 @@ class Driver(models.Model):
                             blank=True,
                             verbose_name='Email Address')
     picture=models.ImageField(upload_to=get_upload_path,
-                              default='driver-default.png',
+                              default='default.png',
                               help_text='If not provided, default will be used')
 
     class Meta():
@@ -80,13 +80,13 @@ class Vehicle(models.Model):
                               blank=True,
                               help_text='e.g.- B3')
 
-    description=models.TextField(null=True)
+    description=models.TextField(null=True,blank=True)
     seating_capacity=models.IntegerField(default=4,validators=[MinValueValidator(1)])
     is_owned=models.BooleanField(default=True,
                                  verbose_name='Owned by institute?',
                                  help_text='Whether owned by IIITA or hired')
     picture = models.ImageField(upload_to=get_upload_path,
-                                default='schoolbus-default.png',
+                                default='school-bus.png',
                                 help_text='If not provided, default will be taken')
 
     @classmethod
@@ -99,7 +99,7 @@ class Vehicle(models.Model):
 
     def __str__(self):
         if self.nickname is not None:
-            return self.nickname+' | '+self.registration_no
+            return self.registration_no+" | "+self.nickname
         else:
             return self.registration_no
 

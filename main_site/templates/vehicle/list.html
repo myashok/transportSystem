@@ -5,18 +5,17 @@
 {% endblock %}
 {% block content %}
       <div class="container">
-        <a href="{%  url 'new-driver' %}" class="btn btn-primary">Add new</a>
+        <a href="{%  url 'new-vehicle' %}" class="btn btn-primary">Add new</a>
         <table class="table table-striped  table-hover table-bordered">
            <thead>
                <tr>
-                   <th>#</th>
+                   <th>ID</th>
                    <th>picture</th>
-                   <th>Registration No.</th>
                    <th>Nickname</th>
-                   <th>Description</th>
+                   <th>Registration No.</th>
                    <th>Seating Capacity</th>
                    <th>Institute Owned</th>
-                   <th>Action</th>
+                   <th>Actions</th>
                </tr>
            </thead>
            <tbody>
@@ -24,9 +23,8 @@
                   <tr>
                     <td><a href="{% url 'view-vehicle' pk=vehicle.id %}">{{vehicle.id}}</a></td>
                     <td><img src="{{ vehicle.picture.url }}"  width="50" height="40" alt="picture"></td>
+                    <td>{{ vehicle.nickname|default_if_none:"---" }}</td>
                     <td>{{ vehicle.registration_no }}</td>
-                    <td>{{ vehicle.nickname }}</td>
-                    <td>{{ vehicle.description }}</td>
                     <td>{{ vehicle.seating_capacity }}</td>
                     <td>{{ vehicle.is_owned }}</td>
                     <td>

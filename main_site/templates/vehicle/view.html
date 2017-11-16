@@ -8,14 +8,22 @@
     <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
       <img class="card-img-top img-fluid" src="{{ vehicle.picture.url }}" alt="Card image cap">
         <div class="card-block">
-            <h4 class="card-title text-bold">{{ vehicle.registration_no }}</h4>
-            <p>
-                <span class="category">Description </span>
-                <span class="data">{{ vehicle.description }}</span>
+            <h4 class="card-title text-bold">{{ vehicle.nickname }}</h4>
+             <p>
+                <span class="category">Registration no. </span>
+                <span class="data">{{ vehicle.registration_no }}</span>
             </p>
             <p>
                 <span class="category">Seats </span>
                 <span class="data">{{ vehicle.seating_capacity }}</span>
+            </p>
+            <p>
+                <span class="category">Owned by IIITA? </span>
+                <span class="data">{{ vehicle.is_owned }}</span>
+            </p>
+             <p>
+                <span class="category">Description </span>
+                <span class="data">{{ vehicle.description }}</span>
             </p>
             <a href="{% url 'update-vehicle' pk=vehicle.id  %}" class="btn btn-primary">Edit</a>
             <a href="{% url 'delete-vehicle' pk=vehicle.id  %}" class="btn btn-danger">Delete</a>
