@@ -28,9 +28,14 @@ class BillCreateView(View):
         Tripset = modelformset_factory(Trip, fields=['start_distance', 'end_distance', 'rate','vehicle','driver'], extra=0)
         req=get_object_or_404(Request,pk=pk)
         if req.status==Status.objects.get(type='Request Cancelled'):
-           raise PermissionDenied()
-        tripformset=Tripset(queryset=req.trip_set.all())
+           raise PermissionDenied('Billing cannot be done for a cancelled request')
+        exists=req.trip_set.filter(status=Status.objects.get(type="Trip Scheduled")).exists()
+        if not exists:
+            raise PermissionDenied('No scheduled trips for billing this request')
+
+        tripformset=Tripset(queryset=req.trip_set.filter(status=Status.objects.get(type="Trip Scheduled")))
         return render(request, 'bill/new.html', {'forms':tripformset})
+
     def post(self,request,pk):
         req=get_object_or_404(Request,pk=pk)
         Tripset = modelformset_factory(Trip, fields=['start_distance', 'end_distance', 'rate'], extra=0)

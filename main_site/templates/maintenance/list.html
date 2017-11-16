@@ -24,17 +24,17 @@
                         <tr>
                            <td><a href="{% url 'view-maintenance' pk=maintenance.id %}">{{ maintenance.id }}</a></td>
                             <td>{{maintenance.vehicle}}</td>
-                            <td>{{ maintenance.start_date }}</td>
-                            <td>{{ maintenance.start_time }}</td>
-                            <td>{{ maintenance.end_date }}</td>
-                            <td>{{ maintenance.end_time }}</td>
-                            <td>{{ maintenance.repairing_cost}}</td>
-                            <td>{{ maintenance.status}}</td>
+                            <td>{{ maintenance.start_date|default_if_none:"---" }}</td>
+                            <td>{{ maintenance.start_time|default_if_none:"---" }}</td>
+                            <td>{{ maintenance.end_date|default_if_none:"---" }}</td>
+                            <td>{{ maintenance.end_time|default_if_none:"---" }}</td>
+                            <td>{{ maintenance.repairing_cost|default_if_none:"---"}}</td>
+                            <td>{{ maintenance.status|default_if_none:"---"}}</td>
                             <td>
                                 {%  if not maintenance.repairing_cost %}
                                     <a href="{% url 'end-maintenance' pk=maintenance.id %}" class="btn btn-success">End</a>
                                 {% else %}
-                                    <a href="{% url 'end-maintenance' pk=maintenance.id %}" class="btn btn-primary">Update</a>
+                                    <a href="{% url 'update-maintenance' pk=maintenance.id %}" class="btn btn-primary">Update</a>
                                 {% endif %}
                             </td>
 

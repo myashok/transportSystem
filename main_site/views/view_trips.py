@@ -22,7 +22,7 @@ class TripCreateView(CreateView):
         context = super(TripCreateView, self).get_context_data(**kwargs)
         req = get_object_or_404(Request, pk=self.kwargs['pk'])
         if Bill.objects.filter(request=req).exists():
-            raise PermissionDenied()
+            raise PermissionDenied('Trip cannot be created after billing')
         context['req'] = req
         return context
 
@@ -51,6 +51,8 @@ class TripDetailView(DetailView):
 class TripCancelView(View):
     def get(self,request,*args,**kwargs):
         trip=get_object_or_404(Trip,pk=kwargs['pk'])
+        if Bill.objects.filter(request=trip.request).exists():
+            raise PermissionDenied('Trip cannot be cancelled after billing')
         trip.status=Status.objects.get(type='Trip Cancelled')
         trip.save()
         return redirect('list-trips',pk=trip.request.pk)

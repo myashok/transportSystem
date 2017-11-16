@@ -17,28 +17,37 @@
            <table class="table  table-hover table-bordered">
                 <tr>
                     <th>Vehicle</th>
-                    <td><a href="{% url 'view-vehicle' pk=maintenance.vehicle_id %}">{{ maintenance.vehicle}}</a></td>
+                    <td><a href="{% url 'view-vehicle' pk=maintenance.vehicle_id %}">{{ maintenance.vehicle|default_if_none:"---"}}</a></td>
                 </tr>
                 <tr>
                     <th>Start date</th>
-                    <td>{{ maintenance.start_date }}</td>
+                    <td>{{ maintenance.start_date|default_if_none:"---" }}</td>
                 </tr>
                <tr>
                     <th>Start Time</th>
-                    <td>{{ maintenance.start_time }}</td>
+                    <td>{{ maintenance.start_time|default_if_none:"---" }}</td>
                </tr>
                <tr>
                     <th>End Date</th>
-                    <td>{{ maintenance.end_date }}</td>
+                    <td>{{ maintenance.end_date|default_if_none:"---" }}</td>
                 </tr>
                <tr>
                     <th>End Time</th>
-                    <td>{{ maintenance.end_time}}</td>
+                    <td>{{ maintenance.end_time|default_if_none:"---"}}</td>
                </tr>
                <tr>
                     <th>Repairing Cost</th>
-                    <td>{{ maintenance.repairing_cost }}</td>
+                    <td>{{ maintenance.repairing_cost|default_if_none:"---" }}</td>
                 </tr>
+               <tr>
+                    <td>
+                        {%  if not maintenance.repairing_cost %}
+                        <a href="{% url 'end-maintenance' pk=maintenance.id %}" class="btn btn-success btn-block">End</a>
+                        {% else %}
+                            <a href="{% url 'update-maintenance' pk=maintenance.id %}" class="btn btn-block btn-primary">Update</a>
+                        {% endif %}
+                    </td>
+               </tr>
             </table>
         </div>
     </div>

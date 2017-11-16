@@ -41,7 +41,7 @@ class RequestDetailView(DetailView):
     def get_object(self, queryset=None):
         obj=super(RequestDetailView,self).get_object()
         if is_not_priveleged(self.request.user) and obj.user!=self.request.user:
-            raise PermissionDenied()
+            raise PermissionDenied('You are not priveleged to see this page')
         return obj
 
 
@@ -53,7 +53,7 @@ class RequestDetailView(DetailView):
 #     fields = ['start_date', 'start_time', 'end_date', 'expected_end_time',
 #               'no_of_persons_travelling', 'request_type', 'description',
 #               'source', 'destination', 'is_round_trip']
-#     template_name = 'request/update.html'
+#     template_name = 'request/end.html'
 #
 #     def get_object(self, *args, **kwargs):
 #         obj = super(RequestUpdateView, self).get_object(*args, **kwargs)
@@ -87,7 +87,7 @@ class RequestCancelView(View):
     def get(self,request,pk):
         req=get_object_or_404(Request,pk=pk)
         if datetime.now() >= datetime.combine(req.start_date,req.start_time):
-            raise PermissionDenied()
+            raise PermissionDenied('Request cannot be cancelled so late. Please contact admin for help.')
         req.status=Status.objects.get(type='Request Cancelled')
         req.save()
         trips=req.trip_set.all()

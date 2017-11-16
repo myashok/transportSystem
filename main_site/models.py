@@ -117,7 +117,7 @@ class Request(models.Model):
     #last_updated_at=models.DateTimeField(default=timezone.now)
     start_date=models.DateField()
     start_time=models.TimeField()
-    end_date=models.DateField()
+    end_date=models.DateField(null=True,blank=True)
     expected_end_time=models.TimeField(null=True,
                                        blank=True,
                                        help_text='To ensure fair services to '
@@ -205,8 +205,9 @@ class Announcement(models.Model):
 
 class Schedule(models.Model):
     file=models.FileField(upload_to=get_upload_path)
+    created_at=models.DateTimeField(default=timezone.now)
     def save(self, *args,**kwargs):
         message='Transport schedule has been updated.Please visit'\
                 +self.file.url+'to see changes'
         #mail_to_admins(message=message)
-        super(self,Schedule).save(*args,**kwargs)
+        super(Schedule,self).save(*args,**kwargs)
