@@ -40,5 +40,6 @@ if($("#id_nickname").length) {
 }
 $(":checkbox").css({"float": "left", "clear": "both", "margin-top": "-25px",});
 if($('input,textarea,select').filter('[required]:visible').length) {
-   $('input,textarea,select').filter('[required]:visible').before("<span style='color: red; font-size: 130%; margin-left: -30px;'>*</span>");
+    $('input,textarea,select').filter('[required]:visible').closest('.form-group').find('label').after("<span style='color:red; font-size: 120% '> *</span>");
+    // $('input,textarea,select').filter('[required]:visible').before("<span style='color:red; font-size: 120% '> *</span>");
 }
