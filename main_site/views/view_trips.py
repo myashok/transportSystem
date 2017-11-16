@@ -53,7 +53,7 @@ class TripCancelView(View):
         trip=get_object_or_404(Trip,pk=kwargs['pk'])
         trip.status=Status.objects.get(type='Trip Cancelled')
         trip.save()
-        return redirect('view-trip',pk=trip.pk)
+        return redirect('list-trips',pk=trip.request.pk)
 
 # list trips
 @method_decorator(login_required(login_url='login'), name='dispatch')

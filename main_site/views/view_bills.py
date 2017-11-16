@@ -25,7 +25,7 @@ class BillDetailView(View):
 class BillCreateView(View):
 
     def get(self,request,pk):
-        Tripset = modelformset_factory(Trip, fields=['start_distance', 'end_distance', 'rate'], extra=0)
+        Tripset = modelformset_factory(Trip, fields=['start_distance', 'end_distance', 'rate','vehicle','driver'], extra=0)
         req=get_object_or_404(Request,pk=pk)
         if req.status==Status.objects.get(type='Request Cancelled'):
            raise PermissionDenied()
@@ -54,3 +54,4 @@ class BillCreateView(View):
             bill.total_fare=fare
             bill.save()
             return redirect(reverse('view-bill', kwargs={'pk': bill.request_id}))
+        return render(request,'bill/new.html',{'forms':tripformset})

@@ -14,6 +14,7 @@ def get_upload_path(instance, filename):
     return os.path.join(
        instance.__class__.__name__, filename)
 
+
 class Driver(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)
     name=models.CharField(max_length=200)

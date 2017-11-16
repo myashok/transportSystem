@@ -24,7 +24,7 @@
            <tbody>
               {%  for trip in trips %}
                   <tr>
-                      <td><a href="{% url 'cancel-trip' pk=trip.id %}">{{ trip.id }}</a></td>
+                      <td><a href="{% url 'view-trip' pk=trip.id %}">{{ trip.id }}</a></td>
                       <td>{{ trip.status }}</td>
                       <td>{{ trip.vehicle}}</td>
                       <td>{{ trip.driver}}</td>
