@@ -14,6 +14,7 @@ def get_upload_path(instance, filename):
     return os.path.join(
        instance.__class__.__name__, filename)
 
+
 class Driver(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)
     name=models.CharField(max_length=200)
@@ -60,7 +61,7 @@ class Maintenance(models.Model):
     start_time=models.TimeField()
     end_time=models.TimeField(null=True)
     repairing_cost=models.FloatField(null=True,blank=True,validators=[MinValueValidator(0)])
-    status=models.ForeignKey('Status',editable=False)
+    status=models.ForeignKey('Status', null=True, editable=False)
     class Meta:
         ordering=['-start_date']
     def save(self,*args,**kwargs):

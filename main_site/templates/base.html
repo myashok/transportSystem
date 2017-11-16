@@ -58,11 +58,11 @@
             <ul class="navbar-nav mr-auto">
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Vehicles
+                 Vehicles
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Adde Vehicle in maintenance</a>
-                  <a class="dropdown-item" href="#">View Vehicles in Maintenance</a>
+                  <a class="dropdown-item" href="{% url 'new-maintenance' %}">Add Vehicle in Maintenance</a>
+                  <a class="dropdown-item" href="{% url 'list-maintenances' %}">View Vehicles in Maintenance</a>
 
                   <a class="dropdown-item" href="{% url 'list-vehicles'%}">View Vehicles</a>
                   <a class="dropdown-item" href="{% url 'new-vehicle'%}">Add Vehicle</a>
@@ -79,10 +79,9 @@
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Requests
+                  Request
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="{%  url 'new-request' %}">New Requests</a>
                   <a class="dropdown-item" href="{%  url 'list-requests' %}">View Requests</a>
                 </div>
               </li>

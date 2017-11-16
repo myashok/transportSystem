@@ -2,6 +2,7 @@
 {% load static %}
 {% block css %}
      <link rel="stylesheet" href="{% static "css/form.css" %}">
+        <link rel="stylesheet" href="{% static "css/plugin/timepicki.css" %}" >
 {% endblock %}
 {%  block content %}
       <div class="container col-lg-4 col-md-5 col-sm-8 col-12">
@@ -24,5 +25,7 @@
 {%  endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugin/timepicki.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/plugin/date-time-picker.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/form.js" %}"></script>
 {% endblock %}
