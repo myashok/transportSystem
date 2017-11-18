@@ -1,6 +1,9 @@
 legend {
     text-align: center;
 }
+.form-group {
+    margin: 0;
+}
 .label {
     text-align: left;
     font-size: 1.2em;

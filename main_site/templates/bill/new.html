@@ -3,29 +3,56 @@
 {% block css %}
      <link rel="stylesheet" href="{% static "css/plugin/timepicki.css" %}" >
      <link rel="stylesheet" href="{% static "css/form.css" %}">
+     <link rel="stylesheet" href="{% static "css/card.css" %}">
+    <style>
+        form {
+            margin: 0;
+            padding: 0;
+        }
+        input[type="submit"] {
+            margin-left: 37.5%;
+            margin-bottom: 30px;
+        }
+        .row {
+            margin : 0;
+        }
+        .form-group {
+            margin-bottom: -10px;
+        }
+    </style>
 {% endblock %}
 {%  block content %}
-     <div class="container col-lg-4 col-md-5 col-sm-8 col-12">
         <form method="POST" action="" enctype="multipart/form-data" class="form-horizontal ">{% csrf_token %}
-          {% for form in forms %}
-              {% for field in form %}
-                    <div class="form-group">
-                       <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field col-lg-2">{{ field }}</span>
-                      {%if field.errors %}
-                          <span class="text-danger">{{ field.errors|striptags }} </span>
-                      {%endif%}
+            <div class="row">
+            {% for form in forms %}
+               <div class="container card col-lg-3 " >
+                    <div class="card-block">
+                      {% for field in form %}
+                          <div class="form-group">
+
+                               <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field col-lg-2">{{ field }}</span>
+                              {%if field.errors %}
+                                  <span class="text-danger">{{ field.errors|striptags }} </span>
+                              {%endif%}
+                          </div>
+                      {% endfor %}
                     </div>
-                {% endfor %}
-          {% endfor %}
+               </div>
+            {% endfor %}
             {{ forms.management_form }}
-        <input type="submit" class="btn btn-primary" value="Generate Bill">
+            </div>
+             <input type="submit" class="btn btn-primary col-lg-3 col-md-4 col-sm-8 col-12" value="Generate Bill">
         </form>
-    </div>
 {%  endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/plugin/timepicki.js" %}"></script>
     <script type="text/javascript" src="{% static "js/plugin/date-time-picker.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/form.js" %}"></script>
+    <script>
+        $("[id*='vehicle']").prop("disabled", true);
+        $("[id*='driver']").prop("disabled", true);
+        $("[for$='id']").hide();
+    </script>
 {% endblock %}
 
