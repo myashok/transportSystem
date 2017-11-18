@@ -34,9 +34,9 @@
                       <td>{{ trip.fare|default_if_none:"---"}}</td>
                       <td>
                           {% if trip.request.bill %}
-                              <a href="{%  url 'cancel-trip' pk=trip.pk %}" class="btn btn-danger">Cancel</a>
-                          {% else %}
                               <a href="{%  url 'cancel-trip' pk=trip.pk %}" class="btn btn-danger disabled">Cancel</a>
+                          {% else %}
+                              <a href="{%  url 'cancel-trip' pk=trip.pk %}" class="btn btn-danger">Cancel</a>
                           {% endif %}
                       </td>
                   </tr>

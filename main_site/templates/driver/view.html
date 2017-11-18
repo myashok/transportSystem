@@ -9,26 +9,34 @@
     <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
       <img class="card-img-top img-fluid" src="{{ driver.picture.url }}" alt="Card image cap">
         <div class="card-block">
-            <h4 class="card-title text-bold">{{ driver.name }}</h4>
+            <h4 class="card-title text-bold">{{ driver.name|default_if_none:"---" }}</h4>
             <p>
                 <span class="category">Mob. No. </span>
-                <span class="data">{{ driver.phone }}</span>
+                <span class="data">{{ driver.phone|default_if_none:"---" }}</span>
             </p>
             <p>
                 <span class="category">Email </span>
-                <span class="data">{{ driver.email }}</span>
+                <span class="data">{{ driver.email|default_if_none:"---" }}</span>
+            </p>
+             <p>
+                <span class="category">Blood group</span>
+                <span class="data">{{ driver.blood_group|default_if_none:"---" }}</span>
             </p>
             <p>
                 <span class="category">License No </span>
-                <span class="data">{{ driver.license_no }}</span>
+                <span class="data">{{ driver.license_no|default_if_none:"---" }}</span>
             </p>
             <p>
-                <span class="category">Licence Valid </span>
-                <span class="data">{{ driver.license_validity }}</span>
+                <span class="category">Licence Valid till</span>
+                <span class="data">{{ driver.license_validity|default_if_none:"---" }}</span>
             </p>
-            <p>
-                <span class="category">Blood group</span>
-                <span class="data">{{ driver.blood_group }}</span>
+             <p>
+                <span class="category">Emergency Contact</span>
+                <span class="data">{{ driver.emergency_contact|default_if_none:"---" }}</span>
+            </p>
+             <p>
+                <span class="category">Address</span>
+                <span class="data">{{ driver.address|default_if_none:"---" }}</span>
             </p>
             <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
             <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>

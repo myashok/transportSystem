@@ -31,6 +31,20 @@ class MaintenanceEndForm(models.ModelForm):
         elif end_date==self.instance.start_date and end_time<self.instance.start_time:
             self.add_error('end_time','End time cannot be before start time on same date')
 
+class MaintenanceUpdateForm(models.ModelForm):
+    class Meta:
+        model=Maintenance
+        fields=['start_date','end_date','start_time','end_time','repairing_cost']
+    def clean(self):
+        start_date=self.cleaned_data.get('start_date')
+        end_date=self.cleaned_data.get('end_date')
+        start_time=self.cleaned_data.get('start_time')
+        end_time=self.cleaned_data.get('end_time')
+        if end_date<start_date:
+            self.add_error('end_date','End date cannot be before start date')
+        elif end_date==start_date and end_time<start_time:
+            self.add_error('end_time','End time cannot be before start time on same date')
+
 class RequestForm(models.ModelForm):
     class Meta:
         model=Request
@@ -45,7 +59,7 @@ class RequestForm(models.ModelForm):
 
         if start_date<datetime.today().date():
             self.add_error('start_date','You cannot make a trip in the past')
-        elif end_date<start_date:
+        elif end_date is not None and end_date<start_date:
             self.add_error('end_date','Make sure end date>=start date')
         elif start_date==end_date and start_time>expected_end_time:
             self.add_error('expected_end_time','End time cannot be smaller than start time on same day')

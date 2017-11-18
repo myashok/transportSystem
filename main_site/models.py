@@ -40,7 +40,7 @@ class Driver(models.Model):
                             blank=True,
                             verbose_name='Email Address')
     picture=models.ImageField(upload_to=get_upload_path,
-                              default='driver-default.png',
+                              default='default.png',
                               help_text='If not provided, default will be used')
 
     class Meta():
@@ -81,13 +81,13 @@ class Vehicle(models.Model):
                               blank=True,
                               help_text='e.g.- B3')
 
-    description=models.TextField(null=True)
+    description=models.TextField(null=True,blank=True)
     seating_capacity=models.IntegerField(default=4,validators=[MinValueValidator(1)])
     is_owned=models.BooleanField(default=True,
                                  verbose_name='Owned by institute?',
                                  help_text='Whether owned by IIITA or hired')
     picture = models.ImageField(upload_to=get_upload_path,
-                                default='schoolbus-default.png',
+                                default='school-bus.png',
                                 help_text='If not provided, default will be taken')
 
     @classmethod
@@ -100,7 +100,7 @@ class Vehicle(models.Model):
 
     def __str__(self):
         if self.nickname is not None:
-            return self.nickname+' | '+self.registration_no
+            return self.registration_no+" | "+self.nickname
         else:
             return self.registration_no
 
@@ -117,7 +117,7 @@ class Request(models.Model):
     #last_updated_at=models.DateTimeField(default=timezone.now)
     start_date=models.DateField()
     start_time=models.TimeField()
-    end_date=models.DateField()
+    end_date=models.DateField(null=True,blank=True)
     expected_end_time=models.TimeField(null=True,
                                        blank=True,
                                        help_text='To ensure fair services to '
@@ -205,8 +205,9 @@ class Announcement(models.Model):
 
 class Schedule(models.Model):
     file=models.FileField(upload_to=get_upload_path)
+    created_at=models.DateTimeField(default=timezone.now)
     def save(self, *args,**kwargs):
         message='Transport schedule has been updated.Please visit'\
                 +self.file.url+'to see changes'
         #mail_to_admins(message=message)
-        super(self,Schedule).save(*args,**kwargs)
+        super(Schedule,self).save(*args,**kwargs)

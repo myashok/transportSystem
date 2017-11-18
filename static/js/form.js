@@ -38,8 +38,8 @@ if($("#id_nickname").length) {
     $("#id_nickname").after("<p>eg: B3</p>");
     $("#id_nickname").next().css("font-size", "85%");
 }
-$(":checkbox").css({"clear": "both", "margin-top": "-25px",});
-// if($('input,textarea,select').filter('[required]:visible').length) {
-//     $('input,textarea,select').filter('[required]:visible').closest('.form-group').find('label').after("<span style='color:red; font-size: 120% '> *</span>");
-//     // $('input,textarea,select').filter('[required]:visible').before("<span style='color:red; font-size: 120% '> *</span>");
-// }
+$(":checkbox").css({ "clear": "both", "margin-top": "-25px",});
+if($('input,textarea,select').filter('[required]:visible').length) {
+    $('input,textarea,select').filter('[required]:visible').closest('.form-group').find('label').after("<span style='color:red; font-size: 120% '> *</span>");
+    // $('input,textarea,select').filter('[required]:visible').before("<span style='color:red; font-size: 120% '> *</span>");
+}

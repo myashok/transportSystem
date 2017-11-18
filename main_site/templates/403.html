@@ -19,7 +19,11 @@
     <div class="row">
         <div id="error-page" class="col-md-12">
             <h1>403</h1>
+            {% if exception %}
+              <h2>{{ exception }}</h2>
+            {% else %}
             <h2>You are not authorized to view this page</h2>
+            {% endif %}
             <br>
             <a class="btn btn-primary" href="/">Return to the main page</a>
         </div>

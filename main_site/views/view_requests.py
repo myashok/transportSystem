@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -13,6 +14,9 @@ from main_site.models import Request, Status
 
 
 #create request
+from main_site.utils import send_html_mail
+
+
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class RequestCreateView(CreateView):
     model = Request
@@ -22,11 +26,8 @@ class RequestCreateView(CreateView):
     def form_valid(self, form):
         request = form.save(commit=False)
         request.user = self.request.user
-        try:
-            print('test')
-            #send_email('Transport request received','Hi, we have received your request',['nik211012@gmail.com'])
-        except OSError as e:
-            print(e.strerror)
+        send_html_mail('Request Received','Your request received'+
+                        ' has been received',['nik211012@gmail.com'])
         return super(RequestCreateView, self).form_valid(form)
 
 
@@ -41,7 +42,7 @@ class RequestDetailView(DetailView):
     def get_object(self, queryset=None):
         obj=super(RequestDetailView,self).get_object()
         if is_not_priveleged(self.request.user) and obj.user!=self.request.user:
-            raise PermissionDenied()
+            raise PermissionDenied('You are not priveleged to see this page')
         return obj
 
 
@@ -53,7 +54,7 @@ class RequestDetailView(DetailView):
 #     fields = ['start_date', 'start_time', 'end_date', 'expected_end_time',
 #               'no_of_persons_travelling', 'request_type', 'description',
 #               'source', 'destination', 'is_round_trip']
-#     template_name = 'request/update.html'
+#     template_name = 'request/end.html'
 #
 #     def get_object(self, *args, **kwargs):
 #         obj = super(RequestUpdateView, self).get_object(*args, **kwargs)
@@ -87,13 +88,15 @@ class RequestCancelView(View):
     def get(self,request,pk):
         req=get_object_or_404(Request,pk=pk)
         if datetime.now() >= datetime.combine(req.start_date,req.start_time):
-            raise PermissionDenied()
+            raise PermissionDenied('Request cannot be cancelled so late. Please contact admin for help.')
         req.status=Status.objects.get(type='Request Cancelled')
         req.save()
         trips=req.trip_set.all()
         if trips.exists():
             for t in trips:
-
                 t.status=Status.objects.get(type='Trip Cancelled')
                 t.save()
+        send_email(title='test',body='test',recepients=['iit2014129@iiita.ac.in'])
+
+
         return redirect('view-request',pk=pk)
