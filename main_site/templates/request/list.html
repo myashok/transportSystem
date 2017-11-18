@@ -24,14 +24,14 @@
                     {%  for request in requests %}
                         <tr>
                            <td><a href="{% url 'view-request' pk=request.id %}">{{ request.id }}</a></td>
-                            <td>{{request.user.username}}</td>
-                            <td>{{ request.start_date }}</td>
-                            <td>{{ request.start_time }}</td>
-                            <td>{{ request.end_date }}</td>
-                            <td>{{ request.expected_end_time }}</td>
-                            <td>{{ request.no_of_persons_travelling }}</td>
-                            <td>{{ request.source}}</td>
-                            <td>{{ request.destination }}</td>
+                            <td>{{request.user.username|default_if_none:"---"}}</td>
+                            <td>{{ request.start_date|default_if_none:"---" }}</td>
+                            <td>{{ request.start_time|default_if_none:"---" }}</td>
+                            <td>{{ request.end_date|default_if_none:"---" }}</td>
+                            <td>{{ request.expected_end_time|default_if_none:"---" }}</td>
+                            <td>{{ request.no_of_persons_travelling|default_if_none:"---" }}</td>
+                            <td>{{ request.source|default_if_none:"---"}}</td>
+                            <td>{{ request.destination|default_if_none:"---" }}</td>
                             <td>
                                 {% if not request.bill %}
                                 <a href="{% url 'new-bill' pk=request.id %}" class="btn btn-success">Billing</a>

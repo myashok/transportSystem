@@ -3,7 +3,7 @@ from datetime import datetime
 from django.core.exceptions import PermissionDenied
 from django.forms import models
 
-from main_site.models import Trip, Driver, Maintenance, Request, Vehicle
+from main_site.models import Trip, Driver, Maintenance, Request, Vehicle, Status
 
 
 class DriverForm(models.ModelForm):
@@ -70,4 +70,13 @@ class TripCreateForm(models.ModelForm):
         fields=['driver','vehicle','rate']
     def __init__(self,*args,**kwargs):
         super(TripCreateForm,self).__init__(*args,**kwargs)
+        self.pk=kwargs.pop('pk',None)
         #self.fields['vehicle']=Vehicle.get_available_vehicles()
+        # trips=Trip.objects.filter(request_id=self.pk)
+        # for i in trips:
+        #     if i.status==Status.objects.get(type='Request Scheduled') and (i.vehicle==vehicle):
+        #         self.add_error('vehicle','Same vehicle is in a different active journey for this trip')
+        #     elif i.status == Status.objects.get(type='Request Scheduled') and (i.driver == driver):
+        #         self.add_error('vehicle','Same driver is in a different active journey for this trip')
+        #
+

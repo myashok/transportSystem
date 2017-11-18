@@ -5,13 +5,10 @@ import threading
 from django.utils._os import safe_join
 from weasyprint import HTML
 
-from main_site.models import Schedule
 from transport.settings import BASE_DIR, EMAIL_HOST_USER
-from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
-from django.template.loader import render_to_string
 
 def get_bill_as_pdf(request,bill):
 
@@ -34,7 +31,6 @@ def get_bill_as_pdf(request,bill):
         response['Content-Disposition'] = 'inline; filename='+"bill_"+filename
         return response
 
-    return Http404
 
 #does not work
 def render_schedule():
@@ -54,7 +50,10 @@ def render_schedule():
         response['Content-Disposition'] = 'inline; filename='+"bill_"+filename
         return response
 
-    return Http404
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
+
 
 class EmailThread(threading.Thread):
     def __init__(self, subject, html_content, recipient_list):

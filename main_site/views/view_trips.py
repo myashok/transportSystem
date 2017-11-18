@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -11,6 +12,9 @@ from main_site.models import Trip, Request, Status, Bill
 
 
 # new trip
+from main_site.utils import send_html_mail
+
+
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_priveleged, name='dispatch')
 class TripCreateView(CreateView):
@@ -31,8 +35,12 @@ class TripCreateView(CreateView):
         trip.request = self.get_context_data()['req']
         trip.request.status=Status.objects.get(type='Request Approved')
         trip.request.save()
-        trip.save()
-        return super(TripCreateView, self).form_valid(form)
+        response=super(TripCreateView, self).form_valid(form)
+        html_content=render_to_string('custom_templates/trip_created.html',{'trip':trip})
+        if trip.request.user.email is not None:
+            send_html_mail('Trip for request #'+str(trip.request_id)+'created',
+                           html_content,[trip.request.user.email])
+        return response
     def get_success_url(self):
         return reverse('list-trips',kwargs={'pk':self.kwargs['pk']})
 

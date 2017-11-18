@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Request Received</title>
+</head>
+<body>
+<strong>Hi {{ request.user }}</strong>
+<p>We have received your booking request with details:</p>
+<div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
+        <div class="card-block">
+           <table class="table  table-hover table-bordered">
+                <tr>
+                    <th>Type of request</th>
+                    <td>{{ request.request_type|default_if_none:"---" }}</td>
+                </tr>
+               <tr>
+                    <th>Source</th>
+                    <td>{{ request.source|default_if_none:"---" }}</td>
+               </tr>
+               <tr>
+                    <th>start date</th>
+                    <td>{{ request.start_date|default_if_none:"---"}}</td>
+               </tr>
+               <tr>
+                    <th>Start time</th>
+                    <td>{{ request.start_time|default_if_none:"---" }}</td>
+                </tr>
+               <tr>
+                    <th>Destination</th>
+                    <td>{{ request.destination|default_if_none:"---" }}</td>
+                </tr>
+               <tr>
+                    <th>End date</th>
+                    <td>{{ request.end_date|default_if_none:"---"}}</td>
+                </tr>
+                <tr>
+                    <th>Expected end time</th>
+                    <td>{{ request.expected_end_time|default_if_none:"---" }}</td>
+                </tr>
+
+                <tr>
+                    <th>Round trip ?</th>
+                    <td>{{ request.is_round_trip|default_if_none:"---"}}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ request.status|default_if_none:"---" }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<p>We'll inform once the status of your request changes</p>
+</body>
+</html>

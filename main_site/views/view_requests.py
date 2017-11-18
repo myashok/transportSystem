@@ -1,19 +1,17 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.template.loader import render_to_string
+from django.urls import reverse, set_script_prefix
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView, ListView
+from django.views.generic import CreateView, DetailView, ListView
 from main_site.decorators import check_priveleged, check_owner_of_request, is_not_priveleged
 from main_site.forms import RequestForm
 from main_site.models import Request, Status
-
-
-#create request
 from main_site.utils import send_html_mail
 
 
@@ -26,10 +24,12 @@ class RequestCreateView(CreateView):
     def form_valid(self, form):
         request = form.save(commit=False)
         request.user = self.request.user
-        send_html_mail('Request Received','Your request received'+
-                        ' has been received',['nik211012@gmail.com'])
-        return super(RequestCreateView, self).form_valid(form)
-
+        self.status = Status.objects.get(type='Request Pending')
+        response=super(RequestCreateView, self).form_valid(form)
+        msg_html = render_to_string('custom_templates/request_created.html', {'request': request})
+        if request.user.email is not None:
+            send_html_mail('Booking Request Received', msg_html, [request.user.email])
+        return response
 
     def get_success_url(self):
         return reverse('view-request', kwargs={'pk': self.object.pk})
@@ -88,7 +88,7 @@ class RequestCancelView(View):
     def get(self,request,pk):
         req=get_object_or_404(Request,pk=pk)
         if datetime.now() >= datetime.combine(req.start_date,req.start_time):
-            raise PermissionDenied('Request cannot be cancelled so late. Please contact admin for help.')
+            raise PermissionDenied('Request cannot be cancelled after the scheduled time. Please contact admin for help.')
         req.status=Status.objects.get(type='Request Cancelled')
         req.save()
         trips=req.trip_set.all()
@@ -96,7 +96,8 @@ class RequestCancelView(View):
             for t in trips:
                 t.status=Status.objects.get(type='Trip Cancelled')
                 t.save()
-        send_email(title='test',body='test',recepients=['iit2014129@iiita.ac.in'])
-
-
+        if req.user.email is not None:
+            html_content=render_to_string('custom_templates/request_cancelled.html',{'request':req})
+            send_html_mail('Request #'+str(req.id)+' cancelled',
+                           html_content,[req.user.email])
         return redirect('view-request',pk=pk)

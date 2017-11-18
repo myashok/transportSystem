@@ -7,6 +7,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, ListView, D
 
 from main_site.decorators import check_priveleged
 from main_site.models import Announcement
+from main_site.utils import send_html_mail
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -21,8 +22,14 @@ class AnnouncementCreateView(CreateView):
         announcement = form.save(commit=False)
         announcement.created_by = self.request.user
         announcement.created_at = datetime.now()
-        announcement.save()
-        return super(AnnouncementCreateView, self).form_valid(form)
+        response=super(AnnouncementCreateView, self).form_valid(form)
+        from django.contrib.auth.models import User
+        users=User.objects.filter(email__isnull=False)
+        emails=[]
+        for user in users:
+            emails.append(user.email)
+        send_html_mail(announcement.text,announcement.description,emails)
+        return response
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_priveleged, name='dispatch')

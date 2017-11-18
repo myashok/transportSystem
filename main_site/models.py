@@ -3,11 +3,15 @@ import uuid
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q
+from django.template.loader import render_to_string
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
 #todo Try removing the respective image from directory after deleting a driver
 #todo Add last_updated_at field to every model, editalble=False and change on every save
+from main_site.utils import send_html_mail
+
+
 def get_upload_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
@@ -110,6 +114,7 @@ class Status(models.Model):
     def __str__(self):
         return self.type
 
+
 class Request(models.Model):
     user=models.ForeignKey('auth.User',
                            verbose_name='Requested by')
@@ -145,14 +150,14 @@ class Request(models.Model):
         #self.last_updated_at=timezone.now()
         if self.pk is None:
             self.status=Status.objects.get(type='Request Pending')
+
         super(Request, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.id)
 
     class Meta:
-        ordering=['-start_date']
-
+        ordering=['-start_date','-start_time']
 
 
 class Trip(models.Model):
@@ -211,3 +216,7 @@ class Schedule(models.Model):
                 +self.file.url+'to see changes'
         #mail_to_admins(message=message)
         super(Schedule,self).save(*args,**kwargs)
+
+class Vendor(models.Model):
+    name=models.CharField(max_length=200)
+

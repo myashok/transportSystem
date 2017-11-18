@@ -36,7 +36,7 @@
                             <td>{{request.status}}</td>
                             <td>
                                 <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">View bill</a>
-                                <a href="{% url 'cancel-trip' pk=request.id %}" class="btn btn-success">Cancel</a>
+                                <a href="{% url 'cancel-request' pk=request.id %}" class="btn btn-success">Cancel</a>
 
                         </tr>
                     {% endfor %}

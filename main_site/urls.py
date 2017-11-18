@@ -25,7 +25,6 @@ urlpatterns=[
 
     url(r'^requests/new', RequestCreateView.as_view(), name='new-request'),
     url(r'^requests/(?P<pk>\d+)$', RequestDetailView.as_view(), name='view-request'),
-    #url(r'^requests/(?P<pk>\d+)/edit$', RequestUpdateView.as_view(), name='update-request'),
     url(r'^requests/(?P<pk>\d+)/cancel$', RequestCancelView.as_view(), name='cancel-request'),
     url(r'^requests[/]$', RequestListView.as_view(), name='list-requests'),
     url(r'^myrequests[/]$',MyRequestsView.as_view(),name='my-requests'),
