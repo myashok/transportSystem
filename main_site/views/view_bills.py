@@ -25,7 +25,7 @@ class BillDetailView(View):
 class BillCreateView(View):
 
     def get(self,request,pk):
-        Tripset = modelformset_factory(Trip, fields=['vehicle','driver','start_distance', 'end_distance', 'rate',], extra=0)
+        Tripset = modelformset_factory(Trip, fields=['vehicle','driver', 'start_distance', 'end_distance', 'rate'], extra=0)
         req=get_object_or_404(Request,pk=pk)
         if req.status==Status.objects.get(type='Request Cancelled'):
            raise PermissionDenied('Billing cannot be done for a cancelled request')
