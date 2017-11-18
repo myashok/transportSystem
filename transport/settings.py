@@ -25,7 +25,7 @@ SECRET_KEY = '9a)x-zs!hsu#hge#$k%hn1n!w#)fhcmy=ih$xpolh-u(lkqiun'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1","localhost"]
+ALLOWED_HOSTS = ["127.0.0.1","localhost","139.59.92.238"]
 
 
 # Application definition
@@ -52,7 +52,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'transport.urls'
 LOGIN_REDIRECT_URL='index'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -127,3 +127,13 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
+
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+
+DEFAULT_FROM_EMAIL = 'iit2014129@gmail.com'
+SERVER_EMAIL = 'iit2014129@gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'iit2014129@gmail.com'
+EMAIL_HOST_PASSWORD = 'iamalive@1596##'
