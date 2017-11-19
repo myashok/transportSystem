@@ -3,6 +3,7 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.conf.urls import url
 
+from main_site.views.view_feedback import FeedbackCreateView, FeedbackListView, FeedbackDetailView
 from main_site.views.view_maintenences import MaintenanceCreateView, MaintenanceDetailView, MaintenanceEndView, \
     MaintenanceListView, MaintenanceUpdateView
 from main_site.views.view_schedules import ScheduleCreateView, ScheduleDetailView, ScheduleUpdateView
@@ -65,6 +66,10 @@ urlpatterns=[
     url(r'^schedule/new$', ScheduleCreateView.as_view(), name='new-schedule'),
     url(r'^schedule[/]$', ScheduleDetailView.as_view(), name='view-schedule'),
     url(r'^schedule/update[/]$', ScheduleUpdateView.as_view(), name='update-schedule'),
+
+    url(r'^feedbacks/new$', FeedbackCreateView.as_view(), name='new-feedback'),
+    url(r'^feedbacks[/]$', FeedbackListView.as_view(), name='list-feedbacks'),
+    url(r'^feedbacks/(?P<pk>\d+)$', FeedbackDetailView.as_view(), name='view-feedback'),
 ]
 
 if settings.DEBUG:

@@ -217,6 +217,12 @@ class Schedule(models.Model):
         #mail_to_admins(message=message)
         super(Schedule,self).save(*args,**kwargs)
 
-class Vendor(models.Model):
-    name=models.CharField(max_length=200)
+# class Vendor(models.Model):
+#     name=models.CharField(max_length=200)
 
+class Feedback(models.Model):
+    text=models.TextField(verbose_name='Feedback')
+    created_at=models.DateTimeField(default=timezone.now)
+    user=models.ForeignKey('auth.User')
+    class Meta:
+        ordering=['created_at']
