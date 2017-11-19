@@ -145,40 +145,32 @@
     </nav>
     {% block content %}
     {% endblock %}
-    <footer class="site-footer" >
-        <div class="bottom">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-6 col-xs-12 text-lg-left text-center">
-                <p class="copyright-text">
-                  <span style="color:white; font-weight: 300">© TransportCell @ IIITA</span>
-                  <a href="https://iiita.ac.in/">TransportCell</a>
-                </p>
-              </div>
-              <div class="col-lg-6 col-xs-12 text-lg-right text-center">
-                <ul class="list-inline">
-                  <li class="list-inline-item">
-                    <a href="
-                            {% ifequal user.groups.all.0.name "TransportUser" %}
+
+        <footer>
+        <div class="bar">
+            <div class="bar-wrap">
+                <ul class="links">
+                    <li><a href="{% ifequal user.groups.all.0.name "TransportUser" %}
                                 {% url 'user-home' %}
                             {% endifequal %}
                             {% if user.groups.all.0.name == "TransportStaff" or user.groups.all.0.name == "TransportAdmin"%}
                                 {% url 'staff-home' %}
-                            {% endif %}">Home</a>
-                  </li>
-
-                  <li class="list-inline-item">
-                    <a href="#about">About Us</a>
-                  </li>
-
-                  <li class="list-inline-item">
-                    <a href="#contact">Contact</a>
-                  </li>
+                            {% endif %}
+                    ">Home</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">About</a></li>
                 </ul>
-              </div>
 
+                <div class="social">
+                    <a href="https://www.iiita.ac.in" class="fb">
+                        <span class="info">
+                            <span class="follow">Property of IIITA</span>
+                        </span>
+                    </a>
+                </div>
+                <div class="clear"></div>
+                <div class="copyright">&copy; All Rights Reserved</div>
             </div>
-          </div>
         </div>
     </footer>
 
