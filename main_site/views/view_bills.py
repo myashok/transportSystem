@@ -4,12 +4,13 @@ from django.db.models import Q
 from django.forms import modelformset_factory
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from main_site.decorators import check_priveleged
 from main_site.models import Bill, Request, Trip, Status
-from main_site.utils import get_bill_as_pdf
+from main_site.utils import get_bill_as_pdf, send_html_mail
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -58,5 +59,9 @@ class BillCreateView(View):
             bill.total_distance=dist
             bill.total_fare=fare
             bill.save()
+            if bill.request.user.email is not None:
+                html_content=render_to_string('custom_templates/bill_created.html',{'bill':bill})
+                send_html_mail('Bill generated for request #'+str(bill.request_id),
+                               html_content,[bill.request.user.email])
             return redirect(reverse('view-bill', kwargs={'pk': bill.request_id}))
         return render(request,'bill/new.html',{'forms':tripformset})

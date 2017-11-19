@@ -24,11 +24,11 @@ class AnnouncementCreateView(CreateView):
         announcement.created_at = datetime.now()
         response=super(AnnouncementCreateView, self).form_valid(form)
         from django.contrib.auth.models import User
-        users=User.objects.filter(email__isnull=False)
-        emails=[]
-        for user in users:
-            emails.append(user.email)
-        send_html_mail(announcement.text,announcement.description,emails)
+        #users=User.objects.filter(email__isnull=False)
+        #emails=[]
+        # for user in users:
+        #     emails.append(user.email)
+        # send_html_mail(announcement.text,announcement.description,emails)
         return response
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
