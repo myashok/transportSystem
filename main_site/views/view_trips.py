@@ -75,3 +75,12 @@ class TripListView(ListView):
     def get_queryset(self):
         req=get_object_or_404(Request,pk=self.kwargs['pk'])
         return Trip.objects.filter(request=req)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UserTripListView(ListView):
+    model = Trip
+    template_name = 'user-trip/list.html'
+    context_object_name = 'trips'
+    def get_queryset(self):
+        req=get_object_or_404(Request,pk=self.kwargs['pk'])
+        return Trip.objects.filter(request=req)

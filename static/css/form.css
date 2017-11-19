@@ -37,6 +37,9 @@ form:hover {
 input:focus, select:focus  {
     box-shadow: 3px 3px 3px #888;
 }
+input[type='checkbox']:focus{
+    box-shadow: 0 0 0 #888;
+}
 textarea:focus {
     box-shadow: 3px 3px 3px #888;
 }
