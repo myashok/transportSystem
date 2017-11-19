@@ -20,7 +20,7 @@ class VehicleCreateView(CreateView):
 
 # vehicle details
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_priveleged, name='dispatch')
+# @method_decorator(check_priveleged, name='dispatch')
 class VehicleDetailView(DetailView):
     model = Vehicle
     template_name = 'vehicle/view.html'

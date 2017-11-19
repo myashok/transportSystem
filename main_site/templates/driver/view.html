@@ -38,8 +38,11 @@
                 <span class="category">Address</span>
                 <span class="data">{{ driver.address|default_if_none:"---" }}</span>
             </p>
-            <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
-            <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>
+            {% if user.groups.all.0.name == "TransportStaff" or user.groups.all.0.name == "TransportAdmin"  %}
+                <a href="{% url 'update-driver' pk=driver.id %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'delete-driver' pk=driver.id %}" class="btn btn-danger">Delete</a>
+            {% endif %}
+            <a href="{{ request.META.HTTP_REFERER }}"  class="btn btn-danger">Back</a>
         </div>
     </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 {% load static %}
 {% block css %}
      <link rel="stylesheet" href="{% static "css/table.css" %}">
+
 {% endblock %}
 
 {% block content %}
@@ -22,10 +23,10 @@
            <tbody>
               {%  for trip in trips %}
                   <tr>
-                      <td><a href="{% url 'view-trip' pk=trip.id %}">{{ trip.id }}</a></td>
+                      <td>{{ trip.id }}</td>
                       <td>{{ trip.status }}</td>
-                      <td>{{ trip.vehicle}}</td>
-                      <td>{{ trip.driver}}</td>
+                      <td><a href="{% url 'view-vehicle' pk=trip.vehicle_id %}">{{ trip.vehicle}}</a> </td>
+                      <td><a href="{% url 'view-driver' pk=trip.driver_id %}"  >{{ trip.driver}}</a> </td>
                       <td>{{ trip.rate}}</td>
                       <td>{{ trip.start_distance|default_if_none:"---"}}</td>
                       <td>{{ trip.end_distance|default_if_none:"---" }}</td>
