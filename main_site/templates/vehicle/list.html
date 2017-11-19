@@ -22,7 +22,7 @@
               {%  for vehicle in vehicles %}
                   <tr>
                     <td><a href="{% url 'view-vehicle' pk=vehicle.id %}">{{vehicle.id}}</a></td>
-                    <td><img src="{{ vehicle.picture.url }}"  width="50" height="40" alt="picture"></td>
+                    <td><img src="{{ vehicle.picture.url }}"  width="50" height="40"></td>
                     <td>{{ vehicle.nickname|default_if_none:"---" }}</td>
                     <td>{{ vehicle.registration_no }}</td>
                     <td>{{ vehicle.seating_capacity }}</td>

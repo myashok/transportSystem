@@ -3,7 +3,7 @@ from datetime import datetime
 from smtplib import SMTPException
 import threading
 from django.utils._os import safe_join
-from weasyprint import HTML
+#from weasyprint import HTML
 
 from transport.settings import BASE_DIR, EMAIL_HOST_USER
 from django.core.files.storage import FileSystemStorage

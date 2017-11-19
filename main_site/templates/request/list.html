@@ -17,12 +17,21 @@
                       <th>Persons</th>
                       <th>Src.</th>
                       <th>Dest.</th>
+                      <th>Status</th>
                       <th>Actions</th>
                    </tr>
               </thead>
               <tbody>
                     {%  for request in requests %}
-                        <tr>
+                        <tr style="{% if request.status.type == 'Request Pending'%}
+                                           background-color:#9FF090;
+                                    {% elif request.status.type == 'Request Cancelled'%}
+                                           background-color:#F5B19F;
+                                    {% elif request.status.type == 'Request Approved'%}
+                                           background-color:#D0E3FC;
+                                    {% elif request.status.type == 'Request Declined'%}
+                                           background-color:#F5B19F;
+                                    {% endif %}">
                            <td><a href="{% url 'view-request' pk=request.id %}">{{ request.id }}</a></td>
                             <td>{{request.user.username|default_if_none:"---"}}</td>
                             <td>{{ request.start_date|default_if_none:"---" }}</td>
@@ -32,16 +41,15 @@
                             <td>{{ request.no_of_persons_travelling|default_if_none:"---" }}</td>
                             <td>{{ request.source|default_if_none:"---"}}</td>
                             <td>{{ request.destination|default_if_none:"---" }}</td>
+                            <td>{{ request.status|default_if_none:"---" }}</td>
                             <td>
-                                {% if not request.bill %}
-                                <a href="{% url 'new-bill' pk=request.id %}" class="btn btn-success">Billing</a>
-                                {% else %}
-                                <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">Bill</a>
+                                {% if not request.bill  and  request.status.type == 'Request Approved'%}
+                                    <a href="{% url 'new-bill' pk=request.id %}" class="btn btn-success">Billing</a>
+                                {% elif request.status.type == 'Request Approved' %}
+                                    <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">Bill</a>
                                 {% endif %}
                                 <a href="{% url 'list-trips' pk=request.id %}" class="btn btn-success">Trips</a>
-                                {%  if request.bill %}
-                                <a href="#" class="btn btn-danger disabled">Decline</a>
-                                {% else %}
+                                {%  if request.status.type == "Request Pending"%}
                                 <a href="#" class="btn btn-danger">Decline</a>
                                 {% endif %}
                             </td>

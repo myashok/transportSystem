@@ -22,7 +22,7 @@ legend {
 form {
     margin-top: 10px;
     border: 1px solid #373a3c;
-    margin-bottom: 80px;
+    margin-bottom: 100px;
     border-radius: 2px;
     background-color: #F7F7F7;
     box-shadow: 3px 3px 5px #888888;
@@ -36,6 +36,9 @@ form:hover {
 
 input:focus, select:focus  {
     box-shadow: 3px 3px 3px #888;
+}
+input[type='checkbox']:focus{
+    box-shadow: 0 0 0 #888;
 }
 textarea:focus {
     box-shadow: 3px 3px 3px #888;
