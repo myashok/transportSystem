@@ -9,8 +9,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 #todo Try removing the respective image from directory after deleting a driver
 #todo Add last_updated_at field to every model, editalble=False and change on every save
-from main_site.utils import send_html_mail
-
 
 def get_upload_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -210,12 +208,17 @@ class Announcement(models.Model):
 
 class Schedule(models.Model):
     file=models.FileField(upload_to=get_upload_path)
-    created_at=models.DateTimeField(default=timezone.now)
-    def save(self, *args,**kwargs):
-        message='Transport schedule has been updated.Please visit'\
-                +self.file.url+'to see changes'
-        #mail_to_admins(message=message)
-        super(Schedule,self).save(*args,**kwargs)
+
+    def save(self, *args, **kwargs):
+        self.__class__.objects.exclude(id=self.id).delete()
+        super(Schedule, self).save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        try:
+            return cls.objects.get()
+        except cls.DoesNotExist:
+            return cls()
 
 class Vendor(models.Model):
     name=models.CharField(max_length=200)

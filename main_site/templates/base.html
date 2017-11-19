@@ -40,28 +40,6 @@
             {% endif %}"
       >TransportCell</a>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        {% ifequal user.groups.all.0.name "TransportUser" %}
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Services
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>
-                  <a class="dropdown-item" href="{% url 'my-requests' %}">View Requests</a>
-                </div>
-              </li>
-               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Schedule
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-{#                  <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>#}
-                  <a class="dropdown-item" href="{% url 'view-schedule' %}">View Schedule</a>
-                </div>
-              </li>
-            </ul>
-        {% endifequal %}
         {% if user.groups.all.0.name  == "TransportStaff" or  user.groups.all.0.name  == "TransportAdmin"%}
             <ul class="navbar-nav mr-auto">
               <li class="nav-item dropdown">
@@ -113,13 +91,32 @@
                   Schedule
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="{% url 'new-schedule' %}">Add Schedule</a>
                   <a class="dropdown-item" href="{% url 'view-schedule' %}">View Schedule</a>
                   <a class="dropdown-item" href="{% url 'update-schedule' %}">Update Schedule</a>
                 </div>
               </li>
             </ul>
-
+        {% else %}
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Services
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>
+                  <a class="dropdown-item" href="{% url 'my-requests' %}">View Requests</a>
+                </div>
+              </li>
+               <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Schedule
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+{#                  <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>#}
+                  <a class="dropdown-item" href="{% url 'view-schedule' %}">View Schedule</a>
+                </div>
+              </li>
+            </ul>
         {% endif %}
         <ul class="navbar-nav">
           <li class="nav-item dropdown">

@@ -1,14 +1,13 @@
 import os
-from datetime import datetime
 from smtplib import SMTPException
 import threading
-from django.utils._os import safe_join
-#from weasyprint import HTML
-
+from weasyprint import HTML
+from main_site.models import Schedule
 from transport.settings import BASE_DIR, EMAIL_HOST_USER
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
+from django.template.loader import render_to_string
 
 def get_bill_as_pdf(request,bill):
 
@@ -32,29 +31,6 @@ def get_bill_as_pdf(request,bill):
         return response
 
 
-#does not work
-def render_schedule():
-
-    ROOT = os.path.join(BASE_DIR, 'files/')
-    fs = FileSystemStorage(ROOT)
-    filename=Schedule.objects.all().order_by('created_at')[0].file.name
-
-    # if fs.exists(filename):
-    #     with fs.open(filename) as pdf:
-    #         response = HttpResponse(pdf, content_type='application/pdf')
-    #         response['Content-Disposition'] = 'inline; filename='+"bill_"+filename
-    #         return response
-
-    with fs.open(filename) as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename='+"bill_"+filename
-        return response
-
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-
-
-
 class EmailThread(threading.Thread):
     def __init__(self, subject, html_content, recipient_list):
         self.subject = subject
@@ -72,26 +48,3 @@ class EmailThread(threading.Thread):
 
 def send_html_mail(subject, html_content, recipient_list):
     EmailThread(subject, html_content, recipient_list).start()
-
-# def validate_s    chedule(x,y):
-#     slots=x.split(",")
-#     times=y.split(",")
-#     if len(slots) != len(times):
-#         return False
-#     for i in times:
-#         try:
-#             i=datetime.strptime(i, '%I:%M')
-#         except ValueError:
-#             print(i)
-#             return False
-#     return True
-
-
-
-# def mail_to_admins(message=None):
-#     admin_set=User.groups.filter(groups__name='TransportAdmin').values()
-#     recepients=[]
-#     if admin_set.exists():
-#         for i in admin_set.iterator():
-#             recepients.append(i.email)
-#     send_email(title='Transport Schedule Changed',body=message,recepients=recepients)
