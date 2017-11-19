@@ -12,7 +12,7 @@ from main_site.views.view_announcements import AnnouncementCreateView, Announcem
 from main_site.views.view_bills import BillDetailView, BillCreateView
 from main_site.views.view_drivers import DriverCreateView, DriverDetailView, DriverUpdateView, DriverDeleteView, DriverListView
 from main_site.views.view_requests import RequestDetailView, RequestListView, MyRequestsView, RequestCreateView, RequestCancelView
-from main_site.views.view_trips import TripCreateView, TripDetailView, TripCancelView, TripListView
+from main_site.views.view_trips import TripCreateView, TripDetailView, TripCancelView, TripListView, UserTripListView
 from main_site.views.view_vehicles import VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, \
     VehicleListView
 
@@ -45,6 +45,7 @@ urlpatterns=[
     url(r'^trips/(?P<pk>\d+)$', TripDetailView.as_view(), name='view-trip'),
     url(r'^trips/(?P<pk>\d+)/cancel$', TripCancelView.as_view(), name='cancel-trip'),
     url(r'^requests/(?P<pk>\d+)/trips', TripListView.as_view(), name='list-trips'),
+    url(r'^myrequests/(?P<pk>\d+)/trips', UserTripListView.as_view(), name='list-user-trips'),
 
     url(r'^requests/(?P<pk>\d+)/billing$', BillCreateView.as_view(), name='new-bill'),
     url(r'^requests/(?P<pk>\d+)/bill$', BillDetailView.as_view(), name='view-bill'),

@@ -33,11 +33,10 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <a class="navbar-brand" href="
-            {% ifequal user.groups.all.0.name "TransportUser" %}
-                {% url 'user-home' %}
-            {% endifequal %}
             {% if user.groups.all.0.name == "TransportStaff" or user.groups.all.0.name == "TransportAdmin"%}
                 {% url 'staff-home' %}
+            {% else %}
+                {% url 'user-home' %}
             {% endif %}"
       >TransportCell</a>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -52,6 +51,15 @@
                   <a class="dropdown-item" href="{% url 'my-requests' %}">View Requests</a>
                 </div>
               </li>
+               <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Schedule
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+{#                  <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>#}
+                  <a class="dropdown-item" href="{% url 'view-schedule' %}">View Schedule</a>
+                </div>
+              </li>
             </ul>
         {% endifequal %}
         {% if user.groups.all.0.name  == "TransportStaff" or  user.groups.all.0.name  == "TransportAdmin"%}
@@ -61,11 +69,17 @@
                  Vehicles
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="{% url 'new-maintenance' %}">Add Vehicle in Maintenance</a>
-                  <a class="dropdown-item" href="{% url 'list-maintenances' %}">View Vehicles in Maintenance</a>
-
                   <a class="dropdown-item" href="{% url 'list-vehicles'%}">View Vehicles</a>
                   <a class="dropdown-item" href="{% url 'new-vehicle'%}">Add Vehicle</a>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Maintenance
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="{% url 'new-maintenance' %}">Add Vehicle in Maintenance</a>
+                  <a class="dropdown-item" href="{% url 'list-maintenances' %}">View Vehicles in Maintenance</a>
                 </div>
               </li>
               <li class="nav-item dropdown">
@@ -94,13 +108,27 @@
                   <a class="dropdown-item" href="{% url 'new-announcement' %}">Add Announcements</a>
                 </div>
               </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Schedule
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="{% url 'new-schedule' %}">Add Schedule</a>
+                  <a class="dropdown-item" href="{% url 'view-schedule' %}">View Schedule</a>
+                  <a class="dropdown-item" href="{% url 'update-schedule' %}">Update Schedule</a>
+                </div>
+              </li>
             </ul>
 
         {% endif %}
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Account
+                {% if request.user.is_authenticated  %}
+                    {{ request.user.username }}
+                {% else%}
+                     Account
+                {% endif  %}
             </a>
             <div class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
 
@@ -117,40 +145,32 @@
     </nav>
     {% block content %}
     {% endblock %}
-    <footer class="site-footer" >
-        <div class="bottom">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-6 col-xs-12 text-lg-left text-center">
-                <p class="copyright-text">
-                  <span style="color:white; font-weight: 300">© TransportCell @ IIITA</span>
-                  <a href="https://iiita.ac.in/">TransportCell</a>
-                </p>
-              </div>
-              <div class="col-lg-6 col-xs-12 text-lg-right text-center">
-                <ul class="list-inline">
-                  <li class="list-inline-item">
-                    <a href="
-                            {% ifequal user.groups.all.0.name "TransportUser" %}
+
+        <footer>
+        <div class="bar">
+            <div class="bar-wrap">
+                <ul class="links">
+                    <li><a href="{% ifequal user.groups.all.0.name "TransportUser" %}
                                 {% url 'user-home' %}
                             {% endifequal %}
                             {% if user.groups.all.0.name == "TransportStaff" or user.groups.all.0.name == "TransportAdmin"%}
                                 {% url 'staff-home' %}
-                            {% endif %}">Home</a>
-                  </li>
-
-                  <li class="list-inline-item">
-                    <a href="#about">About Us</a>
-                  </li>
-
-                  <li class="list-inline-item">
-                    <a href="#contact">Contact</a>
-                  </li>
+                            {% endif %}
+                    ">Home</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">About</a></li>
                 </ul>
-              </div>
 
+                <div class="social">
+                    <a href="https://www.iiita.ac.in" class="fb">
+                        <span class="info">
+                            <span class="follow">Property of IIITA</span>
+                        </span>
+                    </a>
+                </div>
+                <div class="clear"></div>
+                <div class="copyright">&copy; All Rights Reserved</div>
             </div>
-          </div>
         </div>
     </footer>
 
