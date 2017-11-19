@@ -25,7 +25,7 @@
             <h2>You are not authorized to view this page</h2>
             {% endif %}
             <br>
-            <a class="btn btn-primary" href="/">Return to the main page</a>
+            <a href="{{ request.META.HTTP_REFERER }} " class="btn btn-primary">Go Back</a>
         </div>
     </div>
   </div>

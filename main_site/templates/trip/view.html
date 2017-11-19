@@ -14,23 +14,50 @@
 {% block content %}
       <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
         <div class="card-block">
+            <h4 class="card-title text-bold">TRIP ID:- {{ trip.id }}</h4>
             <p>
-                <span class="category">Vehicle </span>
-                <span class="data">{{ trip.vehicle }} </span>
+                <span class="category">Request </span>
+                <span class="data">
+                    <a href="{%  url 'view-request' pk=trip.request_id%}">{{ trip.request }}</a>
+                </span>
             </p>
-            <p>
-                <span class="category">Driver </span>
-                <span class="data">{{ trip.driver }}</span>
-            </p>
-            <p>
-                <span class="category">Rate </span>
-                <span class="data">{{ trip.rate }}</span>
-            </p>
-            <p>
+             <p>
                 <span class="category">Status </span>
                 <span class="data">{{ trip.status }}</span>
             </p>
+            <p>
+                <span class="category">Vehicle </span>
+                <span class="data">
+                    <a href="{% url 'view-vehicle' pk=trip.vehicle_id %}">{{ trip.vehicle }}</a>
+                </span>
+            </p>
+            <p>
+                <span class="category">Driver </span>
+                <span class="data">
+                    <a href="{% url 'view-driver' pk=trip.driver_id %}">{{ trip.driver }}</a>
+                </span>
+            </p>
+            <p>
+                <span class="category">Rate </span>
+                <span class="data">{{ trip.rate|default_if_none:"---" }}</span>
+            </p>
+             <p>
+                <span class="category">Start Distance </span>
+                <span class="data">{{ trip.start_distance|default_if_none:"---" }}</span>
+            </p>
+             <p>
+                <span class="category">End Distance </span>
+                <span class="data">{{ trip.end_distance|default_if_none:"---" }}</span>
+            </p>
+
+             <p>
+                <span class="category">Fare </span>
+                <span class="data">{{ trip.fare|default_if_none:"---" }}</span>
+            </p>
+            {%  if trip.status|stringformat:"s" == "Trip Scheduled"  %}
             <a href="{% url 'cancel-trip' pk=trip.id %}" class="btn btn-primary">Cancel</a>
+            {% endif %}
+            <a href="{{ request.META.HTTP_REFERER }} " class="btn btn-primary">Go Back</a>
         </div>
     </div>
 {% endblock %}

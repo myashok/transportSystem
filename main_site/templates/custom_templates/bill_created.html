@@ -3,19 +3,19 @@
     <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
         <div class="card-block">
            <table class="table  table-hover table-bordered">
-            <tr><td>Datetime of generation </td> <td>{{ bill.datetime_of_generation }} </td></tr>
+            <tr><td>Datetime of generation </td> <td>{{ bill.created_at }} </td></tr>
             <tr><td>Bill ID  </td> <td>{{ bill.id }} </td></tr>
             <tr><td>Request Type </td> <td>{{ bill.request.request_type }} </td></tr>
             <tr><td>Total distance </td> <td>{{ bill.total_distance }} </td></tr>
             <tr><td>Trips:</td></tr>
-            {%  for trip in request.trips %}
-                <tr>
-                    <td>Trip Id: {{ trip.id }}</td>
-                    <td>Vehicle: {{ trip.vehicle }}</td>
-                    <td>Driver: {{ trip.driver }}</td>
-                </tr>
+           {% for trip in trips %}
+               <tr><td>{{ trip.id }}</td></tr>
+               <tr><td>{{ trip.vehicle }}</td></tr>
+               <tr><td>{{ trip.driver }}</td></tr>
+               <tr><td>{{ trip.rate }}</td></tr>
+               <tr><td>{{ trip.fare }}</td></tr>
             {% endfor %}
-            <tr><td>Fare </td> <td>{{ bill.total_fare }}</td></tr>
+            <tr><td>Total Fare </td> <td>{{ bill.total_fare }}</td></tr>
            </table>
         </div>
     </div>

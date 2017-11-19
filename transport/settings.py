@@ -52,7 +52,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'transport.urls'
 LOGIN_REDIRECT_URL='index'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
