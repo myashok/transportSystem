@@ -33,11 +33,10 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <a class="navbar-brand" href="
-            {% ifequal user.groups.all.0.name "TransportUser" %}
-                {% url 'user-home' %}
-            {% endifequal %}
             {% if user.groups.all.0.name == "TransportStaff" or user.groups.all.0.name == "TransportAdmin"%}
                 {% url 'staff-home' %}
+            {% else %}
+                {% url 'user-home' %}
             {% endif %}"
       >TransportCell</a>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">

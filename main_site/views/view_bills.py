@@ -58,9 +58,11 @@ class BillCreateView(View):
                 bill=Bill(request=req)
             bill.total_distance=dist
             bill.total_fare=fare
+            trips=bill.request.trip_set.all()
             bill.save()
             if bill.request.user.email is not None:
-                html_content=render_to_string('custom_templates/bill_created.html',{'bill':bill})
+                html_content=render_to_string('custom_templates/bill_created.html',{'bill':bill,
+                                                                                    'trips':trips})
                 send_html_mail('Bill generated for request #'+str(bill.request_id),
                                html_content,[bill.request.user.email])
             return redirect(reverse('view-bill', kwargs={'pk': bill.request_id}))

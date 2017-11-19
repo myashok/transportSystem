@@ -6,6 +6,7 @@ from django.views.generic import DetailView, UpdateView, DeleteView, ListView, C
 from main_site.decorators import check_priveleged
 from main_site.models import Vehicle
 
+
 # create vehicle
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_priveleged, name='dispatch')
@@ -15,6 +16,7 @@ class VehicleCreateView(CreateView):
               ,'is_owned','picture']
     template_name = 'vehicle/new.html'
     success_url = reverse_lazy('list-vehicles')
+
 
 # vehicle details
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -37,6 +39,7 @@ class VehicleUpdateView(UpdateView):
     def get_success_url(self):
         return reverse('view-vehicle', kwargs={'pk': self.object.pk})
 
+
 # delete vehicle
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_priveleged, name='dispatch')
@@ -44,6 +47,7 @@ class VehicleDeleteView(DeleteView):
     model = Vehicle
     template_name = 'vehicle/delete.html'
     success_url = reverse_lazy('list-vehicles')
+
 
 # list vehicles
 @method_decorator(login_required(login_url='login'), name='dispatch')

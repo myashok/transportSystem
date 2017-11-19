@@ -9,12 +9,10 @@ from django.views.generic import CreateView, ListView, DetailView
 from main_site.decorators import check_priveleged
 from main_site.forms import TripCreateForm
 from main_site.models import Trip, Request, Status, Bill
-
-
-# new trip
 from main_site.utils import send_html_mail
 
 
+#new trip
 @method_decorator(login_required(login_url='login'), name='dispatch')
 @method_decorator(check_priveleged, name='dispatch')
 class TripCreateView(CreateView):
@@ -59,11 +57,13 @@ class TripDetailView(DetailView):
 class TripCancelView(View):
     def get(self,request,*args,**kwargs):
         trip=get_object_or_404(Trip,pk=kwargs['pk'])
-        if Bill.objects.filter(request=trip.request).exists():
+        if trip.status==Status.objects.get(type="Trip Cancelled"):
+            raise PermissionDenied('This trip has already been cancelled')
+        elif Bill.objects.filter(request=trip.request).exists():
             raise PermissionDenied('Trip cannot be cancelled after billing')
         trip.status=Status.objects.get(type='Trip Cancelled')
         trip.save()
-        return redirect('list-trips',pk=trip.request.pk)
+        return redirect('view-trip',pk=trip.pk)
 
 # list trips
 @method_decorator(login_required(login_url='login'), name='dispatch')

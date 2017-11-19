@@ -39,11 +39,6 @@
                                 <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">Bill</a>
                                 {% endif %}
                                 <a href="{% url 'list-trips' pk=request.id %}" class="btn btn-success">Trips</a>
-                                {% if request.bill %}
-                                <a href="{% url 'new-trip' pk=request.id %}" class="btn btn-primary disabled">Create Trip</a>
-                                {% else %}
-                                <a href="{% url 'new-trip' pk=request.id %}" class="btn btn-primary">Create Trip</a>
-                                {% endif %}
                                 {%  if request.bill %}
                                 <a href="#" class="btn btn-danger disabled">Decline</a>
                                 {% else %}
