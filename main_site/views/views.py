@@ -4,8 +4,12 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 from main_site.decorators import is_not_priveleged, check_priveleged
+from main_site.forms import FareCalculatorForm
 from main_site.models import Announcement
 from django.contrib.auth import authenticate, login, logout
+
+from main_site.utils import calculate_fare
+
 
 class UserHomeView(TemplateView):
     def get(self, request, **kwargs):
@@ -51,6 +55,27 @@ class LogoutView(View):
         logout(request)
         return redirect('login')
 
+@method_decorator(login_required(login_url='login'),name='dispatch')
+class FareCalculatorView(View):
+    def get(self,request):
+        return render(request,'fare_calculator.html',{'form':FareCalculatorForm()})
+    def post(self,request):
+        form=FareCalculatorForm(request.POST)
+        if form.is_valid():
+            start_date=form.cleaned_data['start_date']
+            start_time=form.cleaned_data['start_time']
+            end_date=form.cleaned_data['end_date']
+            end_time=form.cleaned_data['end_time']
+            distance=form.cleaned_data['distance']
+            fare_dist,fare_time=calculate_fare(start_date,start_time,end_date,end_time,distance)
+            print('valid')
+            return render(request,'fare_calculator.html',{'form':form,
+                                                          'fare_dist':fare_dist,
+                                                          'fare_time':fare_time,
+                                                          'fare_total':fare_dist+fare_time,
+                                                          })
+
+        return render(request,'fare_calculator.html',{'form':form})
 
 # # trip start view
 # @method_decorator(login_required(login_url='login'), name='dispatch')

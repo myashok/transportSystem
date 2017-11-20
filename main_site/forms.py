@@ -1,10 +1,9 @@
 from datetime import datetime
 
-from django.core.exceptions import PermissionDenied
-from django.forms import models
-
-from main_site.models import Trip, Driver, Maintenance, Request, Vehicle, Status
-
+from django.core.validators import MinValueValidator
+from django.forms import models, forms
+from main_site.models import Trip, Driver, Maintenance, Request
+from django import  forms
 
 class DriverForm(models.ModelForm):
     class Meta:
@@ -79,4 +78,12 @@ class TripCreateForm(models.ModelForm):
         #     elif i.status == Status.objects.get(type='Request Scheduled') and (i.driver == driver):
         #         self.add_error('vehicle','Same driver is in a different active journey for this trip')
         #
+class FareCalculatorForm(forms.Form):
+    start_date=forms.DateField(required=True)
+    end_date=forms.DateField(required=True)
+    start_time=forms.TimeField(required=True)
+    end_time=forms.TimeField(required=True)
+    distance=forms.FloatField(required=True,
+                              validators=[MinValueValidator(1)],
+                              label='Expected Distance')
 

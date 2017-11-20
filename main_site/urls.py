@@ -6,7 +6,7 @@ from django.conf.urls import url
 from main_site.views.view_maintenences import MaintenanceCreateView, MaintenanceDetailView, MaintenanceEndView, \
     MaintenanceListView, MaintenanceUpdateView
 from main_site.views.view_schedules import ScheduleDetailView, ScheduleUpdateView
-from main_site.views.views import UserHomeView, LoginView, LogoutView, StaffHomeView
+from main_site.views.views import UserHomeView, LoginView, LogoutView, StaffHomeView, FareCalculatorView
 from main_site.views.view_announcements import AnnouncementCreateView, AnnouncementUpdateView, AnnouncementListView, \
     AnnouncementDeleteView, AnnouncementDetailView
 from main_site.views.view_bills import BillDetailView, BillCreateView
@@ -64,6 +64,9 @@ urlpatterns=[
 
     url(r'^schedule[/]$', ScheduleDetailView.as_view(), name='view-schedule'),
     url(r'^schedule/update[/]$', ScheduleUpdateView.as_view(), name='update-schedule'),
+
+    url(r'^fare_calculator[/]$', FareCalculatorView.as_view(), name='fare-calculator'),
+
 ]
 
 if settings.DEBUG:

@@ -26,19 +26,19 @@
                     {%  for request in requests %}
                         <tr>
                            <td><a href="{% url 'view-request' pk=request.id%}">{{ request.id }}</a></td>
-                            <td>{{ request.start_date }}</td>
-                            <td>{{ request.end_date }}</td>
-                            <td>{{ request.expected_end_time }}</td>
-                            <td>{{ request.no_of_persons_travelling }}</td>
-                            <td>{{ request.source}}</td>
-                            <td>{{ request.destination }}</td>
-                            <td>{{request.request_type}}</td>
-                            <td>{{request.status}}</td>
+                            <td>{{ request.start_date|default_if_none:"---" }}</td>
+                            <td>{{ request.end_date|default_if_none:"---" }}</td>
+                            <td>{{ request.expected_end_time|default_if_none:"---" }}</td>
+                            <td>{{ request.no_of_persons_travelling|default_if_none:"---" }}</td>
+                            <td>{{ request.source|default_if_none:"---"}}</td>
+                            <td>{{ request.destination|default_if_none:"---" }}</td>
+                            <td>{{request.request_type|default_if_none:"---"}}</td>
+                            <td>{{request.status|default_if_none:"---"}}</td>
                             <td>
                                 {% if not request.bill and request.status.type == 'Request Approved'%}
                                 <a href="{% url 'list-user-trips' pk=request.id %}" class="btn btn-primary">Trips</a>
                                 {% elif request.status.type == 'Request Approved'%}
-                                 <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">Bill/a>
+                                 <a href="{% url 'view-bill' pk=request.id %}" class="btn btn-primary">Bill</a>
                                 {% endif %}
                                 <a href="{% url 'cancel-request' pk=request.id %}" class="btn btn-success">Cancel</a>
 

@@ -14,7 +14,6 @@ from transport.settings import STATIC_URL, MEDIA_ROOT
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_priveleged, name='dispatch')
 class ScheduleDetailView(View):
     def get(self,request):
         schedule=Schedule.load()

@@ -11,7 +11,7 @@ from django.views import View
 from django.views.generic import CreateView, DetailView, ListView
 from main_site.decorators import check_priveleged, check_owner_of_request, is_not_priveleged
 from main_site.forms import RequestForm
-from main_site.models import Request, Status
+from main_site.models import Request, Status, Bill
 from main_site.utils import send_html_mail
 
 
@@ -87,8 +87,16 @@ class MyRequestsView(ListView):
 class RequestCancelView(View):
     def get(self,request,pk):
         req=get_object_or_404(Request,pk=pk)
-        if datetime.now() >= datetime.combine(req.start_date,req.start_time):
+        if req.status==Status.objects.get(type='Request Cancelled'):
+            raise PermissionDenied('Trying to cancel already cancelled request?')
+        elif Bill.objects.filter(request=req).exists():
+            raise PermissionDenied('Trip cannot be cancelled after billing')
+        elif req.trip_set.filter(status=Status.objects.get(type='Trip Scheduled')).exists():
+            raise  PermissionDenied('Request cannot be cancelled as trip has already been scheduled')
+        elif datetime.now() >= datetime.combine(req.start_date,req.start_time):
             raise PermissionDenied('Request cannot be cancelled after the scheduled time. Please contact admin for help.')
+
+
         req.status=Status.objects.get(type='Request Cancelled')
         req.save()
         trips=req.trip_set.all()

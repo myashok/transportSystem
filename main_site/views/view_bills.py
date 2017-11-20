@@ -8,13 +8,13 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from main_site.decorators import check_priveleged
+from main_site.decorators import check_priveleged, check_owner_of_bill
 from main_site.models import Bill, Request, Trip, Status
 from main_site.utils import get_bill_as_pdf, send_html_mail
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
-@method_decorator(check_priveleged, name='dispatch')
+@method_decorator(check_owner_of_bill, name='dispatch')
 class BillDetailView(View):
     def get(self, request, pk):
         bill = get_object_or_404(Bill, request_id=pk)
