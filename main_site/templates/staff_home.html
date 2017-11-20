@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-    <link rel="stylesheet" href="{% static "css/plugin/carousel.css" %}">
     <link rel="stylesheet" href="{% static "css/home.css" %}">
+    <link rel="stylesheet" href="{% static "css/home-card.css" %}">
+    <style>
+     .card-block a {
+        position: absolute;
+        top: 0; left: 0;
+        height: 100%; width: 100%;
+        text-decoration: none;
+        text-align: center;
+        color: black;
+        font-size: 80%;
+        padding-top: 10%;
+     }
+    </style>
 {% endblock %}
 {% block content %}
     <div class="container carouselcontainer" >
@@ -44,6 +56,38 @@
                     {% endfor %}
                 </dl>
             </div>
+        </div>
+    </div>
+     <div class="container carouselcontainer" >
+        <div class="row">
+                 <div class="container col-lg-3 col-md-6 col-sm-8 col-12" style="padding: 0 5px;">
+                        <div class="card col-lg-12" >
+                            <div class="card-block">
+                               <a href="{% url 'new-announcement' %}">  <h6 class="card-title text-bold">Add Announcement</h6></a>
+                            </div>
+                        </div>
+                 </div>
+              <div class="container col-lg-3 col-md-6 col-sm-8 col-12" style="padding: 0 5px;">
+                    <div class="card col-lg-12" >
+                        <div class="card-block">
+                           <a href="{% url 'list-requests' %}"> <h6 class="card-title text-bold">View Request</h6></a>
+                        </div>
+                    </div>
+             </div>
+              <div class="container col-lg-3 col-md-6 col-sm-8 col-12" style="padding: 0 5px;">
+                    <div class="card col-lg-12">
+                        <div class="card-block">
+                            <a href="{% url 'update-schedule' %}"> <h6 class="card-title text-bold">Update Schedule</h6></a>
+                        </div>
+                    </div>
+             </div>
+              <div class="container col-lg-3 col-md-6 col-sm-8 col-12" style="padding: 0 5px;">
+                    <div class="card col-lg-12">
+                        <div class="card-block">
+                            <a href="{% url 'new-driver' %}"><h6 class="card-title text-bold">Add Driver</h6></a>
+                        </div>
+                    </div>
+             </div>
         </div>
     </div>
 {% endblock %}

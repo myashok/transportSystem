@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9a)x-zs!hsu#hge#$k%hn1n!w#)fhcmy=ih$xpolh-u(lkqiun'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1","localhost","139.59.92.238","172.19.18.221"]
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main_site',
+    'report_builder'
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
+                'django.template.context_processors.media'
             ],
 
         },
@@ -117,9 +120,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-
-
+REPORT_BUILDER_INCLUDE = ['main_site.request',
+                          'main_site.bill',
+                          'main_site.trip']
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -131,7 +139,6 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
 
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
 DEFAULT_FROM_EMAIL = 'iit2014129@gmail.com'
 SERVER_EMAIL = 'iit2014129@gmail.com'
