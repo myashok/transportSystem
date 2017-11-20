@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+     <link rel="stylesheet" href="{% static "css/card.css" %}">
+
+{% endblock %}
+
+{% block content %}
+    <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
+        <div class="card-block">
+            <h4 class="card-title text-bold">{{feedback.user|default_if_none:"---" }}</h4>
+            <p>
+                <span class="category">Feedback </span>
+                <span class="data">{{ feedback.text|default_if_none:"---" }}</span>
+            </p>
+            <p>
+                <span class="category">Given at </span>
+                <span class="data">{{ feedback.created_at|default_if_none:"---" }}</span>
+            </p>
+            <a href="{{ request.META.HTTP_REFERER }}"  class="btn btn-danger">Back</a>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+
+{% endblock %}

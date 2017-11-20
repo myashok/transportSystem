@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
+from django.utils.http import is_safe_url
 from django.views import View
 from django.views.generic import TemplateView
 from main_site.decorators import is_not_priveleged, check_priveleged
@@ -32,7 +34,10 @@ class LoginView(View):
 
         if user is not None:
             login(request, user)
-            if is_not_priveleged(request.user):
+            next_url = request.GET.get('next')
+            if next_url:
+                return HttpResponseRedirect(next_url)
+            elif is_not_priveleged(request.user):
                 return redirect('user-home')
             else:
                 return redirect('staff-home')
