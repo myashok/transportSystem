@@ -1,0 +1,25 @@
+.card {
+  background: #fff;
+  box-shadow: 2px 2px 2px #888;
+}
+.card-row {
+    margin-top: 0.5%;
+}
+.card:hover {
+  box-shadow: 5px 5px 7px #888;
+}
+.card-title {
+    text-transform: capitalize;
+    font-weight: 400;
+    font-size: 2em;
+}
+.card-block a {
+    position: absolute;
+    padding: 2%;
+    top: 0; left: 0;
+    height: 100%; width: 100%;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+    font-size: 60%;
+}

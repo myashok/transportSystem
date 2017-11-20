@@ -13,10 +13,12 @@ legend {
 .btn {
     color: white;
     background: #515E67;
-    margin-bottom: 10px;
+    border-color: #34383B;
+    margin: 10px 0;
 }
 .btn:hover {
     background: #34383B;
+    border-color: #34383B;
     box-shadow: 1px 1px 2px #888888;
 }
 form {
