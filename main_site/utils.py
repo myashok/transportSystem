@@ -2,7 +2,7 @@ from datetime import  datetime,date
 import os
 from smtplib import SMTPException
 import threading
-rom weasyprint import HTML
+from weasyprint import HTML
 from transport.settings import BASE_DIR, EMAIL_HOST_USER
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage

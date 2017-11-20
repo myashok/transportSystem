@@ -12,7 +12,7 @@
                    <tr><td style="border:1px solid black;"><strong>Driver: </strong></td><td style="border:1px solid black;">{{ trip.driver }}</td></tr>
                    <tr><td style="border:1px solid black;"><strong>Status:</strong> </td><td style="border:1px solid black;">{{ trip.status }}</td></tr>
                    <tr><td style="border:1px solid black;"><strong>Start Distance::</strong> </td><td style="border:1px solid black;">{{ trip.start_distance|default_if_none:"---" }}</td></tr>
-                   <tr><td style="border:1px solid black;"<strong>End Distance::</strong> </td><td style="border:1px solid black;">{{ trip.end_distance|default_if_none:"---" }}</td></tr>
+                   <tr><td style="border:1px solid black;"><strong>End Distance::</strong> </td><td style="border:1px solid black;">{{ trip.end_distance|default_if_none:"---" }}</td></tr>
                    <tr><td style="border:1px solid black;"><strong>Fare:</strong></td><td style="border:1px solid black;">{{ trip.fare|default_if_none:"---" }}</td></tr>
                 {% endfor %}
              <tr><td style="border:1px solid black;"><strong>Total Fare:</strong> </td> <td style="border:1px solid black;">{{ bill.total_fare }}</td></tr>
