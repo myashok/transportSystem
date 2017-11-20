@@ -9,11 +9,13 @@
             <tr><td>Total distance </td> <td>{{ bill.total_distance }} </td></tr>
             <tr><td>Trips:</td></tr>
            {% for trip in trips %}
-               <tr><td>{{ trip.id }}</td></tr>
-               <tr><td>{{ trip.vehicle }}</td></tr>
-               <tr><td>{{ trip.driver }}</td></tr>
-               <tr><td>{{ trip.rate }}</td></tr>
-               <tr><td>{{ trip.fare }}</td></tr>
+               <tr><td><strong>Trip ID:</strong>{{ trip.id }}</td></tr>
+               <tr><td><strong>Vehicle: </strong>{{ trip.vehicle }}</td></tr>
+               <tr><td><strong>Driver: </strong>{{ trip.driver }}</td></tr>
+               <tr><td>Status: {{ trip.status }}</td></tr>
+               <tr><td><strong>Start Distance::</strong> {{ trip.start_distance|default_if_none:"---" }}</td></tr>
+               <tr><td><strong>End Distance::</strong> {{ trip.end_distance|default_if_none:"---" }}</td></tr>
+               <tr><td><strong>Fare:</strong>{{ trip.fare|default_if_none:"---" }}</td></tr>
             {% endfor %}
             <tr><td>Total Fare </td> <td>{{ bill.total_fare }}</td></tr>
            </table>
