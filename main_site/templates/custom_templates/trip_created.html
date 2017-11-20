@@ -1,39 +1,32 @@
-{% load static %}
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Trip Created</title>
-     <link rel="stylesheet" href="{% static "css/card.css" %}">
-    <style type="text/css">
-        table.table-bordered > tbody > tr > td{
-            border:2px solid white;
-            text-align: left;
-            max-width: 150px;
-            overflow: auto;}
 
-    </style>
-</head>
+<html>
 <body>
-<strong>Hi {{ trip.request.user }}</strong>
-<p>A trip was created for your request with ID {{ trip.request.id }}</p>
+<p>Trip Created for request ID <strong>{{ trip.request_id }}</strong></p>
 <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
         <div class="card-block">
             <p>
-                <span class="category">Vehicle </span>
+                <span class="category">Date of trip: </span>
+                <span class="data">{{ trip.request.start_date }} </span>
+            </p>
+            <p>
+                <span class="category">Reporting place for driver: </span>
+                <span class="data">{{ trip.request.source }} </span>
+            </p>
+            <p>
+                <span class="category">Reporting time for driver: </span>
+                <span class="data">{{ trip.request.start_time }} </span>
+            </p>
+            <p>
+                <span class="category">Vehicle: </span>
                 <span class="data">{{ trip.vehicle.registration_no }} </span>
             </p>
             <p>
-                <span class="category">Driver </span>
+                <span class="category">Driver: </span>
                 <span class="data">{{ trip.driver.name }}</span>
             </p>
             <p>
-                <span class="category">Contact</span>
+                <span class="category">Contact no. of driver:</span>
                 <span class="data">{{ trip.driver.phone }}</span>
-            </p>
-            <p>
-                <span class="category">Rate per km</span>
-                <span class="data">{{ trip.rate }}</span>
             </p>
         </div>
 </div>

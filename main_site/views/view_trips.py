@@ -23,7 +23,9 @@ class TripCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super(TripCreateView, self).get_context_data(**kwargs)
         req = get_object_or_404(Request, pk=self.kwargs['pk'])
-        if Bill.objects.filter(request=req).exists():
+        if req.status==Status.objects.get(type='Request Cancelled'):
+            raise PermissionDenied('Cannnot make trips for a cancelled request')
+        elif Bill.objects.filter(request=req).exists():
             raise PermissionDenied('Trip cannot be created after billing')
         context['req'] = req
         return context
@@ -35,9 +37,13 @@ class TripCreateView(CreateView):
         trip.request.save()
         response=super(TripCreateView, self).form_valid(form)
         html_content=render_to_string('custom_templates/trip_created.html',{'trip':trip})
+        to=[]
         if trip.request.user.email is not None:
-            send_html_mail('Trip for request #'+str(trip.request_id)+'created',
-                           html_content,[trip.request.user.email])
+            to.append(trip.request.user.email)
+        if trip.driver.email is not None:
+            to.append(trip.driver.email)
+        send_html_mail('Trip for request #'+str(trip.request_id)+'created',
+                           html_content,to)
         return response
     def get_success_url(self):
         return reverse('list-trips',kwargs={'pk':self.kwargs['pk']})
@@ -63,6 +69,15 @@ class TripCancelView(View):
             raise PermissionDenied('Trip cannot be cancelled after billing')
         trip.status=Status.objects.get(type='Trip Cancelled')
         trip.save()
+        to=[]
+        if trip.driver.email is not None:
+            to.append(trip.driver.email)
+        if trip.request.user.email is not None:
+            to.append(trip.request.user.email)
+        html_content=render_to_string('custom_templates/trip_cancelled.html',{'trip':trip})
+        send_html_mail('Trip # '+str(trip.id)+' cancelled',
+                       html_content,
+                       to)
         return redirect('view-trip',pk=trip.pk)
 
 # list trips

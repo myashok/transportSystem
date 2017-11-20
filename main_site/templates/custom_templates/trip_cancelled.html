@@ -1,10 +1,37 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-    <title>Title</title>
-</head>
 <body>
-
+<p>Trip with ID <strong>{{ trip.id }}</strong>
+    and following details was cancelled by the admin.
+</p>
+<div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
+        <div class="card-block">
+            <p>
+                <span class="category">Date of trip: </span>
+                <span class="data">{{ trip.request.start_date }} </span>
+            </p>
+            <p>
+                <span class="category">Reporting place for driver: </span>
+                <span class="data">{{ trip.request.source }} </span>
+            </p>
+            <p>
+                <span class="category">Reporting time for driver: </span>
+                <span class="data">{{ trip.request.start_time }} </span>
+            </p>
+            <p>
+                <span class="category">Vehicle: </span>
+                <span class="data">{{ trip.vehicle.registration_no }} </span>
+            </p>
+            <p>
+                <span class="category">Driver: </span>
+                <span class="data">{{ trip.driver.name }}</span>
+            </p>
+            <p>
+                <span class="category">Contact no. of driver:</span>
+                <span class="data">{{ trip.driver.phone }}</span>
+            </p>
+        </div>
+</div>
+<p>Please contact <strong>admin</strong> for any queries </p>
 </body>
 </html>
+
