@@ -1,8 +1,7 @@
 import os
 from smtplib import SMTPException
 import threading
-from weasyprint import HTML
-from main_site.models import Schedule
+# from weasyprint import HTML
 from transport.settings import BASE_DIR, EMAIL_HOST_USER
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
