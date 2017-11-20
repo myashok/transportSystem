@@ -1,41 +1,36 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-    <title>Request Cancelled</title>
-</head>
 <body>
-<strong>Hi {{ request.user }}</strong>
-<p>Your request with Id {{ request.id }} has been successfully cancelled.</p>
+<strong>Hi, {{ request.user }}!</strong>
+<p>Your request with ID {{ request.id }} has been successfully cancelled.</p>
 <div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
         <div class="card-block">
            <table class="table  table-hover table-bordered">
                 <tr>
-                    <th>Type of request</th>
+                    <th>Type of request:</th>
                     <td>{{ request.request_type|default_if_none:"---" }}</td>
                 </tr>
                <tr>
-                    <th>Source</th>
+                    <th>Source:</th>
                     <td>{{ request.source|default_if_none:"---" }}</td>
                </tr>
                <tr>
-                    <th>start date</th>
+                    <th>Start Date:</th>
                     <td>{{ request.start_date|default_if_none:"---"}}</td>
                </tr>
                <tr>
-                    <th>Start time</th>
+                    <th>Start Time:</th>
                     <td>{{ request.start_time|default_if_none:"---" }}</td>
                 </tr>
                <tr>
-                    <th>Destination</th>
+                    <th>Destination:</th>
                     <td>{{ request.destination|default_if_none:"---" }}</td>
                 </tr>
                <tr>
-                    <th>End date</th>
+                    <th>End Date:</th>
                     <td>{{ request.end_date|default_if_none:"---"}}</td>
                 </tr>
                 <tr>
-                    <th>Expected end time</th>
+                    <th>Expected End Time:</th>
                     <td>{{ request.expected_end_time|default_if_none:"---" }}</td>
                 </tr>
 
@@ -50,5 +45,9 @@
             </table>
         </div>
     </div>
+<p>
+    Please note that this action cannot be undone now.
+    Please request a new booking if cancellation was done by mistake.
+</p>
 </body>
 </html>
