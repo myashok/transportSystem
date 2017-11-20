@@ -8,23 +8,35 @@
     <div class="container col-lg-4 col-md-5 col-sm-8 col-12">
         <form method="POST" action="" class="form-horizontal ">{% csrf_token %}
         <fieldset>
-            <legend>Register</legend>
+            <legend>Fare Calculator</legend>
             {% for field in form %}
+
                 <div class="form-group ">
-                    <span class="label col-lg-2 control-label" >{{ field.label_tag }}</span> <span class="field col-lg-2">{{ field }}</span>
+                    <span class="label col-lg-2 control-label" >
+                        {{ field.label_tag}}
+                    </span>
+                    <span class="field">{{ field }}</span>
                   {%if field.errors %}
                       <span class="text-danger">{{ field.errors|striptags }} </span>
                   {%endif%}
                 </div>
             {% endfor %}
-            <input type="submit" class="btn btn-info"  name="request_vehicle" value="Submit" margin-top="10px">
+            <input type="submit" class="btn btn-info" value="Submit">
+{#         {%  if fare_total is not None %}#}
+{#             <strong><p align="center">The expected fare is {{ fare_total }}</p></strong>#}
+{#             <strong><p align="center">Fare for distance: {{ fare_dist }}</p></strong>#}
+{#             <strong><p align="center">Fare for time: {{ fare_time }}</p></strong>#}
+{#         {% endif %}#}
         </fieldset>
         </form>
     </div>
+
+
 {%  endblock %}
 {% block js %}
     <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
     <script type="text/javascript" src="{% static "js/plugin/timepicki.js" %}"></script>
     <script type="text/javascript" src="{% static "js/plugin/date-time-picker.min.js" %}"></script>
     <script type="text/javascript" src="{% static "js/form.js" %}"></script>
+
 {% endblock %}

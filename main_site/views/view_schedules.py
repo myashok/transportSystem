@@ -1,4 +1,5 @@
 import os
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.urls import reverse
@@ -11,8 +12,8 @@ from main_site.models import Schedule
 #schedule details
 from transport.settings import STATIC_URL, MEDIA_ROOT
 
+
 @method_decorator(login_required(login_url='login'), name='dispatch')
-# @method_decorator(check_priveleged, name='dispatch')
 class ScheduleDetailView(View):
     def get(self,request):
         schedule=Schedule.load()

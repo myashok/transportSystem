@@ -122,6 +122,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>
                   <a class="dropdown-item" href="{% url 'my-requests' %}">View Requests</a>
+                  <a class="dropdown-item" href="{% url 'fare-calculator' %}">Fare Calculator</a>
                 </div>
               </li>
                <li class="nav-item dropdown">
@@ -129,8 +130,7 @@
                   <i class="fa fa-sticky-note" aria-hidden="true"></i> Schedule
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-{#                  <a class="dropdown-item" href="{%  url 'new-request' %}">Request Vehicle</a>#}
-                  <a class="dropdown-item" href="{% url 'view-schedule' %}">View Schedule</a>
+                  <a class="dropdown-item" href="{% url 'view-schedule' %}">Schedule</a>
                 </div>
               </li>
             </ul>
