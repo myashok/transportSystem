@@ -10,3 +10,6 @@ transport/__init__.pyc
 views/__pycache__
 main_site/views/__pycache__
 files
+main_site/__init__.pyc
+start.sh
+transport/static/
