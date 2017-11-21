@@ -4,9 +4,10 @@ from smtplib import SMTPException
 import threading
 
 from django.core.files.base import ContentFile
-from weasyprint import HTML
+#from weasyprint import HTML
 from django.core.files import File
 from main_site.models import Trip
+from googletrans import Translator
 from transport.settings import BASE_DIR, EMAIL_HOST_USER
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
@@ -81,11 +82,11 @@ class MP3Generation(threading.Thread):
         mytext = 'You have to report at '+self.trip.request.source+' on '+\
                  str(self.trip.request.start_date)+' at '+str(self.trip.request.start_time)\
                  +'with vehicle '+self.trip.vehicle.registration_no
+        translator = Translator()
+        x = translator.translate(mytext, dest='hi')
+        language = 'hi'
 
-
-        language = 'en'
-
-        myobj = gTTS(text=mytext, lang=language, slow=False)
+        myobj = gTTS(text=x.text, lang=language, slow=False)
 
         myobj.save(str(self.trip.driver_id)+'_'+str(self.trip.id)+'.mp3')
 
