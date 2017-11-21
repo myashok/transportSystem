@@ -4,7 +4,7 @@ from smtplib import SMTPException
 import threading
 
 from django.core.files.base import ContentFile
-from weasyprint import HTML
+#from weasyprint import HTML
 from django.core.files import File
 from main_site.models import Trip
 from transport.settings import BASE_DIR, EMAIL_HOST_USER

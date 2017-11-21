@@ -163,7 +163,7 @@ class Trip(models.Model):
     status=models.ForeignKey('Status',editable=False,verbose_name='Status of trip')
     vehicle=models.ForeignKey('Vehicle')
     driver=models.ForeignKey('Driver')
-    audiofile=models.FileField(upload_to=get_upload_path,default='sample.mp3')
+    # audiofile=models.FileField(upload_to=get_upload_path,default='sample.mp3')
     start_distance = models.FloatField(null=True,
                                        validators=[MinValueValidator(0)])
     end_distance = models.FloatField(null=True,
