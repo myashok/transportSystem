@@ -75,7 +75,7 @@ class Maintenance(models.Model):
 
 class Vehicle(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)
-    registration_no=models.CharField(max_length=15,
+    registration_no=models.CharField(max_length=50,
                                      unique=True,
                                      help_text='e.g - UP 15 D 1234')
     nickname=models.CharField(max_length=50,
@@ -163,6 +163,7 @@ class Trip(models.Model):
     status=models.ForeignKey('Status',editable=False,verbose_name='Status of trip')
     vehicle=models.ForeignKey('Vehicle')
     driver=models.ForeignKey('Driver')
+    audiofile=models.FileField(upload_to=get_upload_path,default='sample.mp3')
     start_distance = models.FloatField(null=True,
                                        validators=[MinValueValidator(0)])
     end_distance = models.FloatField(null=True,

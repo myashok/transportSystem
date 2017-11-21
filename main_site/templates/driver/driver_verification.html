@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+        .container {
+            margin-top: 50px;
+            width: 100%;
+            text-align: center;
+        }
+        .btn {
+            background: #373a3c;
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="container">
+            <strong>अपना मोबाइल नंबर दर्ज करें:</strong>
+            <input type="text"  name="id_mobile">
+            <input type="submit" class="btn btn-info" value="ओटीपी प्राप्त करें">
+{#            <div id="id_div_otp" class="container">#}
+{#                <strong>अपना ओटीपी दर्ज करें:</strong>#}
+{#                <input type="text" name="mobile_otp" id="id_mobile_otp">#}
+{#                <input type="submit" class="btn btn-info" value="सत्यापित करें">#}
+{#                <input type="submit" class="btn btn-info"  value="पुन: भेजने">#}
+{#            </div>#}
+        </div>
+    </form>
+{% endblock %}
+{% block js %}
+{#    <script>#}
+{##}
+{#        jQuery("#id_mobile").blur(function() {#}
+{#            var bla = $('#id_mobile').val();#}
+{#            $('#id_mobile').val("+91-"+ bla);#}
+{#        });#}
+{#    </script>#}
+{% endblock %}
+
+
