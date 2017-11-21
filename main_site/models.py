@@ -52,8 +52,6 @@ class Driver(models.Model):
         return self.name
 
 
-
-
 class Maintenance(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)
     vehicle=models.ForeignKey('Vehicle',
@@ -73,6 +71,7 @@ class Maintenance(models.Model):
 
     def __str__(self):
         return self.vehicle.__str__()+' | '+str(self.start_date)
+
 
 class Vehicle(models.Model):
     created_at=models.DateTimeField(default=timezone.now,editable=False)

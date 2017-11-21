@@ -69,6 +69,9 @@ class TripCancelView(View):
             raise PermissionDenied('Trip cannot be cancelled after billing')
         trip.status=Status.objects.get(type='Trip Cancelled')
         trip.save()
+        if not trip.request.trip_set.filter(status=Status.objects.get(type='Trip Scheduled')).exists():
+            trip.request.status=Status.objects.get(type='Request Pending')
+            trip.request.save()
         to=[]
         if trip.driver.email is not None:
             to.append(trip.driver.email)

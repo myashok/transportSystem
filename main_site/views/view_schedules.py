@@ -1,7 +1,8 @@
 import os
 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, Http404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -16,7 +17,10 @@ from transport.settings import STATIC_URL, MEDIA_ROOT
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class ScheduleDetailView(View):
     def get(self,request):
-        schedule=Schedule.load()
+        try:
+            schedule=Schedule.load()
+        except Exception as e:
+            raise PermissionDenied('Something bad happened, we will notify the developers')
         data = open(os.path.join(MEDIA_ROOT,schedule.file.name),'rb')
         response = HttpResponse(content=data)
         response['Content-Type'] = 'application/pdf'
