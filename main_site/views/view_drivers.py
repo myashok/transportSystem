@@ -1,10 +1,13 @@
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
 from main_site.decorators import  check_priveleged
 from main_site.forms import DriverForm
-from main_site.models import Driver
+from main_site.models import Driver, Trip
+
 
 #create driver
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -48,3 +51,5 @@ class DriverListView(ListView):
     model = Driver
     template_name = 'driver/list.html'
     context_object_name = 'drivers'
+
+

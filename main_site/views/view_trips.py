@@ -9,7 +9,7 @@ from django.views.generic import CreateView, ListView, DetailView
 from main_site.decorators import check_priveleged
 from main_site.forms import TripCreateForm
 from main_site.models import Trip, Request, Status, Bill
-from main_site.utils import send_html_mail
+from main_site.utils import send_html_mail, generate_mp3
 
 
 #new trip
@@ -44,6 +44,8 @@ class TripCreateView(CreateView):
             to.append(trip.driver.email)
         send_html_mail('Trip for request #'+str(trip.request_id)+'created',
                            html_content,to)
+
+        generate_mp3(trip)
         return response
     def get_success_url(self):
         return reverse('list-trips',kwargs={'pk':self.kwargs['pk']})
@@ -69,6 +71,9 @@ class TripCancelView(View):
             raise PermissionDenied('Trip cannot be cancelled after billing')
         trip.status=Status.objects.get(type='Trip Cancelled')
         trip.save()
+        if not trip.request.trip_set.filter(status=Status.objects.get(type='Trip Scheduled')).exists():
+            trip.request.status=Status.objects.get(type='Request Pending')
+            trip.request.save()
         to=[]
         if trip.driver.email is not None:
             to.append(trip.driver.email)

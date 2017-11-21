@@ -8,11 +8,13 @@ from main_site.views.view_feedback import FeedbackCreateView, FeedbackListView, 
 from main_site.views.view_maintenences import MaintenanceCreateView, MaintenanceDetailView, MaintenanceEndView, \
     MaintenanceListView, MaintenanceUpdateView
 from main_site.views.view_schedules import ScheduleDetailView, ScheduleUpdateView
-from main_site.views.views import UserHomeView, LoginView, LogoutView, StaffHomeView, FareCalculatorView
+from main_site.views.views import UserHomeView, LoginView, LogoutView, StaffHomeView, FareCalculatorView, PlayTripView, \
+    PlayView
 from main_site.views.view_announcements import AnnouncementCreateView, AnnouncementUpdateView, AnnouncementListView, \
     AnnouncementDeleteView, AnnouncementDetailView
 from main_site.views.view_bills import BillDetailView, BillCreateView
-from main_site.views.view_drivers import DriverCreateView, DriverDetailView, DriverUpdateView, DriverDeleteView, DriverListView
+from main_site.views.view_drivers import DriverCreateView, DriverDetailView, DriverUpdateView, DriverDeleteView, \
+    DriverListView
 from main_site.views.view_requests import RequestDetailView, RequestListView, MyRequestsView, RequestCreateView, RequestCancelView
 from main_site.views.view_trips import TripCreateView, TripDetailView, TripCancelView, TripListView, UserTripListView
 from main_site.views.view_vehicles import VehicleCreateView, VehicleDetailView, VehicleUpdateView, VehicleDeleteView, \
@@ -31,11 +33,11 @@ urlpatterns=[
     url(r'^requests[/]$', RequestListView.as_view(), name='list-requests'),
     url(r'^myrequests[/]$',MyRequestsView.as_view(),name='my-requests'),
 
-    url(r'^drivers/new$', DriverCreateView.as_view(), name='new-driver'),
+    url(r'^drivers/new[/]$', DriverCreateView.as_view(), name='new-driver'),
     url(r'^drivers/(?P<pk>\d+)$', DriverDetailView.as_view(), name='view-driver'),
-    url(r'^drivers/(?P<pk>\d+)/edit$', DriverUpdateView.as_view(), name='update-driver'),
-    url(r'^drivers/(?P<pk>\d+)/delete$', DriverDeleteView.as_view(), name='delete-driver'),
-    url(r'^drivers', DriverListView.as_view(), name='list-drivers'),
+    url(r'^drivers/(?P<pk>\d+)/edit[/]$', DriverUpdateView.as_view(), name='update-driver'),
+    url(r'^drivers/(?P<pk>\d+)/delete[/]$', DriverDeleteView.as_view(), name='delete-driver'),
+    url(r'^drivers[/]$', DriverListView.as_view(), name='list-drivers'),
 
     url(r'^vehicles/new$', VehicleCreateView.as_view(), name='new-vehicle'),
     url(r'^vehicles/(?P<pk>\d+)$', VehicleDetailView.as_view(), name='view-vehicle'),
@@ -73,6 +75,11 @@ urlpatterns=[
     url(r'^feedbacks/new$', FeedbackCreateView.as_view(), name='new-feedback'),
     url(r'^feedbacks[/]$', FeedbackListView.as_view(), name='list-feedbacks'),
     url(r'^feedbacks/(?P<pk>\d+)$', FeedbackDetailView.as_view(), name='view-feedback'),
+
+    #playing trips
+    url(r'^play_trips$', PlayTripView.as_view(), name='play-trips'),
+    url(r'^play/(?P<name>\w+).mp3$', PlayView.as_view(), name='play'),
+
 ]
 
 if settings.DEBUG:

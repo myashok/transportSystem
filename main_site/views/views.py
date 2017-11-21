@@ -1,13 +1,15 @@
+import os
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.http import HttpResponseRedirect, HttpResponse, FileResponse
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.decorators import method_decorator
+from django.utils.encoding import smart_str
 from django.utils.http import is_safe_url
 from django.views import View
 from django.views.generic import TemplateView
 from main_site.decorators import is_not_priveleged, check_priveleged
 from main_site.forms import FareCalculatorForm
-from main_site.models import Announcement
+from main_site.models import Announcement, Trip, Driver
 from django.contrib.auth import authenticate, login, logout
 
 from main_site.utils import calculate_fare
@@ -138,3 +140,27 @@ class FareCalculatorView(View):
 #         return reverse('view-bill', kwargs={'pk': self.object.bill.pk})
 #
 
+
+class PlayTripView(View):
+    def get(self,request):
+        return render(request,'driver/driver_verification.html')
+    def post(self,request):
+        mobile=request.POST.get('id_mobile','')
+        print(mobile)
+        driver=get_object_or_404(Driver,phone=mobile)
+        trips=[]
+        for filename in os.listdir('./'):
+            if filename.endswith(".mp3"):
+                if filename.split("_")[0]==str(driver.id):
+                    filename=filename[:-4]
+                    trips.append(filename)
+        return render(request,'driver/otp.html',{'trips':trips})
+
+class PlayView(View):
+    def get(self,request,name):
+        f = open(name+'.mp3', "rb")
+        response = HttpResponse()
+        response.write(f.read())
+        response['Content-Type'] = 'audio/mp3'
+        response['Content-Length'] = os.path.getsize(name+'.mp3')
+        return response

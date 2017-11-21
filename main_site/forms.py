@@ -87,3 +87,13 @@ class FareCalculatorForm(forms.Form):
                               validators=[MinValueValidator(1)],
                               label='Expected Distance')
 
+    def clean(self):
+        start_date = self.cleaned_data['start_date']
+        start_time = self.cleaned_data['start_time']
+        end_date = self.cleaned_data['end_date']
+        end_time = self.cleaned_data['end_time']
+        if start_date==end_date and start_time>end_time:
+            self.add_error('end_time','End time cannot be smaller than start time on same day')
+
+        # super(FareCalculatorForm,self).clean()
+
