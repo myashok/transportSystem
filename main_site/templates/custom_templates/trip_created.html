@@ -1,34 +1,33 @@
-
 <html>
 <body>
 <p>Trip Created for request ID <strong>{{ trip.request_id }}</strong></p>
-<div class="container card col-lg-3 col-md-6 col-sm-8 col-12" >
+<table style="border: 2px inset black" >
         <div class="card-block">
-            <p>
-                <span class="category">Date of trip: </span>
-                <span class="data">{{ trip.request.start_date }} </span>
-            </p>
-            <p>
-                <span class="category">Reporting place for driver: </span>
-                <span class="data">{{ trip.request.source }} </span>
-            </p>
-            <p>
-                <span class="category">Reporting time for driver: </span>
-                <span class="data">{{ trip.request.start_time }} </span>
-            </p>
-            <p>
-                <span class="category">Vehicle: </span>
-                <span class="data">{{ trip.vehicle.registration_no }} </span>
-            </p>
-            <p>
-                <span class="category">Driver: </span>
-                <span class="data">{{ trip.driver.name }}</span>
-            </p>
-            <p>
-                <span class="category">Contact no. of driver:</span>
-                <span class="data">{{ trip.driver.phone }}</span>
-            </p>
+            <tr>
+                <td style="border:1px solid black; font-weight: bold">Date of trip: </td>
+                <td style="border:1px solid black;">{{ trip.request.start_date }} </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid black; font-weight: bold">Reporting place for driver: </td>
+                <td style="border:1px solid black;">{{ trip.request.source }} </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid black; font-weight: bold">Reporting time for driver: </td>
+                <td style="border:1px solid black;">{{ trip.request.start_time }} </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid black; font-weight: bold">Vehicle: </td>
+                <td style="border:1px solid black;">{{ trip.vehicle.registration_no }} </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid black; font-weight: bold">Driver: </td>
+                <td style="border:1px solid black;">{{ trip.driver.name }}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid black; font-weight: bold">Contact no. of driver:</td>
+                <td style="border:1px solid black;">{{ trip.driver.phone }}</td>
+            </tr>
         </div>
-</div>
+</table>
 </body>
 </html>

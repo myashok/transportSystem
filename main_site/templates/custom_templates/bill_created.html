@@ -1,20 +1,21 @@
-<body>
-   <table style="border: 2px inset black">
-       <tr><td><strong>Datetime of generation:</strong> </td> <td>{{ bill.created_at }} </td></tr>
-       <tr><td><strong>Bill ID:</strong>  </td> <td>{{ bill.id }} </td></tr>
-       <tr><td><strong>Request Type:</strong> </td> <td>{{ bill.request.request_type }} </td></tr>
-       <tr><td><strong>Total distance</strong> </td> <td>{{ bill.total_distance }} </td></tr>
-       <tr><td><strong>Trips:</strong></td></tr>
-       {% for trip in trips %}
-           <tr><td><strong>Trip ID:</strong></td><td>{{ trip.id }}</td></tr>
-           <tr><td><strong>Vehicle: </strong></td><td>{{ trip.vehicle }}</td></tr>
-           <tr><td><strong>Driver: </strong></td><td>{{ trip.driver }}</td></tr>
-           <tr><td><strong>Status:</strong> </td><td>{{ trip.status }}</td></tr>
-           <tr><td><strong>Start Distance::</strong> </td><td>{{ trip.start_distance|default_if_none:"---" }}</td></tr>
-           <tr><td><strong>End Distance::</strong> </td><td>{{ trip.end_distance|default_if_none:"---" }}</td></tr>
-           <tr><td><strong>Fare:</strong></td><td>{{ trip.fare|default_if_none:"---" }}</td></tr>
-        {% endfor %}
-       <tr><td><strong>Total Fare:</strong></td><td> {{ bill.total_fare }}</td></tr>
-   </table>
-</body>
-
+<html>
+    <body>
+         <table style="border:1px solid black;">
+               <tr><td style="border:1px solid black;"><strong>Datetime of generation:</strong> </td> <td style="border:1px solid black;">{{ bill.created_at }} </td></tr>
+               <tr><td style="border:1px solid black;"><strong>Bill ID:</strong>  </td> <td style="border:1px solid black;">{{ bill.id }} </td></tr>
+               <tr><td style="border:1px solid black;"><strong>Request Type:</strong> </td> <td style="border:1px solid black;">{{ bill.request.request_type }} </td></tr>
+               <tr><td style="border:1px solid black;"><strong>Total distance</strong> </td> <td style="border:1px solid black;">{{ bill.total_distance }} </td></tr>
+               <tr><td style="border:1px solid black;"><strong>Trips:</strong></td></tr>
+               {% for trip in trips %}
+                   <tr><td style="border:1px solid black;"><strong>Trip ID:</strong></td><td style="border:1px solid black;">{{ trip.id }}</td></tr>
+                   <tr><td style="border:1px solid black;"><strong>Vehicle: </strong></td><td style="border:1px solid black;">{{ trip.vehicle }}</td></tr>
+                   <tr><td style="border:1px solid black;"><strong>Driver: </strong></td><td style="border:1px solid black;">{{ trip.driver }}</td></tr>
+                   <tr><td style="border:1px solid black;"><strong>Status:</strong> </td><td style="border:1px solid black;">{{ trip.status }}</td></tr>
+                   <tr><td style="border:1px solid black;"><strong>Start Distance::</strong> </td><td style="border:1px solid black;">{{ trip.start_distance|default_if_none:"---" }}</td></tr>
+                   <tr><td style="border:1px solid black;"><strong>End Distance::</strong> </td><td style="border:1px solid black;">{{ trip.end_distance|default_if_none:"---" }}</td></tr>
+                   <tr><td style="border:1px solid black;"><strong>Fare:</strong></td><td style="border:1px solid black;">{{ trip.fare|default_if_none:"---" }}</td></tr>
+                {% endfor %}
+             <tr><td style="border:1px solid black;"><strong>Total Fare:</strong> </td> <td style="border:1px solid black;">{{ bill.total_fare }}</td></tr>
+           </table>
+    </body>
+</html>
