@@ -1,3 +1,4 @@
+import pickle
 from datetime import  datetime,date
 import os
 from smtplib import SMTPException
@@ -79,7 +80,7 @@ class MP3Generation(threading.Thread):
         from gtts import gTTS
 
         import os
-        mytext = 'You have to report at '+self.trip.request.source+' on '+\
+        mytext = 'You have to report at '+ self.trip.request.source+' on '+\
                  str(self.trip.request.start_date)+' at '+str(self.trip.request.start_time)\
                  +'with vehicle '+self.trip.vehicle.registration_no
         translator = Translator()
@@ -89,7 +90,8 @@ class MP3Generation(threading.Thread):
         myobj = gTTS(text=x.text, lang=language, slow=False)
 
         myobj.save(str(self.trip.driver_id)+'_'+str(self.trip.id)+'.mp3')
-
+        file=open(str(self.trip.driver_id)+'_'+str(self.trip.id),'wb')
+        pickle.dump(x,file)
 
         # trip=Trip.objects.get(id=self.trip.id)
         # fh = open(str(self.trip.id)+'.mp3', "r")

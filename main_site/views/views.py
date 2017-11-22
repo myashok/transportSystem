@@ -1,4 +1,6 @@
 import os
+import pickle
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse, FileResponse
 from django.shortcuts import redirect, render, get_object_or_404
@@ -153,7 +155,18 @@ class PlayTripView(View):
             if filename.endswith(".mp3"):
                 if filename.split("_")[0]==str(driver.id):
                     filename=filename[:-4]
-                    trips.append(filename)
+                    for root, dirs, files in os.walk('./'):
+                        if filename in files:
+                            file = open(filename, 'rb')
+                            x=pickle.load(file)
+                            print(x.text)
+                            trips.append((filename,x.text))
+                        break
+            # if filename.endswith(".txt"):
+            #     if filename.split("_")[0] == str(driver.id):
+            #         filename = filename[:-4]
+            #         trips.append(filename)
+        print(trips)
         return render(request,'driver/otp.html',{'trips':trips})
 
 class PlayView(View):

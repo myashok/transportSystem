@@ -1,14 +1,25 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css %}
-
+    ul li {
+    }
+    <style>
+        table {
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        table, td {
+            border: 2px inset black;
+            padding: 5px;
+        }
+    </style>
 {% endblock %}
 {% block content %}
-    {%  for trip in trips %}
-        <ul>
-            <li><a href="{% url 'play' name=trip %}">{{ trip }} name</a></li>
-        </ul>
-    {% endfor %}
+    <table >
+        {%  for trip in trips %}
+            <td>{{ trip.1 }}</td><td><a href="{% url 'play' name=trip.0 %}"> सुनिए</a></td></tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 {% block js %}
 {% endblock %}
